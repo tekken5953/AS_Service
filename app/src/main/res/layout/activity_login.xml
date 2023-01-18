@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="signInVM"
+            type="app.as_service.viewModel.LoginViewModel" />
+        <variable
+            name="username" type="String" />
+        <variable
+            name="password" type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.login.LoginActivity">
+
+        <TextView
+            android:id="@+id/mainLoginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textColor="@color/modeTextColor"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/mainLoginIdTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/mainLoginIdTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/id"
+            android:textColor="@color/modeTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/mainLoginIdEt"
+            app:layout_constraintStart_toStartOf="@+id/mainLoginIdEt" />
+
+        <EditText
+            android:id="@+id/mainLoginIdEt"
+            style="@style/mainLoginItemField"
+            android:layout_marginBottom="180dp"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/password"
+            android:textColor="@color/modeTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/mainLoginPwdEt"
+            app:layout_constraintStart_toStartOf="@+id/mainLoginPwdEt" />
+
+        <EditText
+            android:id="@+id/mainLoginPwdEt"
+            style="@style/mainLoginItemField"
+            android:layout_marginTop="50dp"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainLoginIdEt" />
+
+        <ProgressBar
+            android:id="@+id/mainLoginPb"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/mainColor"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mainLoginBtn"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/sign_in"
+            android:backgroundTint="@color/defaultMainColor"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/mainLoginPwdEt"
+            app:layout_constraintStart_toStartOf="@+id/mainLoginPwdEt"
+            app:layout_constraintTop_toBottomOf="@+id/mainLoginPwdEt" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mainSignUpBtn"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="20dp"
+            android:text="@string/sign_up"
+            app:layout_constraintEnd_toEndOf="@+id/mainLoginPwdEt"
+            app:layout_constraintStart_toStartOf="@+id/mainLoginPwdEt"
+            app:layout_constraintTop_toBottomOf="@+id/mainLoginBtn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
