@@ -30,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initializing()
 
         // ViewModel 에게 LiveData 값을 보내라고 명령. 리턴받은 결과 값(토큰)을 비교하여 내부 DB에 저장
@@ -81,8 +82,6 @@ class LoginActivity : AppCompatActivity() {
 
             viewModel.loadSignInResult(binding.username.toString(), binding.password.toString())
         }
-
-
     }
 
     private fun nullCheck() {
