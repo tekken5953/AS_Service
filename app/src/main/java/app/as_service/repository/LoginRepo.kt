@@ -15,8 +15,11 @@ import retrofit2.Response
 class LoginRepo {
     var _signInResultData = MutableLiveData<String>()    // 로그인 Response Body : access token
 
-    fun loadSignInResult(username: String, password: String) {
+    init {
         httpClient.getInstance()    // HTTP Client 인스턴스 생성
+    }
+
+    fun loadSignInResult(username: String, password: String) {
         val loginModel = ApiModel.Login(username, password)
 
         // 현재는 postUser 이지만 postLogin 으로 변경예정
