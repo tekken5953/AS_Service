@@ -66,4 +66,7 @@ __HTTP__
 
 > implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'  // String 처리시
 
+__AsTextView__ 
+> implementation 'com.github.tekken5953:AsCustomText:1.0.9' <https://github.com/tekken5953/AsCustomText>
+
 
