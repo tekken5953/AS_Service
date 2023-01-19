@@ -73,16 +73,13 @@ __Koin__
 
 > def koin_android_version = "3.3.2"
 
-_// Koin main features for Android_
 
-> implementation "io.insert-koin:koin-android:$koin_android_version"
+> implementation "io.insert-koin:koin-android:$koin_android_version" // Koin main features for Android
 
-_// Java Compatibility_
 
-> implementation "io.insert-koin:koin-android-compat:$koin_android_version"
+> implementation "io.insert-koin:koin-android-compat:$koin_android_version" // Java Compatibility
 
-_// Navigation Graph_
 
-> implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version"
+> implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version" // Navigation Graph
 
 
