@@ -69,4 +69,20 @@ __HTTP__
 __AsTextView__ 
 > implementation 'com.github.tekken5953:AsCustomText:1.0.9' <https://github.com/tekken5953/AsCustomText>
 
+__Koin__
+
+> def koin_android_version = "3.3.2"
+
+_// Koin main features for Android_
+
+> implementation "io.insert-koin:koin-android:$koin_android_version"
+
+_// Java Compatibility_
+
+> implementation "io.insert-koin:koin-android-compat:$koin_android_version"
+
+_// Navigation Graph_
+
+> implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version"
+
 
