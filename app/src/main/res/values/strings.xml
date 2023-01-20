@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AS_Service</string>
     <string name="sign_up">회원가입</string>
@@ -8,7 +9,6 @@
     <string name="sign_up_ok">생성</string>
     <string name="re_password">비밀번호 확인</string>
     <string name="phone">핸드폰 번호</string>
-    <string name="secondary">2차 인증</string>
     <string name="submit">제출</string>
     <string name="main_name">AS Service</string>
 </resources>

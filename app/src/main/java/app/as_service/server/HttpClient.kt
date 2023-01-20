@@ -16,7 +16,7 @@ object HttpClient {
     lateinit var mMyAPI: MyApi  // API Interface 생성
 
     fun getInstance() {
-        Log.d(TAG, "인스턴스 생성")
+        Log.d(TAG, "API 인스턴스 생성")
         // OkHttp 빌드
         val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
         val loggingInterceptor = HttpLoggingInterceptor()

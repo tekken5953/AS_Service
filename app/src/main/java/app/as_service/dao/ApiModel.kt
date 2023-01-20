@@ -21,5 +21,4 @@ class ApiModel {
     data class PutMyEmail(val email: String)
     // 장치데이터 리스트 GET할 데이터 모델
     data class GetData(val ValidPM: String)
-
 }
