@@ -37,6 +37,8 @@ _**<h1>AirSignal 100 Service App</h1>**_
 
 * 공기질 정보 등 지속적인 API 호출 데이터는 비동기 처리 (Coroutain 혹은 RxJava 사용 예정)
 
+* Koin을 이용하여 의존성 주입 + 테스트 작성
+
 * JUnit + Mock을 사용하여 Unit Test 코드 작성 예정 (ViewModel Test + Adapter Test + ETC)
 
 <br/>
