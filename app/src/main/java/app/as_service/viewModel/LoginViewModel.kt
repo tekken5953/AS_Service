@@ -25,6 +25,6 @@ class LoginViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Log.d(TAG, "로그인 뷰모델 인스턴스 소멸")
+        Log.d(TAG, "뷰모델 인스턴스 소멸")
     }
 }

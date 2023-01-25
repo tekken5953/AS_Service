@@ -8,9 +8,6 @@
             name="signInVM"
             type="app.as_service.viewModel.LoginViewModel" />
         <variable
-            name="signUpVM"
-            type="app.as_service.viewModel.SignUpViewModel" />
-        <variable
             name="username" type="String" />
         <variable
             name="password" type="String" />
@@ -40,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginBottom="3dp"
-            android:text="@string/email"
+            android:text="@string/id"
             android:textColor="@color/modeTextColor"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/mainLoginIdEt"

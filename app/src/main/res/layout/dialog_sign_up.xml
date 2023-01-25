@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -16,114 +15,93 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_up_email_input"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/sign_up_id_tx"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/main_text"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="이메일"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/sign_up_email"
+        style="@style/signUpEditTextStyle"
         android:layout_below="@+id/main_text"
-        app:boxBackgroundColor="@color/modeViewColor"
-        android:hint="@string/email"
-        app:boxStrokeColor="@color/mainColor"
-        app:hintTextColor="@color/mainColor"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp">
+        android:layout_toEndOf="@+id/sign_up_repwd_tx"
+        android:gravity="center"
+        android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/sign_up_email"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="start"
-            android:textCursorDrawable="@drawable/et_cursor"
-            android:textIsSelectable="true"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_up_phone_input"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/sign_up_name_tx"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_up_email_input"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp"
-        android:hint="@string/phone"
-        app:boxBackgroundColor="@color/modeViewColor"
-        app:boxStrokeColor="@color/mainColor"
-        app:counterEnabled="true"
-        app:counterMaxLength="11"
-        app:errorEnabled="true"
-        app:helperText="@string/sign_up_helper"
-        app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/mainColor">
+        android:layout_below="@id/sign_up_email"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/id"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/sign_up_phone"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="start"
-            android:textCursorDrawable="@drawable/et_cursor"
-            android:textIsSelectable="true"
-            android:inputType="phone" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:id="@+id/sign_up_id"
+        style="@style/signUpEditTextStyle"
+        android:layout_below="@+id/sign_up_email"
+        android:layout_alignStart="@id/sign_up_email"
+        android:layout_marginTop="21dp"
+        android:inputType="text" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_up_pwd_input"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/sign_up_pwd_tx"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_up_phone_input"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp"
-        android:hint="@string/password"
-        app:boxStrokeColor="@color/mainColor"
-        app:boxBackgroundColor="@color/modeViewColor"
-        app:hintTextColor="@color/mainColor"
-        app:counterMaxLength="20"
-        app:errorEnabled="true"
-        app:passwordToggleEnabled="true">
+        android:layout_below="@id/sign_up_name_tx"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/password"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/sign_up_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="start"
-            android:textCursorDrawable="@drawable/et_cursor"
-            android:textIsSelectable="true"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:id="@+id/sign_up_pwd"
+        style="@style/signUpEditTextStyle"
+        android:layout_below="@+id/sign_up_name_tx"
+        android:layout_alignStart="@id/sign_up_email"
+        android:layout_marginTop="30dp"
+        android:inputType="textPassword" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_up_repwd_input"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/sign_up_repwd_tx"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_up_pwd_input"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp"
-        android:hint="@string/re_password"
-        app:boxStrokeColor="@color/mainColor"
-        app:boxBackgroundColor="@color/modeViewColor"
-        app:hintTextColor="@color/mainColor"
-        app:counterMaxLength="20"
-        app:errorEnabled="true"
-        app:passwordToggleEnabled="true">
+        android:layout_below="@id/sign_up_pwd_tx"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/re_password"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/sign_up_repwd"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="start"
-            android:textCursorDrawable="@drawable/et_cursor"
-            android:textIsSelectable="true"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:id="@+id/sign_up_repwd"
+        style="@style/signUpEditTextStyle"
+        android:layout_below="@+id/sign_up_pwd_tx"
+        android:layout_alignStart="@id/sign_up_email"
+        android:layout_marginTop="32dp"
+        android:inputType="textPassword" />
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_up_repwd_input"
-        android:layout_marginTop="30dp"
+        android:layout_below="@+id/sign_up_repwd"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -134,7 +112,7 @@
             style="@style/ButtonStyle"
             android:layout_marginStart="50dp"
             android:layout_weight="1"
-            android:text="@string/sign_up_ok" />
+            android:text="@string/sign_up_ok"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sign_up_cancel"
