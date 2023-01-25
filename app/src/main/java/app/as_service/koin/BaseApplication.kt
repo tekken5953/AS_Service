@@ -2,7 +2,6 @@ package app.as_service.koin
 
 import android.app.Application
 import app.as_service.viewModel.LoginViewModel
-import app.as_service.viewModel.SignUpViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -16,7 +15,7 @@ class BaseApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BaseApplication)
-            modules(listOf(loginModule, signUpModule))
+            modules(listOf(loginModule))
         }
     }
 
@@ -24,5 +23,4 @@ class BaseApplication : Application() {
     /* factory : 호출될 때마다 객체 생성 */
     /* viewModel : 뷰모델 의존성 제거 객체 생성 */
     private val loginModule = module { viewModel { LoginViewModel() } }
-    private val signUpModule = module { viewModel { SignUpViewModel() } }
 }
