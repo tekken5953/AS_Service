@@ -11,4 +11,13 @@
     <string name="phone">Phone Number</string>
     <string name="submit">Submit</string>
     <string name="main_name">AS Service</string>
+    <string name="email">Email</string>
+    <string name="sign_up_helper">without \' - \'</string>
+    <string name="error_email">Email format is not correct</string>
+    <string name="error_pwd_matching">Passwords do not match each other</string>
+    <string name="error_phone">Phone number format is not correct</string>
+    <string name="error_not_input">Please enter all items</string>
+    <string name="error_check_status">Please check your ID and password</string>
+    <string name="error_input">Please enter all items correctly</string>
+    <string name="success_signup">Success to Sign up</string>
 </resources>
