@@ -28,7 +28,7 @@ object HttpClient {
         // 서버 URL 주소에 연결, GSON Convert 활성화
         val retrofit: Retrofit by lazy {
             Retrofit.Builder()
-                .baseUrl("http://192.168.0.19:8080/api/")
+                .baseUrl("http://192.168.0.177:8080/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(clientBuilder.build())
                 .build()
