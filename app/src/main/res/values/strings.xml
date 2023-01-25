@@ -11,4 +11,13 @@
     <string name="phone">핸드폰 번호</string>
     <string name="submit">제출</string>
     <string name="main_name">AS Service</string>
+    <string name="email">이메일</string>
+    <string name="sign_up_helper">\' - \' 없이 입력해주세요</string>
+    <string name="error_email">이메일 형식이 올바르지 않습니다</string>
+    <string name="error_pwd_matching">비밀번호가 서로 일치하지 않습니다</string>
+    <string name="error_phone">핸드폰 번호 형식이 올바르지 않습니다</string>
+    <string name="error_not_input">모든 항목을 입력해주세요</string>
+    <string name="error_check_status">아이디와 비밀번호를 확인해주세요</string>
+    <string name="error_input">모든 항목을 올바르게 입력해주세요</string>
+    <string name="success_signup">회원가입을 완료했습니다</string>
 </resources>
