@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="modeTextColor">#FFFFFF</color>
-    <color name="modeViewColor">#FF000000</color>
+    <color name="modeViewColor">#080c42</color>
     <color name="mainColor">#FFFFFF</color>
+    <color name="deviceListBgColor">#151a57</color>
 </resources>

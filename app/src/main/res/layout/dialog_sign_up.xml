@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/modeViewColor">
 
     <TextView
         android:id="@+id/main_text"
@@ -11,6 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
+        android:fontFamily="@font/lotte_medium"
         android:text="@string/sign_up"
         android:textColor="@color/mainColor"
         android:textSize="30sp"
@@ -23,6 +25,7 @@
         android:layout_below="@+id/main_text"
         app:boxBackgroundColor="@color/modeViewColor"
         android:hint="@string/email"
+        android:textColorHint="@color/modeTextColor"
         app:boxStrokeColor="@color/mainColor"
         app:hintTextColor="@color/mainColor"
         android:layout_marginStart="30dp"
@@ -34,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:fontFamily="@font/lotte_medium"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textEmailAddress" />
@@ -48,12 +52,14 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/phone"
+        android:textColorHint="@color/modeTextColor"
         app:boxBackgroundColor="@color/modeViewColor"
         app:boxStrokeColor="@color/mainColor"
         app:counterEnabled="true"
         app:counterMaxLength="11"
         app:errorEnabled="true"
         app:helperText="@string/sign_up_helper"
+        app:helperTextTextColor="@color/modeTextColor"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/mainColor">
 
@@ -62,9 +68,10 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:inputType="phone"
+            android:fontFamily="@font/lotte_medium"
             android:textCursorDrawable="@drawable/et_cursor"
-            android:textIsSelectable="true"
-            android:inputType="phone" />
+            android:textIsSelectable="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,18 +83,21 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/password"
+        android:textColorHint="@color/modeTextColor"
         app:boxStrokeColor="@color/mainColor"
         app:boxBackgroundColor="@color/modeViewColor"
         app:hintTextColor="@color/mainColor"
         app:counterMaxLength="20"
         app:errorEnabled="true"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/modeTextColor">
 
         <EditText
             android:id="@+id/sign_up_pwd"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:fontFamily="@font/lotte_medium"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textPassword" />
@@ -102,11 +112,13 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/re_password"
+        android:textColorHint="@color/modeTextColor"
         app:boxStrokeColor="@color/mainColor"
         app:boxBackgroundColor="@color/modeViewColor"
         app:hintTextColor="@color/mainColor"
         app:counterMaxLength="20"
         app:errorEnabled="true"
+        app:passwordToggleTint="@color/modeTextColor"
         app:passwordToggleEnabled="true">
 
         <EditText
@@ -114,6 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:fontFamily="@font/lotte_medium"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textPassword" />
@@ -130,19 +143,23 @@
         android:padding="10dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/sign_up_ok"
-            style="@style/ButtonStyle"
-            android:layout_marginStart="50dp"
-            android:layout_weight="1"
-            android:text="@string/sign_up_ok" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sign_up_cancel"
             style="@style/ButtonStyle"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="25dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/lotte_medium"
+            android:text="@string/cancel" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sign_up_ok"
+            style="@style/ButtonStyle"
             android:layout_marginEnd="50dp"
             android:layout_weight="1"
-            android:text="@string/cancel" />
+            android:text="@string/sign_up_ok"
+            android:fontFamily="@font/lotte_medium"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/defaultMainColor"/>
     </TableRow>
 
 </RelativeLayout>

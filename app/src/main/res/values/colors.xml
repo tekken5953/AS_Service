@@ -10,6 +10,7 @@
 
     <color name="modeTextColor">#FF000000</color>
     <color name="modeViewColor">#FFFFFF</color>
-    <color name="mainColor">#1eb1f0</color>
-    <color name="defaultMainColor">#1eb1f0</color>
+    <color name="mainColor">#3ec5ff</color>
+    <color name="defaultMainColor">#3ec5ff</color>
+    <color name="deviceListBgColor">#E9ECEF</color>
 </resources>

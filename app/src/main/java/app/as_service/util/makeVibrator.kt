@@ -16,7 +16,7 @@ class MakeVibrator(var context: Context) {
                     )
                 )
             )
-        } else if (Build.VERSION.SDK_INT >= 26) {
+        } else {
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createOneShot(

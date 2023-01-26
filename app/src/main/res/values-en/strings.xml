@@ -20,4 +20,6 @@
     <string name="error_check_status">Please check your ID and password</string>
     <string name="error_input">Please enter all items correctly</string>
     <string name="success_signup">Success to Sign up</string>
+    <string name="cqi_colon">CQI :</string>
+    <string name="virus_colon">VIRUS :</string>
 </resources>

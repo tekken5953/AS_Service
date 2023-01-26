@@ -10,6 +10,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/second_item_bg</item>
         <item name="android:inputType">textPassword</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="mainLoginItemField">
@@ -25,6 +26,7 @@
         <item name="android:layout_marginStart">30dp</item>
         <item name="android:layout_marginEnd">30dp</item>
         <item name="android:background">@drawable/second_item_bg</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="signUpEditTextStyle">
@@ -37,6 +39,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:background">@drawable/second_item_bg</item>
         <item name="android:gravity">center</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="ButtonStyle">
@@ -47,6 +50,7 @@
         <item name="android:layout_marginStart">30dp</item>
         <item name="android:layout_marginEnd">30dp</item>
         <item name="android:textSize">17sp</item>
+        <item name="textAllCaps">false</item>
     </style>
     
     <style name="animation">

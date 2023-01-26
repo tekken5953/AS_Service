@@ -2,9 +2,9 @@ package app.as_service.dao
 
 class ApiModel {
     // 회원가입 시 Body에 넣어서 POST 할 데이터 모델
-    data class Member(val email: String, val phone: String, val password: String)
+    data class Member(val userId: String, val phone: String, val password: String)
     // 로그인 시 Body에 넣어서 POST 할 데이터 모델
-    data class Login(val username: String, val password: String)
+    data class Login(val userId: String, val password: String)
     // 로그인 시 발행된 AccessToken Body로 Get할 데이터 모델
     data class AccessToken(var access: String)
     // 장치추가 시 Body에 넣어서 POST 할 데이터 모델
