@@ -6,6 +6,7 @@ import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.CODE_SERVER_DOWN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
+import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.dao.StaticDataObject.httpClient
 import retrofit2.Call
@@ -51,6 +52,7 @@ class LoginRepo {
 
                 // API 통신 실패
                 override fun onFailure(call: Call<ApiModel.AccessToken>, t: Throwable) {
+                    _signInResultData.value = RESPONSE_FAIL
                     Log.e(TAG, "로그인 실패 : ${t.localizedMessage}")
                 }
             })

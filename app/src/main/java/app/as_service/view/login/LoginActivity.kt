@@ -21,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
+import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.databinding.ActivityLoginBinding
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
@@ -31,6 +32,7 @@ import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -60,22 +62,15 @@ class LoginActivity : AppCompatActivity() {
                     lifecycleOwner = this@LoginActivity
                     signInVM = loginViewModel
                     signUpVM = signUpViewModel
-                    mainLoginPb.bringToFront()
                 }
 
         if (::binding.isInitialized) {
-            binding.mainLoginBtn.setOnClickListener {
-                binding.username = binding.mainLoginIdEt.text.toString()
-                binding.password = binding.mainLoginPwdEt.text.toString()
-
-                loginViewModel.loadSignInResult(
-                    requireNotNull(binding.username.toString()),
-                    requireNotNull(binding.password.toString())
-                )
-            }
-
             binding.mainSignUpBtn.setOnClickListener {
                 buildSignUpDialog()
+            }
+
+            binding.mainLoginBtn.setOnClickListener {
+                binding.mainLoginPb.visibility = View.VISIBLE
             }
         }
     }
@@ -188,8 +183,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun applySignInViewModel() {
         loginViewModel.getSignInResult().observe(this@LoginActivity) { newToken ->
+            binding.mainLoginPb.visibility = View.GONE
             newToken?.let {
-                if (it != RESPONSE_DEFAULT) {
+                if (it == RESPONSE_DEFAULT || it == RESPONSE_FAIL) {
+                    MakeVibrator(context).run(300)
+                    nullCheck()
+                } else {
                     if (newToken != originToken) {
                         // 엑세스 토큰 저장
                         SharedPreferenceManager.setString(context, "accessToken", newToken)
@@ -201,16 +200,10 @@ class LoginActivity : AppCompatActivity() {
                         )
                     }
                     // 토큰이 저장되었으면 메인화면으로 이동
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed( {
-                        val intent = Intent(context, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    },2000)
-                } else {
-                        Toast.makeText(context, "로그인에 실패했습니다", Toast.LENGTH_SHORT).show()
-                        MakeVibrator(context).run(300)
-                        nullCheck()
+                    val intent = Intent(context, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(R.anim.fadein_activity, R.anim.fadeout_activity)
                 }
             }
         }
@@ -219,6 +212,7 @@ class LoginActivity : AppCompatActivity() {
     private fun applySignUpViewModel() {
         signUpViewModel.getSignUpCode().observe(this@LoginActivity) { resultCode ->
             resultCode?.let {
+
                 if (it == RESULT_OK.toString()) {
                     Toast.makeText(context, getString(R.string.success_signup), Toast.LENGTH_SHORT)
                         .show()

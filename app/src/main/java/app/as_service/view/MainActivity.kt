@@ -1,52 +1,95 @@
 package app.as_service.view
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import app.as_service.R
-import app.as_service.adapter.DeviceListAdapter
-import app.as_service.dao.ApiModel
 import app.as_service.databinding.ActivityMainBinding
-import app.as_service.util.SharedPreferenceManager
-import app.as_service.viewModel.DeviceListViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import app.as_service.view.fragment.AnalyticsFragment
+import app.as_service.view.fragment.ChatFragment
+import app.as_service.view.fragment.DashboardFragment
+import app.as_service.view.fragment.UserFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: DeviceListAdapter
-    private val mList = ArrayList<ApiModel.GetDeviceList>()
-    private val deviceListViewModel by viewModel<DeviceListViewModel>()
-    private val originToken: String by lazy {
-        SharedPreferenceManager.getString(this, "accessToken")    // 로컬 DB 에 저장된 토큰 값 불러오기
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<ActivityMainBinding?>(this, R.layout.activity_main)
-            .apply {
-                lifecycleOwner = this@MainActivity
-                deviceListVM = deviceListViewModel
-            }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        if (::binding.isInitialized) {
-            adapter = DeviceListAdapter(mList)
-            binding.mainRecyclerView.adapter = adapter
-            applyDeviceListInViewModel()
-            deviceListViewModel.loadDeviceListResult(originToken)
+        val bottomNav: BottomNavigationView = binding.bottomNav
+        bottomNav.selectedItemId = R.id.bottom_dashboard
+        val viewPager: ViewPager2 = binding.viewPager
+        val viewPagerAdapter = ViewPagerAdapter(this)
+        viewPager.adapter = viewPagerAdapter
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> {
+                        viewPager.currentItem = 0
+                        bottomNav.selectedItemId = R.id.bottom_dashboard
+                    }
+                    1 -> {
+                        viewPager.currentItem = 1
+                        bottomNav.selectedItemId = R.id.bottom_analytics
+                    }
+                    2 -> {
+                        viewPager.currentItem = 2
+                        bottomNav.selectedItemId = R.id.bottom_chat
+                    }
+                    3 -> {
+                        viewPager.currentItem = 3
+                        bottomNav.selectedItemId = R.id.bottom_user
+                    }
+                }
+                super.onPageSelected(position)
+            }
+        })
+
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.bottom_dashboard -> {
+                    viewPager.currentItem = 0
+                    true
+                }
+                R.id.bottom_analytics -> {
+                    viewPager.currentItem = 1
+                    true
+                }
+
+                R.id.bottom_chat -> {
+                    viewPager.currentItem = 2
+                    true
+                }
+                R.id.bottom_user -> {
+                    viewPager.currentItem = 3
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun applyDeviceListInViewModel() {
-        deviceListViewModel.getDeviceListResult().observe(this@MainActivity) { listItem ->
-                listItem?.let {
-                    if (it.size != 0) {
-                        mList.addAll(listItem)
-                        adapter.notifyDataSetChanged()
-                    }
+    internal class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
+        FragmentStateAdapter(fragmentActivity) {
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                1 -> { AnalyticsFragment() }
+                2 -> { ChatFragment() }
+                3 -> { UserFragment() }
+                else -> { DashboardFragment() }
             }
+        }
+
+        override fun getItemCount(): Int {
+            return 4
         }
     }
 }

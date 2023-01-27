@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AS_Service</string>
+    <string name="app__name">AS_Service</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
     <string name="password">Password</string>
@@ -22,4 +22,9 @@
     <string name="success_signup">Success to Sign up</string>
     <string name="cqi_colon">CQI :</string>
     <string name="virus_colon">VIRUS :</string>
+    <string name="air_condition">Air Quality Data</string>
+    <string name="change_temp">Temp Variation</string>
+    <string name="online">Online</string>
+    <string name="device_status">장치 정보</string>
+    <string name="category">Good Normal Bad Worst</string>
 </resources>

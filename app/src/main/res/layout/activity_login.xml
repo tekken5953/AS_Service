@@ -11,10 +11,6 @@
         <variable
             name="signUpVM"
             type="app.as_service.viewModel.SignUpViewModel" />
-        <variable
-            name="username" type="String" />
-        <variable
-            name="password" type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -99,6 +95,7 @@
             android:layout_width="0dp"
             android:layout_marginTop="50dp"
             android:text="@string/sign_in"
+            android:onClick="@{()-> signInVM.loadSignInResult(mainLoginIdEt.getText().toString(),mainLoginPwdEt.getText().toString())}"
             android:fontFamily="@font/lotte_medium"
             android:backgroundTint="@color/defaultMainColor"
             android:textColor="@color/white"
