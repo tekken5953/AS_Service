@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="false">
+        <shape>
+            <solid android:color="@color/deviceListBgColor"/>
+            <corners android:radius="5dp"/>
+        </shape>
+        <scale android:scaleWidth="1" android:scaleHeight="1"/>
+    </item>
+
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/deviceListBgColor"/>
+            <corners android:radius="5dp"/>
+        </shape>
+        <scale android:scaleWidth="0.9" android:scaleHeight="0.9"/>
+    </item>
+
+</selector>

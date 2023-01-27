@@ -20,4 +20,6 @@
     <string name="error_check_status">아이디와 비밀번호를 확인해주세요</string>
     <string name="error_input">모든 항목을 올바르게 입력해주세요</string>
     <string name="success_signup">회원가입을 완료했습니다</string>
+    <string name="cqi_colon">공기질 통합지수 :</string>
+    <string name="virus_colon">바이러스 위험지수 :</string>
 </resources>

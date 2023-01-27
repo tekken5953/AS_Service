@@ -3,6 +3,8 @@ package app.as_service.view.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -18,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import app.as_service.R
-import app.as_service.dao.StaticDataObject.CODE_SERVER_DOWN
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.databinding.ActivityLoginBinding
 import app.as_service.util.MakeVibrator
@@ -59,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     lifecycleOwner = this@LoginActivity
                     signInVM = loginViewModel
                     signUpVM = signUpViewModel
+                    mainLoginPb.bringToFront()
                 }
 
         if (::binding.isInitialized) {
@@ -94,7 +96,6 @@ class LoginActivity : AppCompatActivity() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
-
         binding.mainLoginTitle.text = span
     }
 
@@ -123,7 +124,6 @@ class LoginActivity : AppCompatActivity() {
             .inflate(R.layout.dialog_sign_up, null, false)
         builder.setView(dialogView)
         val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
         val idInput: TextInputLayout = dialogView.findViewById(R.id.sign_up_email_input)
         val idEt: EditText = dialogView.findViewById(R.id.sign_up_email)
         val pwdEt: EditText = dialogView.findViewById(R.id.sign_up_pwd)
@@ -201,12 +201,16 @@ class LoginActivity : AppCompatActivity() {
                         )
                     }
                     // 토큰이 저장되었으면 메인화면으로 이동
-                    val intent = Intent(context, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed( {
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    },2000)
                 } else {
-                    MakeVibrator(context).run(300)
-                    nullCheck()
+                        Toast.makeText(context, "로그인에 실패했습니다", Toast.LENGTH_SHORT).show()
+                        MakeVibrator(context).run(300)
+                        nullCheck()
                 }
             }
         }
@@ -216,7 +220,8 @@ class LoginActivity : AppCompatActivity() {
         signUpViewModel.getSignUpCode().observe(this@LoginActivity) { resultCode ->
             resultCode?.let {
                 if (it == RESULT_OK.toString()) {
-                    Toast.makeText(context, getString(R.string.success_signup), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.success_signup), Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     Toast.makeText(context, "예상치 못한 오류 발생 $it", Toast.LENGTH_SHORT).show()
                 }

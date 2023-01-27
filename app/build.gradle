@@ -69,4 +69,8 @@ dependencies {
     implementation "io.insert-koin:koin-android-compat:$koin_android_version"
     // Navigation Graph
     implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version"
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }
