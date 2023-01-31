@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_business_type" translatable="true">
+        <item>개인</item>
+        <item>기업</item>
+    </string-array>
+
+    <string-array name="spinner_business_individual" translatable="true">
+        <item>자택</item>
+        <item>사무실</item>
+    </string-array>
+
+    <string-array name="spinner_business_company" translatable="true">
+        <item>실내</item>
+        <item>실외</item>
+    </string-array>
+
+    <string-array name="spinner_business_individual_home" translatable="true">
+        <item>방</item>
+        <item>화장실</item>
+        <item>보일러실</item>
+        <item>세탁실</item>
+        <item>거실</item>
+        <item>주방</item>
+        <item>베란다</item>
+        <item>기타</item>
+        <item>직접입력</item>
+    </string-array>
+
+    <string-array name="spinner_business_company_indoor" translatable="true">
+        <item>사무실</item>
+        <item>병원</item>
+        <item>학교</item>
+        <item>카페</item>
+        <item>공공기관</item>
+        <item>음식점</item>
+        <item>피시방</item>
+        <item>노래방</item>
+        <item>도서관</item>
+        <item>기타</item>
+        <item>직접입력</item>
+    </string-array>
+
+    <string-array name="spinner_business_company_outdoor" translatable="true">
+        <item>복도</item>
+        <item>계단</item>
+        <item>공사장</item>
+        <item>공원</item>
+        <item>공중 화장실</item>
+        <item>기타</item>
+        <item>직접입력</item>
+    </string-array>
+</resources>
