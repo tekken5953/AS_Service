@@ -2,6 +2,7 @@ package app.as_service.server.api;
 
 import java.util.List;
 
+import app.as_service.dao.AdapterModel;
 import app.as_service.dao.ApiModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,7 +28,7 @@ public interface MyApi {
 
     // 장치리스트 검색
     @GET("device/")
-    Call<List<ApiModel.GetDeviceList>> getDeviceList(@Header("Authorization") String token);
+    Call<List<AdapterModel.GetDeviceList>> getDeviceList(@Header("Authorization") String token);
 
     // 내 정보 확인
     @GET("user/")
@@ -42,6 +43,6 @@ public interface MyApi {
     Call<ApiModel.ReturnPost> putMyEmail(@Header("Authorization") String token,@Body ApiModel.PutMyEmail item);
 
     // 데이터 정보 불러오기
-    @GET("analytics/{sn}")
-    Call<ApiModel.GetData> getData(@Path("sn") String sn, @Query("param") String query, @Header("Authorization") String token);
+    @GET("analytics/{device}")
+    Call<ApiModel.GetData> getData(@Path("device") String device, @Header("Authorization") String token);
 }

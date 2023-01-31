@@ -3,13 +3,12 @@ package app.as_service.view.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -21,10 +20,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
+import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.databinding.ActivityLoginBinding
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
-import app.as_service.view.MainActivity
+import app.as_service.util.ToastUtils
+import app.as_service.view.main.MainActivity
 import app.as_service.viewModel.LoginViewModel
 import app.as_service.viewModel.SignUpViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -37,15 +38,17 @@ class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModel<LoginViewModel>()
     private val signUpViewModel by viewModel<SignUpViewModel>()
     private val originToken: String by lazy {
-        SharedPreferenceManager.getString(this, "accessToken")    // 로컬 DB 에 저장된 토큰 값 불러오기
+        SharedPreferenceManager.getString(this@LoginActivity,"accessToken")  // 엑세스 토큰
     }
     private val context: Context = this@LoginActivity
+    val toast = ToastUtils(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializing()
         setLoginTitleText()
+        setMissingPasswordText()
 
         // ViewModel 에게 LiveData 값을 보내라고 명령. 리턴받은 결과 값(토큰)을 비교하여 내부 DB에 저장
         applySignInViewModel()
@@ -60,22 +63,15 @@ class LoginActivity : AppCompatActivity() {
                     lifecycleOwner = this@LoginActivity
                     signInVM = loginViewModel
                     signUpVM = signUpViewModel
-                    mainLoginPb.bringToFront()
                 }
 
         if (::binding.isInitialized) {
-            binding.mainLoginBtn.setOnClickListener {
-                binding.username = binding.mainLoginIdEt.text.toString()
-                binding.password = binding.mainLoginPwdEt.text.toString()
-
-                loginViewModel.loadSignInResult(
-                    requireNotNull(binding.username.toString()),
-                    requireNotNull(binding.password.toString())
-                )
-            }
-
             binding.mainSignUpBtn.setOnClickListener {
                 buildSignUpDialog()
+            }
+
+            binding.mainLoginBtn.setOnClickListener {
+                binding.mainLoginPb.visibility = View.VISIBLE
             }
         }
     }
@@ -99,16 +95,27 @@ class LoginActivity : AppCompatActivity() {
         binding.mainLoginTitle.text = span
     }
 
+    //비밀번호 찾기 타이틀 설정
+    private fun setMissingPasswordText() {
+        val span = SpannableStringBuilder(getString(R.string.missing_password))
+        span.setSpan(
+            UnderlineSpan(),
+            0, getString(R.string.missing_password).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        binding.mainLoginMissingPwd.text = span
+    }
+
+    // 통신에 실패했을 때 이메일 체크섬
     private fun nullCheck() {
         if (binding.mainLoginIdEt.text.toString().isBlank()
             || binding.mainLoginPwdEt.text.toString().isBlank()
         )
-            Toast.makeText(context, R.string.error_not_input, Toast.LENGTH_SHORT).show()
+            toast.shortMessage(getString(R.string.error_not_input))
         else if (!binding.mainLoginIdEt.text.contains("@"))
-            Toast.makeText(context, R.string.error_email, Toast.LENGTH_SHORT).show()
+            toast.shortMessage(getString(R.string.error_email))
         else
-            Toast.makeText(context, getString(R.string.error_check_status), Toast.LENGTH_SHORT)
-                .show()
+        toast.shortMessage(getString(R.string.error_check_status))
     }
 
     // JWT 토큰의 payload 로 전달된 데이터 추출
@@ -188,29 +195,35 @@ class LoginActivity : AppCompatActivity() {
 
     private fun applySignInViewModel() {
         loginViewModel.getSignInResult().observe(this@LoginActivity) { newToken ->
+            binding.mainLoginPb.visibility = View.GONE
             newToken?.let {
-                if (it != RESPONSE_DEFAULT) {
-                    if (newToken != originToken) {
-                        // 엑세스 토큰 저장
-                        SharedPreferenceManager.setString(context, "accessToken", newToken)
-                        // 유저 이름 저장
-                        SharedPreferenceManager.setString(
-                            context,
-                            "jti",
-                            getDecodeStream(newToken, "jti")
-                        )
+                when (it) {
+                    RESPONSE_DEFAULT -> {
+                        MakeVibrator(context).run(300)
+                        nullCheck()
                     }
-                    // 토큰이 저장되었으면 메인화면으로 이동
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed( {
+
+                    RESPONSE_FAIL -> {
+                        toast.shortMessage("예상치 못한 오류가 발생했습니다")
+                        MakeVibrator(context).run(300)
+                    }
+                    else -> {
+                        if (newToken != originToken) {
+                            // 엑세스 토큰 저장
+                            SharedPreferenceManager.setString(context, "accessToken", newToken)
+                            // 유저 이름 저장
+                            SharedPreferenceManager.setString(
+                                context,
+                                "jti",
+                                getDecodeStream(newToken, "jti")
+                            )
+                        }
+                        // 토큰이 저장되었으면 메인화면으로 이동
                         val intent = Intent(context, MainActivity::class.java)
                         startActivity(intent)
                         finish()
-                    },2000)
-                } else {
-                        Toast.makeText(context, "로그인에 실패했습니다", Toast.LENGTH_SHORT).show()
-                        MakeVibrator(context).run(300)
-                        nullCheck()
+                        overridePendingTransition(R.anim.fadein_activity, R.anim.fadeout_activity)
+                    }
                 }
             }
         }
@@ -219,11 +232,11 @@ class LoginActivity : AppCompatActivity() {
     private fun applySignUpViewModel() {
         signUpViewModel.getSignUpCode().observe(this@LoginActivity) { resultCode ->
             resultCode?.let {
+
                 if (it == RESULT_OK.toString()) {
-                    Toast.makeText(context, getString(R.string.success_signup), Toast.LENGTH_SHORT)
-                        .show()
+                    toast.shortMessage(getString(R.string.success_signup))
                 } else {
-                    Toast.makeText(context, "예상치 못한 오류 발생 $it", Toast.LENGTH_SHORT).show()
+                    toast.shortMessage("예상치 못한 오류 발생 $it")
                 }
             }
         }

@@ -1,12 +1,10 @@
-/**
- * 에어시그널 태블릿 대쉬보드 (사용자용)
- * 개발자 LeeJaeYoung (jy5953@airsignal.kr)
- * 개발시작 2022-06-20
- */
-
 package app.as_service.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +22,18 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import app.as_service.R;
+import app.as_service.dao.AdapterModel;
 import app.as_service.dao.ApiModel;
 import app.as_service.util.ViewTouchListener;
+import app.as_service.view.DeviceDetailActivity;
 import kotlin.random.Random;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
-    private final ArrayList<ApiModel.GetDeviceList> mData;
+    private final ArrayList<AdapterModel.GetDeviceList> mData;
     Context context;
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public DeviceListAdapter(ArrayList<ApiModel.GetDeviceList> list) {
+    public DeviceListAdapter(ArrayList<AdapterModel.GetDeviceList> list) {
         mData = list;
     }
 
@@ -45,9 +45,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.device_list_item, parent, false);
-
-        ViewTouchListener viewTouchListener = new ViewTouchListener();
-        viewTouchListener.onPressView(view);
 
         return new ViewHolder(view);
     }
@@ -115,11 +112,26 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-
                 if (position != RecyclerView.NO_POSITION) {
-                    if (mListener != null) {
-                        mListener.onItemClick(v, position);
-                    }
+                    Intent intent = new Intent(context, DeviceDetailActivity.class);
+                    intent.putExtra("deviceName",name.getText().toString());
+                    intent.putExtra("serialNumber", sn.getText().toString());
+                    intent.putExtra("businessType",business.getText().toString());
+                    if (sn.getText().toString().startsWith("SI"))
+                        intent.putExtra("deviceType","as_100");
+                    else if (sn.getText().toString().startsWith("TI"))
+                        intent.putExtra("deviceType","as_m");
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                            (Activity) context,
+                            Pair.create(name, "deviceNameTran"),
+                            Pair.create(sn, "serialNumberTran"),
+                            Pair.create(business, "businessTypeTran"),
+                            Pair.create(type, "imageTran")
+                    );
+                    context.startActivity(intent, options.toBundle());
+//                    if (mListener != null) {
+//                        mListener.onItemClick(v,position);
+//                    }
                 }
             });
 

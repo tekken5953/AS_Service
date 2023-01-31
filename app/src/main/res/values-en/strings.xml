@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AS_Service</string>
+    <string name="app__name">AS_Service</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
     <string name="password">Password</string>
@@ -22,4 +22,17 @@
     <string name="success_signup">Success to Sign up</string>
     <string name="cqi_colon">CQI :</string>
     <string name="virus_colon">VIRUS :</string>
+    <string name="air_condition">Air Quality Data</string>
+    <string name="change_temp">Temp Variation</string>
+    <string name="online">Online</string>
+    <string name="device_status">Device Info</string>
+    <string name="category">Good Normal Bad Worst</string>
+    <string name="missing_password">Forgot your Email?</string>
+    <string name="location">Location</string>
+    <string name="detail_sn">Serial Number :</string>
+    <string name="add_device">장치 등록하기</string>
+    <string name="next">다음</string>
+    <string name="serial_title">장치 하단에 적혀있는 일련번호를 입력해주세요</string>
+    <string name="serial_number">시리얼 넘버</string>
+    <string name="serial_error">올바른 시리얼번호가 아닙니다</string>
 </resources>

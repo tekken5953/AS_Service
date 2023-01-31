@@ -1,6 +1,7 @@
 package app.as_service.viewModel
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import app.as_service.dao.StaticDataObject.TAG

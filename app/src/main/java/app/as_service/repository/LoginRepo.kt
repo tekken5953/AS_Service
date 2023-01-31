@@ -6,6 +6,7 @@ import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.CODE_SERVER_DOWN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
+import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.dao.StaticDataObject.httpClient
 import retrofit2.Call
@@ -34,7 +35,7 @@ class LoginRepo {
                         val token =
                             response.body()?.access.toString()  // response body 에 전달 된 access Json 으로 값 갱신
                         Log.d(TAG, "로그인 성공 : ${response.code()}")
-                        Log.d(TAG, "토큰(Response Body) : \n$token")
+                        Log.d(TAG, "엑세스 토큰 발행(Response Body) : \n$token")
                         _signInResultData.value = token // MutableLiveData 값 갱신
                     }
                     // 서버 연결 실패(404)
@@ -51,6 +52,7 @@ class LoginRepo {
 
                 // API 통신 실패
                 override fun onFailure(call: Call<ApiModel.AccessToken>, t: Throwable) {
+                    _signInResultData.value = RESPONSE_FAIL
                     Log.e(TAG, "로그인 실패 : ${t.localizedMessage}")
                 }
             })

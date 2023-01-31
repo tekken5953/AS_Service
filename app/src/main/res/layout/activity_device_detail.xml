@@ -1,9 +1,350 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.DeviceDetailActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+        <variable
+            name="dataVM"
+            type="app.as_service.viewModel.GetValueDataModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/modeViewColor"
+            tools:context=".view.DeviceDetailActivity">
+
+            <ImageView
+                android:id="@+id/detailBookMark"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/star_empty"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/detailBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/modeTextColor" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/detailBack"
+                app:layout_constraintEnd_toStartOf="@+id/detailBookMark"
+                app:layout_constraintStart_toEndOf="@+id/detailBack"
+                app:layout_constraintTop_toTopOf="@+id/detailBack">
+
+                <TextView
+                    android:id="@+id/detailName"
+                    style="@style/basicBoldTextView"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:transitionName="deviceNameTran" />
+
+                <ImageView
+                    android:id="@+id/detailRightArrow"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/right_arrow" />
+
+                <TextView
+                    android:id="@+id/detailDeviceBusiness"
+                    style="@style/basicBoldTextView"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="20sp"
+                    android:transitionName="businessTypeTran" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detailSnTitle"
+                style="@style/basicRegularTextView"
+                android:layout_marginTop="15dp"
+                android:text="@string/detail_sn"
+                android:textColor="@color/gray"
+                android:textSize="17sp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="@+id/detailBack"
+                app:layout_constraintTop_toBottomOf="@+id/detailBack" />
+
+            <TextView
+                android:id="@+id/detailSN"
+                style="@style/basicRegularTextView"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:transitionName="serialNumberTran"
+                app:layout_constraintBottom_toBottomOf="@+id/detailSnTitle"
+                app:layout_constraintStart_toEndOf="@+id/detailSnTitle"
+                app:layout_constraintTop_toTopOf="@+id/detailSnTitle" />
+
+            <ImageView
+                android:id="@+id/detailDeviceType"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="30dp"
+                android:transitionName="imageTran"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailSnTitle" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailFanCard"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="10dp"
+                android:translationZ="10dp"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintBottom_toTopOf="@+id/detailPowerCard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toTopOf="@id/detailDeviceType">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/detail_control_fan_bg"
+                    android:padding="18dp"
+                    android:src="@drawable/fan"
+                    app:tint="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailPowerCard"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="10dp"
+                android:elevation="10dp"
+                android:translationZ="10dp"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/detailDeviceType"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toBottomOf="@+id/detailFanCard">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/detail_control_power_bg"
+                    android:padding="18dp"
+                    android:src="@drawable/power"
+                    app:tint="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/detailDeviceOnline"
+                style="@style/basicRegularTextView"
+                android:drawablePadding="2dp"
+                android:text="@string/online"
+                android:textColor="@color/green"
+                app:drawableStartCompat="@drawable/circle"
+                app:drawableTint="@color/green"
+                app:layout_constraintEnd_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintStart_toStartOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toBottomOf="@+id/detailDeviceType" />
+
+            <TextView
+                android:id="@+id/detailAirCondTitle"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
+                android:text="@string/air_condition"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/detailBack"
+                app:layout_constraintTop_toBottomOf="@+id/detailDeviceOnline" />
+
+            <TextView
+                android:id="@+id/detailAirCondTimeLine"
+                style="@style/basicRegularTextView"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:drawablePadding="5dp"
+                android:layout_marginTop="2dp"
+                android:textSize="14sp"
+                android:textColor="@color/gray"
+                app:drawableStartCompat="@drawable/circle"
+                app:layout_constraintBottom_toBottomOf="@+id/detailAirCondTitle"
+                app:layout_constraintStart_toEndOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toTopOf="@+id/detailAirCondTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detailAirCondRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:padding="5dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/detailAirCondTitle"
+                tools:listitem="@layout/detail_air_item" />
+
+            <TableRow
+                android:id="@+id/detailAirCondCategory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/detailAirCondTimeLine"
+                app:layout_constraintEnd_toEndOf="@+id/detailBookMark"
+                app:layout_constraintTop_toTopOf="@+id/detailAirCondTimeLine">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="※"
+                    android:textColor="@color/modeTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/good"
+                    android:textColor="@color/progressGood"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/normal"
+                    android:textColor="@color/progressNormal"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/bad"
+                    android:textColor="@color/progressBad"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/very_bad"
+                    android:textColor="@color/progressWorst"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/error"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+            </TableRow>
+
+            <TextView
+                android:id="@+id/detailChangeTempTitle"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
+                android:text="@string/change_temp"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toBottomOf="@+id/detailAirCondRecyclerView" />
+
+            <TextView
+                android:id="@+id/detailChangeTempTimeLine"
+                style="@style/basicRegularTextView"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:drawablePadding="5dp"
+                android:text="2022-01-26"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/gray"
+                app:drawableStartCompat="@drawable/circle"
+                app:layout_constraintBottom_toBottomOf="@+id/detailChangeTempTitle"
+                app:layout_constraintStart_toEndOf="@+id/detailChangeTempTitle"
+                app:layout_constraintTop_toTopOf="@+id/detailChangeTempTitle" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailCardView1"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detailChangeTempTitle">
+
+                <ImageView
+                    android:id="@+id/detailChangeTempGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/graph" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/detailLocationTitle"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
+                android:text="@string/location"
+                android:textSize="18sp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toBottomOf="@+id/detailCardView1" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailCardView2"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="invisible"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detailLocationTitle">
+
+                <ImageView
+                    android:id="@+id/detailLocationImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleX="1.2"
+                    android:src="@drawable/map" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/detailLocationContent"
+                style="@style/basicRegularTextView"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="경기도 성남시 수정구 창업로 54, 가동 506호"
+                android:textSize="17sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/detailCardView2"
+                app:layout_constraintTop_toBottomOf="@+id/detailCardView2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
