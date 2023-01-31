@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/add_device_top_menu" android:id="@+id/serialInclude"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/serialInclude"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/serialTitle"
+            style="@style/basicBoldTextView"
+            android:text="@string/serial_title"
+            android:textSize="18sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/serialEditInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="24dp"
+            app:boxBackgroundColor="@color/modeViewColor"
+            app:boxCollapsedPaddingTop="5dp"
+            app:boxStrokeColor="@color/mainColor"
+            app:counterEnabled="true"
+            app:counterMaxLength="15"
+            app:errorEnabled="true"
+            android:hint="@string/serial_number"
+            android:textColorHint="@color/modeTextColor"
+            app:hintTextColor="@color/defaultMainColor">
+
+            <EditText
+                android:id="@+id/serialEdit"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="start"
+                android:inputType="text"
+                android:textIsSelectable="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/serialBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/add_serial_button"
+            android:fontFamily="@font/lineseed_be"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

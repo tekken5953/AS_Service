@@ -1,4 +1,4 @@
-package app.as_service.view.fragment
+package app.as_service.view.main.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import app.as_service.R
-import app.as_service.databinding.UserFragmentBinding
-import app.as_service.view.MainActivity
+import app.as_service.databinding.ChatFragmentBinding
+import app.as_service.view.main.MainActivity
 
-class UserFragment : Fragment() {
+class ChatFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
-    lateinit var binding : UserFragmentBinding
+    lateinit var binding : ChatFragmentBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -27,7 +27,7 @@ class UserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.user_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.chat_fragment, container, false)
         return binding.root
     }
 }

@@ -2,51 +2,63 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="dataVM"
+            type="app.as_service.viewModel.GetValueDataModel" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/modeViewColor"
             tools:context=".view.DeviceDetailActivity">
+
             <ImageView
                 android:id="@+id/detailBookMark"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/star_empty"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/detailBack"
-                app:layout_constraintBottom_toBottomOf="@+id/detailBack"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/detailBack"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/back"
-                android:background="?android:attr/selectableItemBackground"
-                app:tint="@color/modeTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="15dp"/>
+                app:tint="@color/modeTextColor" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toEndOf="@+id/detailBack"
+                app:layout_constraintBottom_toBottomOf="@+id/detailBack"
                 app:layout_constraintEnd_toStartOf="@+id/detailBookMark"
-                app:layout_constraintTop_toTopOf="@+id/detailBack"
-                app:layout_constraintBottom_toBottomOf="@+id/detailBack">
+                app:layout_constraintStart_toEndOf="@+id/detailBack"
+                app:layout_constraintTop_toTopOf="@+id/detailBack">
+
                 <TextView
                     android:id="@+id/detailName"
-                    style="@style/detailTextStyle"
+                    style="@style/basicBoldTextView"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:transitionName="deviceNameTran"/>
+                    android:transitionName="deviceNameTran" />
 
                 <ImageView
                     android:id="@+id/detailRightArrow"
@@ -58,20 +70,18 @@
 
                 <TextView
                     android:id="@+id/detailDeviceBusiness"
-                    style="@style/detailTextStyle"
+                    style="@style/basicBoldTextView"
                     android:layout_marginStart="5dp"
                     android:layout_marginBottom="5dp"
                     android:textSize="20sp"
-                    android:transitionName="businessTypeTran"/>
+                    android:transitionName="businessTypeTran" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/detailSnTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/basicRegularTextView"
                 android:layout_marginTop="15dp"
-                android:text="시리얼 넘버 : "
-                android:textAllCaps="false"
+                android:text="@string/detail_sn"
                 android:textColor="@color/gray"
                 android:textSize="17sp"
                 android:textStyle="italic"
@@ -80,9 +90,7 @@
 
             <TextView
                 android:id="@+id/detailSN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
+                style="@style/basicRegularTextView"
                 android:textColor="@color/gray"
                 android:textSize="18sp"
                 android:textStyle="italic"
@@ -93,8 +101,8 @@
 
             <ImageView
                 android:id="@+id/detailDeviceType"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
                 android:layout_marginTop="30dp"
                 android:transitionName="imageTran"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,98 +113,95 @@
                 android:id="@+id/detailFanCard"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/detailDeviceType"
-                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
-                app:layout_constraintBottom_toTopOf="@+id/detailPowerCard"
-                app:cardCornerRadius="50dp"
+                android:layout_marginBottom="10dp"
                 android:elevation="10dp"
                 android:translationZ="10dp"
-                android:layout_marginBottom="10dp">
+                app:cardCornerRadius="50dp"
+                app:layout_constraintBottom_toTopOf="@+id/detailPowerCard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toTopOf="@id/detailDeviceType">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/fan"
+                    android:layout_gravity="center"
                     android:background="@drawable/detail_control_fan_bg"
                     android:padding="18dp"
-                    android:layout_gravity="center"
-                    app:tint="@color/white"/>
+                    android:src="@drawable/fan"
+                    app:tint="@color/white" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/detailPowerCard"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/detailFanCard"
-                app:layout_constraintBottom_toBottomOf="@+id/detailDeviceType"
-                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
-                app:cardCornerRadius="50dp"
+                android:layout_marginTop="10dp"
                 android:elevation="10dp"
                 android:translationZ="10dp"
-                android:layout_marginTop="10dp">
+                app:cardCornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/detailDeviceType"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toBottomOf="@+id/detailFanCard">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/power"
+                    android:layout_gravity="center"
                     android:background="@drawable/detail_control_power_bg"
                     android:padding="18dp"
-                    android:layout_gravity="center"
-                    app:tint="@color/white"/>
+                    android:src="@drawable/power"
+                    app:tint="@color/white" />
             </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/detailDeviceOnline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@+id/detailDeviceType"
-                app:layout_constraintEnd_toEndOf="@+id/detailDeviceType"
-                app:layout_constraintTop_toBottomOf="@+id/detailDeviceType"
+                style="@style/basicRegularTextView"
+                android:drawablePadding="2dp"
                 android:text="@string/online"
-                android:textSize="15sp"
-                android:textAllCaps="false"
                 android:textColor="@color/green"
                 app:drawableStartCompat="@drawable/circle"
                 app:drawableTint="@color/green"
-                android:drawablePadding="2dp"/>
+                app:layout_constraintEnd_toEndOf="@+id/detailDeviceType"
+                app:layout_constraintStart_toStartOf="@+id/detailDeviceType"
+                app:layout_constraintTop_toBottomOf="@+id/detailDeviceType" />
 
             <TextView
                 android:id="@+id/detailAirCondTitle"
-                style="@style/detailTextStyle"
-                android:layout_marginTop="18dp"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
                 android:text="@string/air_condition"
-                android:textStyle="bold"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/detailBack"
                 app:layout_constraintTop_toBottomOf="@+id/detailDeviceOnline" />
 
             <TextView
                 android:id="@+id/detailAirCondTimeLine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/detailAirCondTitle"
-                app:layout_constraintTop_toTopOf="@+id/detailAirCondTitle"
-                app:layout_constraintBottom_toBottomOf="@+id/detailAirCondTitle"
-                android:text="5:23 AM"
+                style="@style/basicRegularTextView"
                 android:layout_marginStart="5dp"
-                android:textSize="15sp"
-                android:textColor="@color/gray"
-                android:textAllCaps="false"
                 android:layout_marginBottom="3dp"
+                android:drawablePadding="5dp"
+                android:layout_marginTop="2dp"
+                android:textSize="14sp"
+                android:textColor="@color/gray"
                 app:drawableStartCompat="@drawable/circle"
-                android:drawablePadding="5dp"/>
+                app:layout_constraintBottom_toBottomOf="@+id/detailAirCondTitle"
+                app:layout_constraintStart_toEndOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toTopOf="@+id/detailAirCondTitle" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/detailAirCondRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
                 android:orientation="horizontal"
+                android:overScrollMode="never"
                 android:padding="5dp"
-                android:layout_marginTop="5dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/detailAirCondTitle"
-                tools:listitem="@layout/detail_air_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                tools:listitem="@layout/detail_air_item" />
 
             <TableRow
                 android:id="@+id/detailAirCondCategory"
@@ -204,87 +209,142 @@
                 android:layout_height="wrap_content"
                 android:gravity="start|center_vertical"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="@+id/detailAirCondTimeLine"
                 app:layout_constraintBottom_toBottomOf="@+id/detailAirCondTimeLine"
-                app:layout_constraintEnd_toEndOf="@+id/detailBookMark">
+                app:layout_constraintEnd_toEndOf="@+id/detailBookMark"
+                app:layout_constraintTop_toTopOf="@+id/detailAirCondTimeLine">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="※"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/modeTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
 
                 <TextView
+                    android:layout_width="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_width="wrap_content"
                     android:text="@string/good"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/progressGood"/>
+                    android:textColor="@color/progressGood"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
                 <TextView
-                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/normal"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/progressNormal"/>
+                    android:textColor="@color/progressNormal"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
                 <TextView
-                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/bad"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/progressBad"/>
+                    android:textColor="@color/progressBad"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
                 <TextView
-                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/very_bad"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/progressWorst"/>
+                    android:textColor="@color/progressWorst"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/error"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
             </TableRow>
 
             <TextView
                 android:id="@+id/detailChangeTempTitle"
-                style="@style/detailTextStyle"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
                 android:text="@string/change_temp"
-                app:layout_constraintTop_toBottomOf="@+id/detailAirCondRecyclerView"
-                android:layout_marginTop="20dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/detailAirCondTitle"/>
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toBottomOf="@+id/detailAirCondRecyclerView" />
 
             <TextView
                 android:id="@+id/detailChangeTempTimeLine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/detailChangeTempTitle"
-                app:layout_constraintTop_toTopOf="@+id/detailChangeTempTitle"
-                app:layout_constraintBottom_toBottomOf="@+id/detailChangeTempTitle"
-                android:text="2022-01-26"
+                style="@style/basicRegularTextView"
                 android:layout_marginStart="5dp"
-                android:textSize="15sp"
-                android:textColor="@color/gray"
-                android:textAllCaps="false"
                 android:layout_marginBottom="3dp"
+                android:drawablePadding="5dp"
+                android:text="2022-01-26"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/gray"
                 app:drawableStartCompat="@drawable/circle"
-                android:drawablePadding="5dp"/>
+                app:layout_constraintBottom_toBottomOf="@+id/detailChangeTempTitle"
+                app:layout_constraintStart_toEndOf="@+id/detailChangeTempTitle"
+                app:layout_constraintTop_toTopOf="@+id/detailChangeTempTitle" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/detailCardView1"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/detailChangeTempTitle">
+
                 <ImageView
                     android:id="@+id/detailChangeTempGraph"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/graph"/>
+                    android:src="@drawable/graph" />
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/detailLocationTitle"
+                style="@style/basicBoldTextView"
+                android:layout_marginTop="35dp"
+                android:text="@string/location"
+                android:textSize="18sp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="@+id/detailAirCondTitle"
+                app:layout_constraintTop_toBottomOf="@+id/detailCardView1" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailCardView2"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="invisible"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detailLocationTitle">
+
+                <ImageView
+                    android:id="@+id/detailLocationImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleX="1.2"
+                    android:src="@drawable/map" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/detailLocationContent"
+                style="@style/basicRegularTextView"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="경기도 성남시 수정구 창업로 54, 가동 506호"
+                android:textSize="17sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/detailCardView2"
+                app:layout_constraintTop_toBottomOf="@+id/detailCardView2" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

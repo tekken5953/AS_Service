@@ -1,5 +1,6 @@
 package app.as_service.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aslib.AsTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import app.as_service.R;
+import app.as_service.dao.AdapterModel;
 import app.as_service.dao.ApiModel;
-import kotlin.random.Random;
 
 public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapter.ViewHolder> {
-    private final ArrayList<ApiModel.AirCondData> mData;
+    private final ArrayList<AdapterModel.AirCondData> mData;
     Context context;
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public AirConditionAdapter(ArrayList<ApiModel.AirCondData> list) {
+    public AirConditionAdapter(ArrayList<AdapterModel.AirCondData> list) {
         mData = list;
     }
 
@@ -64,7 +67,11 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(mData.get(position).getTitle());
-        holder.data.setIndexTextAsInt(Random.Default.nextInt(500));
+        holder.data.setSort(mData.get(position).getSort());
+        if (mData.get(position).getSort().equals("temp") || mData.get(position).getSort().equals("humid"))
+            holder.data.setIndexTextAsFloat(Float.parseFloat(mData.get(position).getData()));
+        else
+            holder.data.setIndexTextAsInt(Float.parseFloat(mData.get(position).getData()));
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

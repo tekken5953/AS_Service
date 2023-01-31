@@ -12,7 +12,8 @@ class MakeVibrator(var context: Context) {
                 CombinedVibration.createParallel(
                     VibrationEffect.createOneShot(
                         time,
-                        VibrationEffect.DEFAULT_AMPLITUDE
+                        VibrationAttributes.USAGE_RINGTONE
+//                        VibrationEffect.DEFAULT_AMPLITUDE
                     )
                 )
             )

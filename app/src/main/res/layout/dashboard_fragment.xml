@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.fragment.DashboardFragment">
+        tools:context=".view.main.fragment.DashboardFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainRecyclerView"

@@ -23,18 +23,13 @@
 
     <TextView
         android:id="@+id/deviceListNameTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicBoldTextView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/deviceListTypeIv"
         android:layout_marginTop="17dp"
         android:layout_marginStart="20dp"
         android:textSize="20sp"
-        android:transitionName="deviceNameTran"
-        android:fontFamily="@font/lotte_medium"
-        android:textColor="@color/modeTextColor"
-        android:textStyle="bold"
-        android:textAllCaps="false"/>
+        android:transitionName="deviceNameTran"/>
 
     <ImageView
         android:id="@+id/deviceListRightArrow2"
@@ -49,18 +44,13 @@
 
     <TextView
         android:id="@+id/deviceListBusiness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicBoldTextView"
         app:layout_constraintTop_toTopOf="@+id/deviceListNameTv"
         app:layout_constraintBottom_toBottomOf="@+id/deviceListNameTv"
         app:layout_constraintStart_toEndOf="@+id/deviceListRightArrow2"
         android:layout_marginStart="5dp"
-        android:textAllCaps="false"
         android:transitionName="businessTypeTran"
-        android:textColor="@color/modeTextColor"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/lotte_medium"/>
+        android:textSize="17sp"/>
 
     <TextView
         android:id="@+id/deviceListSnTv"
@@ -75,48 +65,36 @@
 
     <TextView
         android:id="@+id/deviceListCqiTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicRegularTextView"
         android:text="@string/cqi_colon"
         android:textSize="16sp"
-        android:textAllCaps="false"
-        android:fontFamily="@font/lotte_light"
-        android:textColor="@color/modeTextColor"
         app:layout_constraintTop_toBottomOf="@+id/deviceListSnTv"
         app:layout_constraintStart_toStartOf="@+id/deviceListNameTv"
         android:layout_marginTop="15dp"/>
 
     <com.aslib.AsTextView
         android:id="@+id/deviceListCqiIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicRegularTextView"
         app:sort="cqi"
         app:layout_constraintStart_toEndOf="@+id/deviceListCqiTitle"
         app:layout_constraintTop_toTopOf="@+id/deviceListCqiTitle"
         app:layout_constraintBottom_toBottomOf="@+id/deviceListCqiTitle"
         android:textSize="17sp"
-        android:fontFamily="@font/lotte_medium"
         android:layout_marginStart="5dp"/>
 
     <TextView
         android:id="@+id/deviceListVirusTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicRegularTextView"
         android:text="@string/virus_colon"
         android:textSize="16sp"
-        android:textAllCaps="false"
-        android:textColor="@color/modeTextColor"
-        android:fontFamily="@font/lotte_light"
         app:layout_constraintTop_toBottomOf="@+id/deviceListCqiTitle"
         app:layout_constraintStart_toStartOf="@+id/deviceListCqiTitle"
         android:layout_marginTop="10dp"/>
 
     <com.aslib.AsTextView
         android:id="@+id/deviceListVirusIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/basicRegularTextView"
         app:sort="virus"
-        android:fontFamily="@font/lotte_medium"
         app:layout_constraintStart_toEndOf="@+id/deviceListVirusTitle"
         app:layout_constraintTop_toTopOf="@+id/deviceListVirusTitle"
         app:layout_constraintBottom_toBottomOf="@+id/deviceListVirusTitle"

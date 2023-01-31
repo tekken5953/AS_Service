@@ -35,7 +35,7 @@ class LoginRepo {
                         val token =
                             response.body()?.access.toString()  // response body 에 전달 된 access Json 으로 값 갱신
                         Log.d(TAG, "로그인 성공 : ${response.code()}")
-                        Log.d(TAG, "토큰(Response Body) : \n$token")
+                        Log.d(TAG, "엑세스 토큰 발행(Response Body) : \n$token")
                         _signInResultData.value = token // MutableLiveData 값 갱신
                     }
                     // 서버 연결 실패(404)

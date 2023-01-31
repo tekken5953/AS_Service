@@ -22,17 +22,18 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import app.as_service.R;
+import app.as_service.dao.AdapterModel;
 import app.as_service.dao.ApiModel;
 import app.as_service.util.ViewTouchListener;
 import app.as_service.view.DeviceDetailActivity;
 import kotlin.random.Random;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
-    private final ArrayList<ApiModel.GetDeviceList> mData;
+    private final ArrayList<AdapterModel.GetDeviceList> mData;
     Context context;
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public DeviceListAdapter(ArrayList<ApiModel.GetDeviceList> list) {
+    public DeviceListAdapter(ArrayList<AdapterModel.GetDeviceList> list) {
         mData = list;
     }
 
