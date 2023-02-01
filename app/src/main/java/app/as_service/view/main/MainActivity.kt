@@ -1,14 +1,16 @@
 package app.as_service.view.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
+import android.widget.GridView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -18,32 +20,48 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import app.as_service.R
-import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG
+import app.as_service.adapter.listener.ChangeDialogListener
+import app.as_service.adapter.GridAdapter
+import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.databinding.ActivityMainBinding
+import app.as_service.util.SharedPreferenceManager
 import app.as_service.view.main.fragment.AnalyticsFragment
 import app.as_service.view.main.fragment.ChatFragment
 import app.as_service.view.main.fragment.DashboardFragment
 import app.as_service.view.main.fragment.UserFragment
+import app.as_service.viewModel.AddDeviceViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private lateinit var binding: ActivityMainBinding
-    lateinit var resultSerial: String   // 장치 추가 시리얼넘버
-    lateinit var resultName: String     // 장치 추가 별명
-    lateinit var resultBusiness: String // 장치 추가 비즈니스 타입
-    lateinit var resultId: String       // 장치 추가 유저 아이디
+    private lateinit var viewSerial: View
+    private lateinit var viewBusiness: View
+    private lateinit var viewName: View
+    private lateinit var builder: AlertDialog.Builder
+    var deviceSerial = ""
+    private val postDeviceViewModel by viewModel<AddDeviceViewModel>()
+    private val accessToken by lazy { SharedPreferenceManager.getString(this,"accessToken")}
+    private val userId by lazy { SharedPreferenceManager.getString(this, "jti") }
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView<ActivityMainBinding?>(
+            this, R.layout.activity_main
+        ).apply {
+                lifecycleOwner = this@MainActivity
+                postDeviceVM = postDeviceViewModel
+        }
 
         val bottomNav: BottomNavigationView = binding.bottomNav
         val viewPager: ViewPager2 = binding.viewPager
         val viewPagerAdapter = ViewPagerAdapter(this)
         bottomNav.selectedItemId = R.id.bottom_dashboard    // 대시보드 화면이 초기화면
         viewPager.adapter = viewPagerAdapter                // 어댑터 바인딩
+        applyPostDeviceViewModel()                          // 장치 추가 뷰모델 설정
 
         // 페이지 이동 시 바텀메뉴 아이템 변경
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -79,26 +97,47 @@ class MainActivity : AppCompatActivity() {
                     viewPager.currentItem = 3
                     true
                 }
-                else -> {
-                    false
-                }
+                else -> { false }
             }
         }
 
         // 장치 추가 이벤트리스너
         binding.fab.setOnClickListener {
-            val builder = AlertDialog.Builder(this, R.style.Dialog)
-            val viewSerial: View =       // 시리얼넘버 등록 뷰
+            builder = AlertDialog.Builder(this, R.style.Dialog)
+            viewSerial =       // 시리얼넘버 등록 뷰
                 LayoutInflater.from(this).inflate(R.layout.dialog_add_serial, null)
-            val viewBusiness: View =     // 비즈니스 타입 등록 뷰
+            viewBusiness =     // 비즈니스 타입 등록 뷰
                 LayoutInflater.from(this).inflate(R.layout.dialog_add_business, null)
+            viewName =         // 별명 등록 뷰
+                LayoutInflater.from(this).inflate(R.layout.dialog_add_name, null)
+
             val serialInput: TextInputLayout = viewSerial.findViewById(R.id.serialEditInput)
             val serialEt: EditText = viewSerial.findViewById(R.id.serialEdit)
             val serialBtn: AppCompatButton = viewSerial.findViewById(R.id.serialBtn)
+
+            val businessTitle: TextView = viewBusiness.findViewById(R.id.businessTitle)
+            val businessGrid: GridView = viewBusiness.findViewById(R.id.businessGridView)
+            val businessApplyBtn: AppCompatButton = viewBusiness.findViewById(R.id.businessApplyBtn)
+            businessApplyBtn.isEnabled = false
+            val businessGridAdapter = GridAdapter(this,businessTitle,businessApplyBtn)
+            businessGridAdapter.setChangeDialogListener(this)
+
+            val nameApplyBtn: AppCompatButton = viewName.findViewById(R.id.nameBtn)
+            val nameEt: EditText = viewName.findViewById(R.id.nameEdit)
+
             builder.setView(viewSerial)
             serialBtn.isEnabled = false     //디폴트로 disable
 
             builder.setOnDismissListener { it.dismiss() }
+
+            nameApplyBtn.setOnClickListener {
+                (viewName.parent as ViewGroup).removeView(viewName)
+                postDeviceViewModel.loadPostDeviceResult(accessToken,
+                    deviceSerial,
+                    userId,
+                    nameEt.text.toString(),
+                    businessGridAdapter.resultBusiness)
+            }
 
             //시리얼번호 EditText 처리
             serialEt.addTextChangedListener(object : TextWatcher {
@@ -122,8 +161,6 @@ class MainActivity : AppCompatActivity() {
                 if (serialInput.error == null
                     && serialEt.text.length == serialInput.counterMaxLength
                 ) {
-                    resultSerial = serialEt.text.toString()     //시리얼번호 저장
-
                     // 다이어로그가 초기생성인지 중복생성인지 구분
                     if (viewBusiness.parent == null) {
                         // 초기생성이면 setView
@@ -133,9 +170,12 @@ class MainActivity : AppCompatActivity() {
                         (viewBusiness.parent as ViewGroup).removeView(viewBusiness)
                         builder.setView(viewBusiness).show()
                     }
+                    deviceSerial = serialEt.text.toString()
+                    businessGrid.adapter = businessGridAdapter
+                    businessGridAdapter.drawTypeEntry()
                 }
             }
-            builder.setView(viewSerial).show()
+            onChangeToSerial()
         }
     }
 
@@ -151,5 +191,70 @@ class MainActivity : AppCompatActivity() {
             }
         }
         override fun getItemCount(): Int { return 4 }
+    }
+
+    override fun onChangeToSerial() {
+        viewSerial.let {
+            // 다이어로그가 초기생성인지 중복생성인지 구분
+            if (it.parent == null) {
+                // 초기생성이면 setView
+                builder.setView(it).show()
+            } else {
+                // 중복생성이면 기존 뷰 삭제 후 setView
+                (it.parent as ViewGroup).removeView(it)
+                builder.setView(it).show()
+            }
+        }
+    }
+
+    override fun onChangeToBusiness() {
+        viewBusiness.let {
+            // 다이어로그가 초기생성인지 중복생성인지 구분
+            if (it.parent == null) {
+                // 초기생성이면 setView
+                builder.setView(it).show()
+            } else {
+                // 중복생성이면 기존 뷰 삭제 후 setView
+                (it.parent as ViewGroup).removeView(it)
+                builder.setView(it).show()
+            }
+        }
+    }
+
+    override fun onChangeToName() {
+        viewName.let {
+            // 다이어로그가 초기생성인지 중복생성인지 구분
+            if (it.parent == null) {
+                // 초기생성이면 setView
+                builder.setView(it).show()
+            } else {
+                // 중복생성이면 기존 뷰 삭제 후 setView
+                (it.parent as ViewGroup).removeView(it)
+                builder.setView(it).show()
+            }
+        }
+    }
+
+    // 장치등록 뷰모델 호출 후 데이터 반환
+    private fun applyPostDeviceViewModel() {
+        postDeviceViewModel.postDeviceResult().observe(this) { result ->
+            result.let {
+                if (it == CODE_SERVER_OK.toString()) {
+                    Toast.makeText(this, "장치등록에 성공하였습니다", Toast.LENGTH_SHORT).show()
+                }  else {
+                    Toast.makeText(this, "장치등록에 실패하였습니다", Toast.LENGTH_SHORT).show()
+                }
+                refreshActivity()
+            }
+        }
+    }
+
+    private fun refreshActivity() {
+        // 액티비티 갱신
+        finish() //인텐트 종료
+        overridePendingTransition(0, 0) //인텐트 효과 없애기
+        val intent = intent //인텐트
+        startActivity(intent) //액티비티 열기
+        overridePendingTransition(0, 0) //인텐트 효과 없애기
     }
 }

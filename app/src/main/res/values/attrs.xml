@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="spinner_business_title" translatable="true">
+        <item>나는?</item>
+        <item>용도는?</item>
+        <item>설치 공간은?</item>
+    </string-array>
+
     <string-array name="spinner_business_type" translatable="true">
         <item>개인</item>
         <item>기업</item>
@@ -22,7 +28,6 @@
         <item>세탁실</item>
         <item>거실</item>
         <item>주방</item>
-        <item>베란다</item>
         <item>기타</item>
         <item>직접입력</item>
     </string-array>

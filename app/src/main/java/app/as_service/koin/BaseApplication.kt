@@ -1,10 +1,7 @@
 package app.as_service.koin
 
 import android.app.Application
-import app.as_service.viewModel.GetValueDataModel
-import app.as_service.viewModel.DeviceListViewModel
-import app.as_service.viewModel.LoginViewModel
-import app.as_service.viewModel.SignUpViewModel
+import app.as_service.viewModel.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -18,7 +15,7 @@ class BaseApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BaseApplication)
-            modules(listOf(loginModule, signUpModule, deviceListModule, getValueDataModel))
+            modules(listOf(loginModule, signUpModule, deviceListModule, getValueDataModule, postDeviceModule ))
         }
     }
 
@@ -28,5 +25,6 @@ class BaseApplication : Application() {
     private val loginModule = module { viewModel { LoginViewModel() } }
     private val signUpModule = module { viewModel { SignUpViewModel() } }
     private val deviceListModule = module { viewModel { DeviceListViewModel() }}
-    private val getValueDataModel = module { viewModel { GetValueDataModel()} }
+    private val getValueDataModule = module { viewModel { GetValueDataModel()} }
+    private val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
 }

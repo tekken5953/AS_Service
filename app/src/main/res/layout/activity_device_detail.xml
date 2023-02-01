@@ -48,6 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/detailBack"
                 app:layout_constraintEnd_toStartOf="@+id/detailBookMark"
                 app:layout_constraintStart_toEndOf="@+id/detailBack"
@@ -65,15 +66,13 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
                     android:src="@drawable/right_arrow" />
 
                 <TextView
                     android:id="@+id/detailDeviceBusiness"
                     style="@style/basicBoldTextView"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:transitionName="businessTypeTran" />
             </LinearLayout>
 

@@ -1,6 +1,5 @@
 package app.as_service.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aslib.AsTextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import app.as_service.R;
 import app.as_service.dao.AdapterModel;
-import app.as_service.dao.ApiModel;
 
 public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapter.ViewHolder> {
     private final ArrayList<AdapterModel.AirCondData> mData;
@@ -109,7 +105,6 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
             });
 
             // 뷰 객체에 대한 참조. (hold strong reference)
-
             title = itemView.findViewById(R.id.airItemTitle);
             data = itemView.findViewById(R.id.airItemData);
         }

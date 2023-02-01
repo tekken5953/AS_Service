@@ -4,52 +4,49 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/add_device_top_menu" android:id="@+id/serialInclude"/>
+    <include layout="@layout/add_device_top_menu" android:id="@+id/nameInclude"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/serialInclude"
+        android:layout_below="@+id/nameInclude"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/serialTitle"
+            android:id="@+id/nameTitle"
             style="@style/basicBoldTextView"
-            android:text="@string/serial_title"
+            android:text="장치의 이름을 등록해주세요"
             android:textSize="18sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/serialEditInput"
+            android:id="@+id/nameEditInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="24dp"
-            android:hint="@string/serial_number"
+            android:hint="@string/name"
             android:textColorHint="@color/modeTextColor"
             app:boxBackgroundColor="@color/modeViewColor"
             app:boxCollapsedPaddingTop="5dp"
             app:boxStrokeColor="@color/defaultMainColor"
-            app:counterEnabled="true"
-            app:counterMaxLength="10"
             app:errorEnabled="true"
             app:hintTextColor="@color/defaultMainColor">
 
             <EditText
-                android:id="@+id/serialEdit"
+                android:id="@+id/nameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:gravity="start"
                 android:inputType="text"
-                android:text="123456789123456"
                 android:textIsSelectable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/serialBtn"
+            android:id="@+id/nameBtn"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
@@ -57,7 +54,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/add_serial_button"
             android:fontFamily="@font/lineseed_be"
-            android:text="@string/next"
+            android:text="@string/apply"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17sp" />

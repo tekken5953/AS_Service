@@ -6,12 +6,12 @@ import app.as_service.dao.AdapterModel;
 import app.as_service.dao.ApiModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface MyApi {
     // 회원가입 API
@@ -24,7 +24,7 @@ public interface MyApi {
 
     // 장치추가 API
     @POST("device/")
-    Call<ApiModel.ReturnPost> postAddDevice(@Header("Authorization") String token, @Body ApiModel.AddDevice item);
+    Call<ApiModel.ReturnPost> postDevice(@Header("Authorization") String token, @Body ApiModel.PostDevice item);
 
     // 장치리스트 검색
     @GET("device/")
@@ -45,4 +45,8 @@ public interface MyApi {
     // 데이터 정보 불러오기
     @GET("analytics/{device}")
     Call<ApiModel.GetData> getData(@Path("device") String device, @Header("Authorization") String token);
+
+    // 장치 삭제하기
+    @DELETE("device/{sn}")
+    Call<ApiModel.ReturnPost> deleteDevice(@Path("device") String device, @Header("Authorization") String token);
 }

@@ -4,6 +4,10 @@
         <variable
             name="deviceListVM"
             type="app.as_service.viewModel.DeviceListViewModel" />
+
+        <variable
+            name="deleteDeviceVM"
+            type="app.as_service.viewModel.DeleteDeviceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
