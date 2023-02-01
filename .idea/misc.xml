@@ -14,6 +14,7 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/device_list_item_bg.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/dropdown.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/et_cursor.xml" value="0.1865" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/grid_selected_item.xml" value="0.2" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/img_placeholder.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/menu_add.xml" value="0.1655" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/right_arrow.xml" value="0.1235" />
@@ -33,8 +34,10 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/detail_air_item.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/device_list_item.xml" value="0.264" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_business.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_name.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_serial.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_sign_up.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/grid_item.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/second_item_bg.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/user_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/menu/bottom_nav.xml" value="0.25364583333333335" />

@@ -45,12 +45,12 @@
     <TextView
         android:id="@+id/deviceListBusiness"
         style="@style/basicBoldTextView"
-        app:layout_constraintTop_toTopOf="@+id/deviceListNameTv"
-        app:layout_constraintBottom_toBottomOf="@+id/deviceListNameTv"
+        app:layout_constraintTop_toTopOf="@+id/deviceListRightArrow2"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceListRightArrow2"
         app:layout_constraintStart_toEndOf="@+id/deviceListRightArrow2"
         android:layout_marginStart="5dp"
         android:transitionName="businessTypeTran"
-        android:textSize="17sp"/>
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/deviceListSnTv"

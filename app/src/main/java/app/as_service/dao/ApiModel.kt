@@ -8,7 +8,7 @@ class ApiModel {
     // 로그인 시 발행된 AccessToken Body로 Get할 데이터 모델
     data class AccessToken(var access: String)
     // 장치추가 시 Body에 넣어서 POST 할 데이터 모델
-    data class AddDevice(val device: String,val id: String, val deviceName: String, val business: String)
+    data class PostDevice(val device: String, val id: String, val deviceName: String, val business: String)
     // 장치생성 리턴 텍스트
     data class ReturnPost(val result: String)
     // 유저정보 GET할 데이터 모델
@@ -20,5 +20,6 @@ class ApiModel {
     // 장치데이터 리스트 GET할 데이터 모델
     data class GetData(val TEMPval: String, val HUMIDval: String, val PM2P5val: String,
                        val CO2val: String, val COval: String, val TVOCval: String, val date: String)
-
+    // 디바이스 삭제 시 바디에 넣어서 전달할 데이터 모델
+    data class DeleteDevice(val device: String)
 }

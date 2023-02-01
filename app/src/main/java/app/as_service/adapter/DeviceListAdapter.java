@@ -70,7 +70,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         this.longClickListener = listener;
     }
 
-
     // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -84,13 +83,16 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
             Glide.with(context)
                     .load(R.drawable.as100)
                     .placeholder(R.drawable.img_placeholder)
-                    .error(R.drawable.no_img)
                     .into(holder.type);
         } else if (mData.get(position).getDevice().startsWith("TI")) {
             Glide.with(context)
                     .load(R.drawable.as_m)
                     .placeholder(R.drawable.img_placeholder)
-                    .error(R.drawable.no_img)
+                    .into(holder.type);
+        } else {
+            Glide.with(context)
+                    .load(R.drawable.no_img)
+                    .placeholder(R.drawable.img_placeholder)
                     .into(holder.type);
         }
     }
@@ -129,9 +131,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                             Pair.create(type, "imageTran")
                     );
                     context.startActivity(intent, options.toBundle());
-//                    if (mListener != null) {
-//                        mListener.onItemClick(v,position);
-//                    }
                 }
             });
 

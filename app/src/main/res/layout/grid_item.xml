@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingBottom="20dp"
+    android:background="@drawable/grid_selected_item">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/gridItemCardView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:cardCornerRadius="70dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/deviceListBgColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/gridItemImg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/gridItemText"
+        style="@style/basicRegularTextView"
+        app:layout_constraintStart_toStartOf="@+id/gridItemCardView"
+        app:layout_constraintEnd_toEndOf="@+id/gridItemCardView"
+        app:layout_constraintTop_toBottomOf="@+id/gridItemCardView"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/add_device_top_menu" android:id="@+id/businessInclude"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/businessApplyBtn"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/businessTitle"
+            style="@style/basicBoldTextView"
+            android:textSize="22sp" />
 
+        <GridView
+            android:id="@+id/businessGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
+            android:choiceMode="singleChoice"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="2"
+            android:scrollbarSize="5dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            android:verticalSpacing="12dp"
+            tools:listitem="@layout/grid_item" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/businessApplyBtn"
+        style="@style/basicButton"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/add_serial_button"
+        android:text="@string/next"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
