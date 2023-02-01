@@ -84,7 +84,11 @@ __Koin__
 
 > implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version" // Navigation Graph
 
+__Glide__
 
+> implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+> annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
 __Room__
 
