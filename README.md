@@ -85,3 +85,13 @@ __Koin__
 > implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version" // Navigation Graph
 
 
+
+__Room__
+
+> def room_version = "2.4.1"
+
+> implementation "androidx.room:room-runtime:$room_version"
+
+> annotationProcessor "androidx.room:room-compiler:$room_version"
+
+
