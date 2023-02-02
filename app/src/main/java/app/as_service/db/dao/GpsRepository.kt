@@ -1,9 +1,10 @@
-package app.as_service.db
+package app.as_service.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import app.as_service.db.model.DBModel
 
 @Dao
 interface GpsRepository {

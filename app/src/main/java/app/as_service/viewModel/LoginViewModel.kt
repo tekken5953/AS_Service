@@ -1,14 +1,9 @@
 package app.as_service.viewModel
 
-import android.util.Log
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.repository.LoginRepo
-import org.koin.java.KoinJavaComponent.inject
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel : BaseViewModel("로그인") {
     // MutableLiveData 값을 받아 View 로 전달해 줄 LiveData
     private lateinit var signInResultData: LiveData<String>
     private val repo = LoginRepo()
@@ -22,10 +17,5 @@ class LoginViewModel : ViewModel() {
     fun getSignInResult(): LiveData<String> {
         signInResultData = repo._signInResultData
         return signInResultData
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d(TAG, "로그인 뷰모델 인스턴스 소멸")
     }
 }

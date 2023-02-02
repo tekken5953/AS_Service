@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         SharedPreferenceManager.getString(this@LoginActivity,"accessToken")  // 엑세스 토큰
     }
     private val context: Context = this@LoginActivity
-    val toast = ToastUtils(this)
+    private val toast = ToastUtils(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,17 +196,18 @@ class LoginActivity : AppCompatActivity() {
     private fun applySignInViewModel() {
         loginViewModel.getSignInResult().observe(this@LoginActivity) { newToken ->
             binding.mainLoginPb.visibility = View.GONE
-            newToken?.let {
+            newToken.let {
                 when (it) {
                     RESPONSE_DEFAULT -> {
                         MakeVibrator(context).run(300)
                         nullCheck()
                     }
 
-                    RESPONSE_FAIL -> {
+                    RESPONSE_FAIL, null -> {
                         toast.shortMessage("예상치 못한 오류가 발생했습니다")
                         MakeVibrator(context).run(300)
                     }
+
                     else -> {
                         if (newToken != originToken) {
                             // 엑세스 토큰 저장
@@ -232,7 +233,6 @@ class LoginActivity : AppCompatActivity() {
     private fun applySignUpViewModel() {
         signUpViewModel.getSignUpCode().observe(this@LoginActivity) { resultCode ->
             resultCode?.let {
-
                 if (it == RESULT_OK.toString()) {
                     toast.shortMessage(getString(R.string.success_signup))
                 } else {

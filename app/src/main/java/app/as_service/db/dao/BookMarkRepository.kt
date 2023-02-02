@@ -1,6 +1,7 @@
-package app.as_service.db
+package app.as_service.db.dao
 
 import androidx.room.*
+import app.as_service.db.model.DBModel
 
 @Dao
 interface BookMarkRepository {

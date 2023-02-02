@@ -47,6 +47,6 @@ public interface MyApi {
     Call<ApiModel.GetData> getData(@Path("device") String device, @Header("Authorization") String token);
 
     // 장치 삭제하기
-    @DELETE("device/{sn}")
+    @DELETE("device/{device}")
     Call<ApiModel.ReturnPost> deleteDevice(@Path("device") String device, @Header("Authorization") String token);
 }

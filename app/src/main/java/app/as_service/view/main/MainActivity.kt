@@ -20,8 +20,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import app.as_service.R
-import app.as_service.adapter.listener.ChangeDialogListener
 import app.as_service.adapter.GridAdapter
+import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.databinding.ActivityMainBinding
 import app.as_service.util.SharedPreferenceManager
@@ -33,7 +33,6 @@ import app.as_service.viewModel.AddDeviceViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private lateinit var binding: ActivityMainBinding

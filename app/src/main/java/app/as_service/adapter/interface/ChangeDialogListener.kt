@@ -1,4 +1,4 @@
-package app.as_service.adapter.listener
+package app.as_service.adapter.`interface`
 
 interface ChangeDialogListener {
     fun onChangeToSerial()

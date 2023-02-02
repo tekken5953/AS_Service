@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import app.as_service.dao.StaticDataObject.TAG
+import app.as_service.db.dao.BookMarkRepository
+import app.as_service.db.dao.GpsRepository
+import app.as_service.db.model.DBModel
 
 @Database(entities = [DBModel::class], version = 1, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {

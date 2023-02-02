@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import app.as_service.R
-import app.as_service.adapter.listener.ChangeDialogListener
+import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.dao.AdapterModel
 import app.as_service.util.ToastUtils
 

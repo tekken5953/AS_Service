@@ -2,6 +2,7 @@ package app.as_service.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +11,9 @@ import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.adapter.AirConditionAdapter
 import app.as_service.dao.AdapterModel
+import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.databinding.ActivityDeviceDetailBinding
-import app.as_service.util.MakeVibrator
-import app.as_service.util.SharedPreferenceManager
-import app.as_service.util.SnackBarUtils
-import app.as_service.util.ToastUtils
+import app.as_service.util.*
 import app.as_service.viewModel.GetValueDataModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -32,6 +31,13 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val snackBarUtils = SnackBarUtils()
     private val getDataViewModel by viewModel<GetValueDataModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
+    private val timer = Timer()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.w(TAG, "공기질 데이터 호출 종료")
+        timer.cancel()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +79,7 @@ class DeviceDetailActivity : AppCompatActivity() {
             binding.detailCardView1.animation =
                 AnimationUtils.loadAnimation(this, R.anim.trans_right_to_left)
 
-            Timer().scheduleAtFixedRate(object : TimerTask() {
+            timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
                         "TIA0002053",
@@ -148,8 +154,8 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     // 공기질 데이터 카테고리 아이템 추가
     private fun addCategoryItem(titleStr: String, dataStr: String, sort: String) {
-        if (mList.size == 6) {
-          for (i: Int in 0 until(5)) {
+        if (mList.size == 8) {
+          for (i: Int in 0 until(7)) {
               if (mList[i].title == titleStr) {
                   mList[i].sort = sort
                   mList[i].data = dataStr
@@ -174,17 +180,13 @@ class DeviceDetailActivity : AppCompatActivity() {
                 addCategoryItem("일산화탄소", it.COval,"co")
                 addCategoryItem("이산화탄소", it.CO2val,"co2")
                 addCategoryItem("유기성 화합물", it.TVOCval,"tvoc")
-                binding.detailAirCondTimeLine.text = millsToString(it.date)
+                addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
+                addCategoryItem("바이러스\n위험지수", it.Virusval,"virus")
+                binding.detailAirCondTimeLine.text = ConvertDataTypeUtil().millsToString(it.date)
             }
             adapter.notifyDataSetChanged()
         }
     }
 
-    private fun millsToString(mills: String): String? {
-        val longMills = mills.toLong()
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("HH:mm")
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = longMills
-        return format.format(calendar.time)
-    }
+
 }

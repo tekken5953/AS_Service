@@ -1,5 +1,7 @@
 package app.as_service.dao
 
+import com.google.gson.annotations.SerializedName
+
 class ApiModel {
     // 회원가입 시 Body에 넣어서 POST 할 데이터 모델
     data class Member(val userId: String, val phone: String, val password: String)
@@ -19,7 +21,6 @@ class ApiModel {
     data class PutMyEmail(val email: String)
     // 장치데이터 리스트 GET할 데이터 모델
     data class GetData(val TEMPval: String, val HUMIDval: String, val PM2P5val: String,
-                       val CO2val: String, val COval: String, val TVOCval: String, val date: String)
-    // 디바이스 삭제 시 바디에 넣어서 전달할 데이터 모델
-    data class DeleteDevice(val device: String)
+                       val CO2val: String, val COval: String, val TVOCval: String,
+                       val CAIval: String, val Virusval: String, val date: Long)
 }

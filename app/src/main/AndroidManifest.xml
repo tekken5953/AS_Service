@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="app.as_service">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".koin.BaseApplication"
@@ -19,9 +22,6 @@
         android:theme="@style/Theme.AS_Service"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name="app.as_service.view.add.AddDeviceActivity"
-            android:exported="false" />
         <activity
             android:name=".view.DeviceDetailActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
