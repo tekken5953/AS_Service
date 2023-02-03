@@ -1,4 +1,4 @@
-package app.as_service.db
+package app.as_service.db.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

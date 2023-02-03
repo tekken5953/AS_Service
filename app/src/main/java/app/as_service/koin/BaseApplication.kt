@@ -15,7 +15,9 @@ class BaseApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BaseApplication)
-            modules(listOf(loginModule, signUpModule, deviceListModule, getValueDataModule, postDeviceModule ))
+            modules(listOf(loginModule, signUpModule,
+                deviceListModule, getValueDataModule,
+                postDeviceModule,deleteDeviceModule ))
         }
     }
 
@@ -27,4 +29,5 @@ class BaseApplication : Application() {
     private val deviceListModule = module { viewModel { DeviceListViewModel() }}
     private val getValueDataModule = module { viewModel { GetValueDataModel()} }
     private val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
+    private val deleteDeviceModule = module { viewModel { DeleteDeviceViewModel() } }
 }

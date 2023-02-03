@@ -7,5 +7,24 @@
         android:layout_height="match_parent"
         tools:context=".view.main.fragment.AnalyticsFragment">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/userLocationBtn"
+            style="@style/basicButton"
+            android:text="GET Location"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:id="@+id/userLocationText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="@color/modeTextColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/userLocationBtn"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

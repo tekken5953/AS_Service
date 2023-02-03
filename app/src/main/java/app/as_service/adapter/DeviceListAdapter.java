@@ -12,9 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.aslib.AsTextView;
 import com.bumptech.glide.Glide;
@@ -23,10 +21,7 @@ import java.util.ArrayList;
 
 import app.as_service.R;
 import app.as_service.dao.AdapterModel;
-import app.as_service.dao.ApiModel;
-import app.as_service.util.ViewTouchListener;
 import app.as_service.view.DeviceDetailActivity;
-import kotlin.random.Random;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
     private final ArrayList<AdapterModel.GetDeviceList> mData;
@@ -73,11 +68,36 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
     // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(mData.get(position).getDeviceName());
+        try {
+            holder.name.setText(mData.get(position).getDevice_name());
+        } catch(NullPointerException e) {
+            holder.name.setText("없음");
+        }
+
         holder.sn.setText(mData.get(position).getDevice());
-        holder.business.setText(mData.get(position).getBusinessType());
-        holder.cqi.setIndexTextAsInt(Random.Default.nextInt(500));
-        holder.virus.setIndexTextAsInt(Random.Default.nextInt(10));
+        try {
+            if (mData.get(position).getBusiness_type().contains(">")) {
+                String[] lastBusiness = mData.get(position).getBusiness_type().split(">");
+                holder.business.setText(lastBusiness[lastBusiness.length - 1]);
+            } else {
+                holder.business.setText(mData.get(position).getBusiness_type());
+            }
+        } catch (NullPointerException e) {
+            holder.business.setText("없음");
+        }
+
+        try {
+            holder.cqi.setVisibility(View.VISIBLE);
+            holder.cqi.setIndexTextAsInt(Integer.parseInt(mData.get(position).getCai_val()));
+        } catch (NumberFormatException e) {
+            holder.cqi.setVisibility(View.GONE);
+        }
+        try {
+            holder.virus.setVisibility(View.VISIBLE);
+            holder.virus.setIndexTextAsInt(Integer.parseInt(mData.get(position).getVirus_val()));
+        } catch (NumberFormatException e) {
+            holder.virus.setVisibility(View.GONE);
+        }
 
         if (mData.get(position).getDevice().startsWith("SI")) {
             Glide.with(context)
@@ -95,6 +115,8 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                     .placeholder(R.drawable.img_placeholder)
                     .into(holder.type);
         }
+
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -106,7 +128,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, sn, business;
-        AsTextView cqi,virus;
+        AsTextView cqi, virus;
         ImageView type;
 
         ViewHolder(final View itemView) {
@@ -116,13 +138,13 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     Intent intent = new Intent(context, DeviceDetailActivity.class);
-                    intent.putExtra("deviceName",name.getText().toString());
+                    intent.putExtra("deviceName", name.getText().toString());
                     intent.putExtra("serialNumber", sn.getText().toString());
-                    intent.putExtra("businessType",business.getText().toString());
+                    intent.putExtra("businessType", business.getText().toString());
                     if (sn.getText().toString().startsWith("SI"))
-                        intent.putExtra("deviceType","as_100");
+                        intent.putExtra("deviceType", "as_100");
                     else if (sn.getText().toString().startsWith("TI"))
-                        intent.putExtra("deviceType","as_m");
+                        intent.putExtra("deviceType", "as_m");
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                             (Activity) context,
                             Pair.create(name, "deviceNameTran"),

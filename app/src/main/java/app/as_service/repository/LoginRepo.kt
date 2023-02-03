@@ -8,17 +8,13 @@ import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG
-import app.as_service.dao.StaticDataObject.httpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginRepo {
+@Suppress("PropertyName")
+class LoginRepo : BaseRepository() {
     var _signInResultData = MutableLiveData<String>()    // 로그인 Response Body : access token
-
-    init {
-        httpClient.getInstance()    // HTTP Client 인스턴스 생성
-    }
 
     fun loadSignInResult(username: String, password: String) {
         val loginModel = ApiModel.Login(username, password)
