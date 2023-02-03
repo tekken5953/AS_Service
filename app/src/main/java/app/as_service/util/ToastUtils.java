@@ -20,6 +20,15 @@ public class ToastUtils {
         mContext.runOnUiThread(r);
     }
 
+    public void customDurationMessage(final String message, final int duration) {
+        Runnable r = () -> {
+            cancelToast();
+            toast = Toast.makeText(mContext, message, duration);
+            toast.show();
+        };
+        mContext.runOnUiThread(r);
+    }
+
     private void cancelToast() {
         if (toast != null) {
             this.mContext.runOnUiThread(() -> toast.cancel());

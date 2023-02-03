@@ -98,13 +98,10 @@ class GridAdapter(mContext: Context, mTitle: TextView, mButton: AppCompatButton)
     }
 
     private fun singleChoice(view: View, position: Int) {
-        var mPosition: Int? = null
         if (view.isSelected) {
-            mPosition = null
             view.isSelected = false
             button.isEnabled = false
         } else {
-            mPosition = position
             view.isSelected = true
             button.isEnabled = true
             val lastBusinessType = businessType + arrayItem[position].text

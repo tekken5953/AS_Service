@@ -3,6 +3,8 @@ package app.as_service.view.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -67,11 +69,20 @@ class LoginActivity : AppCompatActivity() {
 
         if (::binding.isInitialized) {
             binding.mainSignUpBtn.setOnClickListener {
+                // 회원가입 다이얼로그 생성
                 buildSignUpDialog()
             }
 
             binding.mainLoginBtn.setOnClickListener {
-                binding.mainLoginPb.visibility = View.VISIBLE
+                // 프로그래스 바 보여짐 + 클릭막기
+                binding.mainLoginCoverView.visibility = View.VISIBLE
+                binding.mainLoginCoverView.bringToFront()
+
+                //아이디 첫글자가 대문자면 소문자로 변경 후 로그인
+                val s = binding.mainLoginIdEt.text.toString().replaceFirst(
+                    binding.mainLoginIdEt.text.toString()[0],
+                    binding.mainLoginIdEt.text.toString().lowercase()[0])
+                loginViewModel.loadSignInResult(s,binding.mainLoginPwdEt.text.toString())
             }
         }
     }
@@ -125,6 +136,7 @@ class LoginActivity : AppCompatActivity() {
         return JSONObject(jwtPayload).get(type).toString()
     }
 
+    // 회원가입 다이얼로그
     private fun buildSignUpDialog() {
         val builder = AlertDialog.Builder(this)
         val dialogView: View = LayoutInflater.from(context)
@@ -154,6 +166,7 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 idInput.error = null
 
+                // 회원가입 뷰모델 호출
                 signUpViewModel.loadSignUpResult(
                     idEt.text.toString(),
                     phoneEt.text.toString(),
@@ -194,40 +207,44 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun applySignInViewModel() {
-        loginViewModel.getSignInResult().observe(this@LoginActivity) { newToken ->
-            binding.mainLoginPb.visibility = View.GONE
-            newToken.let {
-                when (it) {
-                    RESPONSE_DEFAULT -> {
-                        MakeVibrator(context).run(300)
-                        nullCheck()
-                    }
-
-                    RESPONSE_FAIL, null -> {
-                        toast.shortMessage("예상치 못한 오류가 발생했습니다")
-                        MakeVibrator(context).run(300)
-                    }
-
-                    else -> {
-                        if (newToken != originToken) {
-                            // 엑세스 토큰 저장
-                            SharedPreferenceManager.setString(context, "accessToken", newToken)
-                            // 유저 이름 저장
-                            SharedPreferenceManager.setString(
-                                context,
-                                "jti",
-                                getDecodeStream(newToken, "jti")
-                            )
+        Handler(Looper.getMainLooper()).postDelayed( {
+            loginViewModel.getSignInResult().observe(this@LoginActivity) { newToken ->
+                binding.mainLoginCoverView.visibility = View.GONE
+                newToken.let {
+                    when (it) {
+                        // 통신성공 but 데이터 에러
+                        RESPONSE_DEFAULT -> {
+                            MakeVibrator(context).run(300)
+                            nullCheck()
                         }
-                        // 토큰이 저장되었으면 메인화면으로 이동
-                        val intent = Intent(context, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                        overridePendingTransition(R.anim.fadein_activity, R.anim.fadeout_activity)
+
+                        // 통신 실패
+                        RESPONSE_FAIL, null -> {
+                            toast.shortMessage("예상치 못한 오류가 발생했습니다")
+                            MakeVibrator(context).run(300)
+                        }
+
+                        else -> {
+                            if (newToken != originToken) {
+                                // 엑세스 토큰 저장
+                                SharedPreferenceManager.setString(context, "accessToken", newToken)
+                                // 유저 이름 저장
+                                SharedPreferenceManager.setString(
+                                    context,
+                                    "jti",
+                                    getDecodeStream(newToken, "jti")
+                                )
+                            }
+                            // 토큰이 저장되었으면 메인화면으로 이동
+                            val intent = Intent(context, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                            overridePendingTransition(R.anim.fadein_activity, R.anim.fadeout_activity)
+                        }
                     }
                 }
             }
-        }
+        },1500)
     }
 
     private fun applySignUpViewModel() {

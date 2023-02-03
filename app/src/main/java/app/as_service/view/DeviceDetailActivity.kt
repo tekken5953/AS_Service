@@ -16,7 +16,6 @@ import app.as_service.databinding.ActivityDeviceDetailBinding
 import app.as_service.util.*
 import app.as_service.viewModel.GetValueDataModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 //https://notepad96.tistory.com/180     // 스크롤 애니메이션
@@ -35,7 +34,7 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.w(TAG, "공기질 데이터 호출 종료")
+        Log.w(TAG, "공기질 데이터 타이머 종료")
         timer.cancel()
     }
 
@@ -57,12 +56,16 @@ class DeviceDetailActivity : AppCompatActivity() {
                     "as_100" -> {
                         detailDeviceType.setImageDrawable(
                             ResourcesCompat.getDrawable(
-                                resources, R.drawable.as100, null))
+                                resources, R.drawable.as100, null
+                            )
+                        )
                     }
                     "as_m" -> {
                         detailDeviceType.setImageDrawable(
                             ResourcesCompat.getDrawable(
-                                resources, R.drawable.as_m, null))
+                                resources, R.drawable.as_m, null
+                            )
+                        )
                     }
                 }
 
@@ -82,13 +85,12 @@ class DeviceDetailActivity : AppCompatActivity() {
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
-                        "TIA0002053",
-//                binding.detailName.text.toString(),
+//                        "TIA0002053",
+                        intent.extras?.getString("serialNumber").toString(),
                         accessToken
                     )
                 }
             }, 0, 10 * 1000)
-            // 뷰모델 데이터 갱신
         }
 
         // 즐겨찾기 아이콘 클릭 이벤트
@@ -101,7 +103,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                     )
                 )
                 MakeVibrator(this).run(50)
-                snackBarUtils.makeSnack(binding.nestedScrollView,this,"즐겨찾기에 저장되었습니다")
+                snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에 저장되었습니다")
                 true
             } else {
                 binding.detailBookMark.setImageDrawable(
@@ -110,7 +112,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                         R.drawable.star_empty, null
                     )
                 )
-                snackBarUtils.makeSnack(binding.nestedScrollView,this,"즐겨찾기에서 제외되었습니다")
+                snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에서 제외되었습니다")
                 MakeVibrator(this).run(50)
                 false
             }
@@ -135,33 +137,38 @@ class DeviceDetailActivity : AppCompatActivity() {
 
         // 스크롤의 위치가 일정이상 일 때 해당 지도뷰 애니메이션 적용
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            if (scrollY > 500) {
-                if (binding.detailCardView2.visibility == View.INVISIBLE) {
-                    binding.detailCardView2.visibility = View.VISIBLE
-                    binding.detailCardView2.animation = AnimationUtils.loadAnimation(
-                        this@DeviceDetailActivity, R.anim.trans_bottom_to_top
-                    )
+            if (mList.size != 0) {
+                // 스크롤을 500이상 다운했을 경우
+                if (scrollY > 500) {
+                    if (binding.detailCardView2.visibility == View.INVISIBLE) {
+                       cardViewAnim()
+                    }
+                    if (binding.detailLocationContent.visibility == View.INVISIBLE) {
+                        locationAnim()
+                    }
                 }
-                if (binding.detailLocationContent.visibility == View.INVISIBLE) {
-                    binding.detailLocationContent.visibility = View.VISIBLE
-                    binding.detailLocationContent.animation = AnimationUtils.loadAnimation(
-                        this@DeviceDetailActivity, R.anim.trans_bottom_to_top
-                    )
-                }
+            }
+            // 데이터 로딩에 실패하였을 경우
+            else {
+                cardViewAnim()
+                locationAnim()
             }
         }
     }
 
     // 공기질 데이터 카테고리 아이템 추가
     private fun addCategoryItem(titleStr: String, dataStr: String, sort: String) {
+        // 데이터가 모두 불러와졌을 경우 데이터만 교체
         if (mList.size == 8) {
-          for (i: Int in 0 until(7)) {
-              if (mList[i].title == titleStr) {
-                  mList[i].sort = sort
-                  mList[i].data = dataStr
-              }
-          }
-        } else {
+            for (i: Int in 0 until (7)) {
+                if (mList[i].title == titleStr) {
+                    mList[i].sort = sort
+                    mList[i].data = dataStr
+                }
+            }
+        }
+        // 데이터가 일부만 호출되었을 경우 새로 추가된 데이터와 함께 다시등록
+        else {
             val item = AdapterModel.AirCondData(titleStr, dataStr, sort)
             item.title = titleStr
             item.data = dataStr
@@ -169,24 +176,36 @@ class DeviceDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun cardViewAnim() {
+        binding.detailCardView2.visibility = View.VISIBLE
+        binding.detailCardView2.animation = AnimationUtils.loadAnimation(
+            this@DeviceDetailActivity, R.anim.trans_bottom_to_top
+        )
+    }
+
+    private fun locationAnim() {
+        binding.detailLocationContent.visibility = View.VISIBLE
+        binding.detailLocationContent.animation = AnimationUtils.loadAnimation(
+            this@DeviceDetailActivity, R.anim.trans_bottom_to_top
+        )
+    }
+
     // 뷰모델 호출 후 데이터 반환
     @SuppressLint("NotifyDataSetChanged")
     private fun applyDeviceListInViewModel() {
         getDataViewModel.getDataResult().observe(this) { data ->
             data.let {
-                addCategoryItem("온도", it.TEMPval,"temp")
-                addCategoryItem("습도", it.HUMIDval,"humid")
-                addCategoryItem("미세먼지", it.PM2P5val,"pm")
-                addCategoryItem("일산화탄소", it.COval,"co")
-                addCategoryItem("이산화탄소", it.CO2val,"co2")
-                addCategoryItem("유기성 화합물", it.TVOCval,"tvoc")
+                addCategoryItem("온도", it.TEMPval, "temp")
+                addCategoryItem("습도", it.HUMIDval, "humid")
+                addCategoryItem("미세먼지", it.PM2P5val, "pm")
+                addCategoryItem("일산화탄소", it.COval, "co")
+                addCategoryItem("이산화탄소", it.CO2val, "co2")
+                addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
                 addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
-                addCategoryItem("바이러스\n위험지수", it.Virusval,"virus")
+                addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
                 binding.detailAirCondTimeLine.text = ConvertDataTypeUtil().millsToString(it.date)
             }
             adapter.notifyDataSetChanged()
         }
     }
-
-
 }
