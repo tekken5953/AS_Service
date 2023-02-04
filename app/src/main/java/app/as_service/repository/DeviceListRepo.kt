@@ -22,7 +22,7 @@ class DeviceListRepo : BaseRepository() {
                 call: Call<List<AdapterModel.GetDeviceList>>,
                 response: Response<List<AdapterModel.GetDeviceList>>
             ) {
-                loadSuccessListData(_deviceListResult,response,"디바이스리스트 호출")
+                loadSuccessListData(_deviceListResult,response,"디바이스 리스트 호출")
             }
 
             override fun onFailure(call: Call<List<AdapterModel.GetDeviceList>>, t: Throwable) {

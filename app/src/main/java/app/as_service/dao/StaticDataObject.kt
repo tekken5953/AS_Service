@@ -8,4 +8,5 @@ object StaticDataObject {
     const val RESPONSE_DEFAULT: String = "NULL"           // 통신기본 값 : String(NULL)
     const val RESPONSE_FAIL: String = "FAIL"              // 통신실패
     const val TAG = "Tag_Retrofit"                        // 서버통신 기본 태그 Key
+    const val REQUEST_LOCATION = 1                        // 위치권한요청 Result Code
 }

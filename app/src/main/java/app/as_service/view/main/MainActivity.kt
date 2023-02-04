@@ -2,8 +2,11 @@ package app.as_service.view.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +28,7 @@ import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.databinding.ActivityMainBinding
 import app.as_service.util.SharedPreferenceManager
+import app.as_service.util.ToastUtils
 import app.as_service.view.main.fragment.AnalyticsFragment
 import app.as_service.view.main.fragment.ChatFragment
 import app.as_service.view.main.fragment.DashboardFragment
@@ -40,10 +44,13 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private lateinit var viewBusiness: View
     private lateinit var viewName: View
     private lateinit var builder: AlertDialog.Builder
+    lateinit var viewPager: ViewPager2
+    lateinit var bottomNav: BottomNavigationView
     var deviceSerial = ""
     private val postDeviceViewModel by viewModel<AddDeviceViewModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this,"accessToken")}
     private val userId by lazy { SharedPreferenceManager.getString(this, "jti") }
+    var isBackPressed = false
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +62,8 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                 postDeviceVM = postDeviceViewModel
         }
 
-        val bottomNav: BottomNavigationView = binding.bottomNav
-        val viewPager: ViewPager2 = binding.viewPager
+        bottomNav = binding.bottomNav
+        viewPager = binding.viewPager
         val viewPagerAdapter = ViewPagerAdapter(this)
         bottomNav.selectedItemId = R.id.bottom_dashboard    // 대시보드 화면이 초기화면
         viewPager.adapter = viewPagerAdapter                // 어댑터 바인딩
@@ -255,5 +262,23 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         val intent = intent //인텐트
         startActivity(intent) //액티비티 열기
         overridePendingTransition(0, 0) //인텐트 효과 없애기
+    }
+
+    override fun onBackPressed() {
+        if (viewPager.currentItem == 0) {
+            val toast = ToastUtils(this)
+            if (!isBackPressed) {
+                toast.customDurationMessage("버튼을 한번 더 누르면 앱이 종료됩니다",2)
+                isBackPressed = true
+            } else {
+                finish()
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+               isBackPressed = false
+            },2000)
+        } else {
+            viewPager.currentItem = 0
+            bottomNav.selectedItemId = 0
+        }
     }
 }

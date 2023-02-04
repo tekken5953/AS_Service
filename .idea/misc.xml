@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/add_serial_button.xml" value="0.1655" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/button_bg.xml" value="0.1785" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/cancel.xml" value="0.2" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/circle.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/detail_air_item_container.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/detail_control_btn_bg.xml" value="0.185" />
@@ -18,6 +19,7 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/img_placeholder.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/menu_add.xml" value="0.1655" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/right_arrow.xml" value="0.1235" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/search_bg.xml" value="0.1225" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/second_item_bg.xml" value="0.1655" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/signup_edit.xml" value="0.1785" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/star_empty.xml" value="0.185" />

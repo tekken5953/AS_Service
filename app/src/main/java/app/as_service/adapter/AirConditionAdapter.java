@@ -62,12 +62,22 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
     // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title.setText(mData.get(position).getTitle());
-        holder.data.setSort(mData.get(position).getSort());
-        if (mData.get(position).getSort().equals("temp") || mData.get(position).getSort().equals("humid"))
-            holder.data.setIndexTextAsFloat(Float.parseFloat(mData.get(position).getData()));
-        else
-            holder.data.setIndexTextAsInt(Float.parseFloat(mData.get(position).getData()));
+        holder.title.setText(mData.get(position).getTitle());   // 공기질 데이터 종류 불러오기
+        // 데이터 불러오기
+        try {
+            holder.data.setSort(mData.get(position).getSort());
+        } catch (NullPointerException e) {
+            holder.data.setSort("grade");
+        }
+        // 데이터가 온도나 습도이면 소숫점까지 노출
+        try {
+            if (mData.get(position).getSort().equals("temp") || mData.get(position).getSort().equals("humid"))
+                holder.data.setIndexTextAsFloat(Float.parseFloat(mData.get(position).getData()));
+            else
+                holder.data.setIndexTextAsInt(Float.parseFloat(mData.get(position).getData()));
+        } catch (NumberFormatException e) {
+            holder.data.setVisibility(View.GONE);
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -88,7 +98,7 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     if (mListener != null) {
-                        mListener.onItemClick(v,position);
+                        mListener.onItemClick(v, position);
                     }
                 }
             });
