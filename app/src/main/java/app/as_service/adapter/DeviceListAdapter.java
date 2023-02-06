@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aslib.AsTextView;
 import com.bumptech.glide.Glide;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 
@@ -35,6 +38,10 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
 
     public Timer getTimer() {
         timer = new Timer();
+        return timer;
+    }
+
+    public Timer currentTimer() {
         return timer;
     }
 
@@ -76,6 +83,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.sn.setText(mData.get(position).getDevice());     // 시리얼 넘버
+        if (mData.get(position).getStarred())
+            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),R.drawable.star_fill,null));
+        else
+            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),R.drawable.star_empty,null));
+
+
 
         // 장치 별명 불러오기
         try {
@@ -147,7 +160,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, sn, business;
         AsTextView cqi, virus;
-        ImageView type, arrow;
+        ImageView type, arrow, bookmark;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -170,8 +183,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                             Pair.create(business, "businessTypeTran"),
                             Pair.create(type, "imageTran")
                     );
-                    if (timer != null) {
-                        timer.cancel();
+                    if (currentTimer() != null) {
+                        currentTimer().cancel();
+                        currentTimer().purge();
                         Log.w(StaticDataObject.TAG,"리스트 타이머 테스크 종료");
                     }
 
@@ -198,6 +212,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
             type = itemView.findViewById(R.id.deviceListTypeIv);
             business = itemView.findViewById(R.id.deviceListBusiness);
             arrow = itemView.findViewById(R.id.deviceListRightArrow2);
+            bookmark = itemView.findViewById(R.id.deviceListBookMarkIv);
         }
     }
 }

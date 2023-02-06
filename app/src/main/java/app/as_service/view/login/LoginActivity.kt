@@ -229,10 +229,11 @@ class LoginActivity : AppCompatActivity() {
                                 // 엑세스 토큰 저장
                                 SharedPreferenceManager.setString(context, "accessToken", newToken)
                                 // 유저 이름 저장
-                                SharedPreferenceManager.setString(
-                                    context,
-                                    "jti",
+                                SharedPreferenceManager.setString(context, "jti",
                                     getDecodeStream(newToken, "jti")
+                                )
+                                SharedPreferenceManager.setString(context, "auth",
+                                    getDecodeStream(newToken, "auth")
                                 )
                             }
                             // 토큰이 저장되었으면 메인화면으로 이동

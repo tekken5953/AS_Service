@@ -34,9 +34,7 @@ class DashboardFragment : Fragment() {
     private val deleteDeviceViewModel by viewModel<DeleteDeviceViewModel>()
 
     private val accessToken by lazy { SharedPreferenceManager.getString(context, "accessToken") }
-
     private val snack = SnackBarUtils()
-
     private var isLoaded = false
 
     override fun onResume() {
@@ -47,6 +45,12 @@ class DashboardFragment : Fragment() {
                 deviceListViewModel.loadDeviceListResult(accessToken)
             }
         },0,10 * 1000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.currentTimer().cancel()
+        adapter.currentTimer().purge()
     }
 
     override fun onCreateView(

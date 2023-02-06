@@ -30,12 +30,13 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val snackBarUtils = SnackBarUtils()
     private val getDataViewModel by viewModel<GetValueDataModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
-    private val timer = Timer()
+    private var timer = Timer()
 
     override fun onDestroy() {
         super.onDestroy()
         Log.w(TAG, "공기질 데이터 타이머 종료")
         timer.cancel()
+        timer.purge()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -162,7 +163,6 @@ class DeviceDetailActivity : AppCompatActivity() {
         if (mList.size == 8) {
             for (i: Int in 0 until (7)) {
                 if (mList[i].title == titleStr) {
-                    mList[i].sort = sort
                     mList[i].data = dataStr
                 }
             }
@@ -170,9 +170,10 @@ class DeviceDetailActivity : AppCompatActivity() {
         // 데이터가 일부만 호출되었을 경우 새로 추가된 데이터와 함께 다시등록
         else {
             val item = AdapterModel.AirCondData(titleStr, dataStr, sort)
-            item.title = titleStr
-            item.data = dataStr
-            mList.add(item)
+                item.title = titleStr
+                item.sort = sort
+                item.data = dataStr
+                mList.add(item)
         }
     }
 
@@ -190,20 +191,20 @@ class DeviceDetailActivity : AppCompatActivity() {
         )
     }
 
-    // 뷰모델 호출 후 데이터 반환
     @SuppressLint("NotifyDataSetChanged")
+    // 뷰모델 호출 후 데이터 반환
     private fun applyDeviceListInViewModel() {
         getDataViewModel.getDataResult().observe(this) { data ->
-            data.let {
-                addCategoryItem("온도", it.TEMPval, "temp")
-                addCategoryItem("습도", it.HUMIDval, "humid")
-                addCategoryItem("미세먼지", it.PM2P5val, "pm")
-                addCategoryItem("일산화탄소", it.COval, "co")
-                addCategoryItem("이산화탄소", it.CO2val, "co2")
-                addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
-                addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
-                addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
-                binding.detailAirCondTimeLine.text = ConvertDataTypeUtil().millsToString(it.date)
+            data?.let {
+                    addCategoryItem("온도", it.TEMPval, "temp")
+                    addCategoryItem("습도", it.HUMIDval, "humid")
+                    addCategoryItem("미세먼지", it.PM2P5val, "pm")
+                    addCategoryItem("일산화탄소", it.COval, "co")
+                    addCategoryItem("이산화탄소", it.CO2val, "co2")
+                    addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
+                    addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
+                    addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
+                    binding.detailAirCondTimeLine.text = ConvertDataTypeUtil().millsToString(it.date, "HH:mm")
             }
             adapter.notifyDataSetChanged()
         }

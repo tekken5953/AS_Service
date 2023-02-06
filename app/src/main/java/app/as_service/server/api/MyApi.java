@@ -1,5 +1,7 @@
 package app.as_service.server.api;
 
+import com.google.android.gms.common.api.Api;
+
 import java.util.List;
 
 import app.as_service.dao.AdapterModel;
@@ -7,8 +9,11 @@ import app.as_service.dao.ApiModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -49,4 +54,12 @@ public interface MyApi {
     // 장치 삭제하기
     @DELETE("device/{device}")
     Call<ApiModel.ReturnPost> deleteDevice(@Path("device") String device, @Header("Authorization") String token);
+
+    // 공공데이터 날씨정보 불러오기
+    @GET
+    Call<List<ApiModel.GetWeather>> getWeather();
+
+    @FormUrlEncoded
+    @PATCH("device/{device}")
+    Call<ApiModel.ReturnPost> patchDevice(@Header("Authorization") String token, @Field("starred") String isStarred);
 }

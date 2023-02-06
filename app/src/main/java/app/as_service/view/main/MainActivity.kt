@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +24,12 @@ import androidx.viewpager2.widget.ViewPager2
 import app.as_service.R
 import app.as_service.adapter.GridAdapter
 import app.as_service.adapter.`interface`.ChangeDialogListener
+import app.as_service.api.MapsFragment
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.databinding.ActivityMainBinding
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
 import app.as_service.view.main.fragment.AnalyticsFragment
-import app.as_service.view.main.fragment.ChatFragment
 import app.as_service.view.main.fragment.DashboardFragment
 import app.as_service.view.main.fragment.UserFragment
 import app.as_service.viewModel.AddDeviceViewModel
@@ -67,15 +66,19 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         val viewPagerAdapter = ViewPagerAdapter(this)
         bottomNav.selectedItemId = R.id.bottom_dashboard    // 대시보드 화면이 초기화면
         viewPager.adapter = viewPagerAdapter                // 어댑터 바인딩
-        applyPostDeviceViewModel()                          // 장치 추가 뷰모델 설정
+        applyPostDeviceViewModel() // 장치 추가 뷰모델 설정
 
         // 페이지 이동 시 바텀메뉴 아이템 변경
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                viewPager.isUserInputEnabled = true
                 when (position) {
                     0 -> { bottomNav.selectedItemId = R.id.bottom_dashboard }
                     1 -> { bottomNav.selectedItemId = R.id.bottom_analytics }
-                    2 -> { bottomNav.selectedItemId = R.id.bottom_chat }
+                    2 -> {
+                        bottomNav.selectedItemId = R.id.map
+                        viewPager.isUserInputEnabled = false
+                    }
                     3 -> { bottomNav.selectedItemId = R.id.bottom_user }
                 }
                 viewPager.currentItem = position
@@ -191,7 +194,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 1 -> { AnalyticsFragment() }
-                2 -> { ChatFragment() }
+                2 -> { MapsFragment() }
                 3 -> { UserFragment() }
                 else -> { DashboardFragment() }
             }

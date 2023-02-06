@@ -15,4 +15,6 @@
     <color name="mainColor">#3ec5ff</color>
     <color name="defaultMainColor">#3ec5ff</color>
     <color name="deviceListBgColor">#E9ECEF</color>
+    <color name="mainDarkColor">#080c42</color>
+    <color name="subDarkColor">#252a69</color>
 </resources>
