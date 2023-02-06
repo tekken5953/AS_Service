@@ -1,5 +1,7 @@
 package app.as_service.adapter;
 
+import static java.util.Objects.requireNonNull;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aslib.AsTextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import app.as_service.R;
 import app.as_service.dao.AdapterModel;
@@ -63,19 +66,17 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(mData.get(position).getTitle());   // 공기질 데이터 종류 불러오기
+
         // 데이터 불러오기
-        try {
-            holder.data.setSort(mData.get(position).getSort());
-        } catch (NullPointerException e) {
-            holder.data.setSort("grade");
-        }
+        holder.data.setSort(mData.get(position).getSort());
+
         // 데이터가 온도나 습도이면 소숫점까지 노출
         try {
             if (mData.get(position).getSort().equals("temp") || mData.get(position).getSort().equals("humid"))
-                holder.data.setIndexTextAsFloat(Float.parseFloat(mData.get(position).getData()));
+                holder.data.setIndexTextAsFloat(Float.parseFloat(requireNonNull(mData.get(position).getData())));
             else
-                holder.data.setIndexTextAsInt(Float.parseFloat(mData.get(position).getData()));
-        } catch (NumberFormatException e) {
+                holder.data.setIndexTextAsInt(Float.parseFloat(requireNonNull(mData.get(position).getData())));
+        } catch (NumberFormatException | NullPointerException e) {
             holder.data.setVisibility(View.GONE);
         }
     }

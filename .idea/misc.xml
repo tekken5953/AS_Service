@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/add_serial_button.xml" value="0.1655" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/analytics_text_bg.xml" value="0.2" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/button_bg.xml" value="0.1785" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/cancel.xml" value="0.2" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/circle.xml" value="0.185" />
@@ -30,7 +31,7 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_main.xml" value="0.2390625" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/add_device_top_menu.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/analytics_fragment.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/analytics_fragment.xml" value="0.152" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/chat_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dashboard_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/detail_air_item.xml" value="0.2526041666666667" />
@@ -39,6 +40,7 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_name.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_serial.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_sign_up.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/fragment_maps.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/grid_item.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/second_item_bg.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/user_fragment.xml" value="0.25364583333333335" />

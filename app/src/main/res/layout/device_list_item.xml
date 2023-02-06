@@ -107,4 +107,15 @@
         android:textSize="17sp"
         android:layout_marginStart="5dp"/>
 
+    <ImageView
+        android:id="@+id/deviceListBookMarkIv"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/star_empty"
+        app:tint="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
