@@ -29,7 +29,7 @@ _**<h1>AirSignal 100 Service App</h1>**_
 
 * MVVM 아키텍처 패턴을 적용하여 디자인
 
-* OKHttp와 Retrofit을 이용한 서버통신
+* Retrofit2를 이용한 서버통신
 
 * 서버 클라이언트 인스턴스 생성을 싱글톤으로 구현
 
