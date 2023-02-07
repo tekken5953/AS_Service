@@ -98,7 +98,7 @@ __Room__
 
 > annotationProcessor "androidx.room:room-compiler:$room_version"
 
-__구글 지도__
+__Google Map__
 
  > implementation 'com.google.android.gms:play-services-maps:17.0.0' // 구글지도 라이브러리
  
