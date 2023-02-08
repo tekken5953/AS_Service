@@ -11,10 +11,12 @@ import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.adapter.AirConditionAdapter
 import app.as_service.dao.AdapterModel
+import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.databinding.ActivityDeviceDetailBinding
 import app.as_service.util.*
-import app.as_service.viewModel.GetValueDataModel
+import app.as_service.viewModel.BookMarkViewModel
+import app.as_service.viewModel.GetValueViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -28,15 +30,26 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val mList = ArrayList<AdapterModel.AirCondData>()
     private val mToast = ToastUtils(this)
     private val snackBarUtils = SnackBarUtils()
-    private val getDataViewModel by viewModel<GetValueDataModel>()
+    private val getDataViewModel by viewModel<GetValueViewModel>()
+    private val patchBookMarkViewModel by viewModel<BookMarkViewModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
     private var timer = Timer()
+    private lateinit var serialNumber: String
+    private lateinit var deviceName: String
+    private lateinit var businessType: String
 
     override fun onDestroy() {
         super.onDestroy()
         Log.w(TAG, "공기질 데이터 타이머 종료")
         timer.cancel()
         timer.purge()
+    }
+
+    private fun getIntentData() {
+        deviceName = intent.extras!!.getString("deviceName").toString()
+        serialNumber = intent.extras!!.getString("serialNumber").toString()
+        businessType = intent.extras!!.getString("businessType").toString()
+        isBookMark = intent.extras!!.getBoolean("bookMark")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +60,21 @@ class DeviceDetailActivity : AppCompatActivity() {
             ).apply {
                 lifecycleOwner = this@DeviceDetailActivity
                 dataVM = getDataViewModel
+                bookMarkVM = patchBookMarkViewModel
+                getIntentData()
 
-                detailName.text = intent.extras?.getString("deviceName")    // 디바이스 이름
-                detailSN.text = intent.extras?.getString("serialNumber")    // 디바이스 S/N
-                detailDeviceBusiness.text = intent.extras?.getString("businessType")    // 비즈니스 타입
+                detailName.text = deviceName    // 디바이스 이름
+                detailSN.text = serialNumber    // 디바이스 S/N
+                detailDeviceBusiness.text = businessType    // 비즈니스 타입
+
+                // 북마크 현황
+                detailBookMark.setImageDrawable(
+                    if (isBookMark) {
+                        ResourcesCompat.getDrawable(resources, R.drawable.star_fill, null)
+                    } else {
+                        ResourcesCompat.getDrawable(resources, R.drawable.star_empty, null)
+                    }
+                )
 
                 // 디바이스 종류 별 이미지 불러오기
                 when (intent.extras?.getString("deviceType")) {
@@ -71,6 +95,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                 }
 
                 applyDeviceListInViewModel()
+                applyBookMarkViewModel()
             }
 
         if (::binding.isInitialized) {  // 바인딩 정상 적용
@@ -86,7 +111,6 @@ class DeviceDetailActivity : AppCompatActivity() {
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
-//                        "TIA0002053",
                         intent.extras?.getString("serialNumber").toString(),
                         accessToken
                     )
@@ -105,6 +129,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                 )
                 MakeVibrator(this).run(50)
                 snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에 저장되었습니다")
+                patchBookMarkViewModel.loadPatchBookMarkResult(serialNumber,accessToken, ApiModel.PutBookMark(true))
                 true
             } else {
                 binding.detailBookMark.setImageDrawable(
@@ -114,6 +139,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                     )
                 )
                 snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에서 제외되었습니다")
+                patchBookMarkViewModel.loadPatchBookMarkResult(serialNumber,accessToken, ApiModel.PutBookMark(false))
                 MakeVibrator(this).run(50)
                 false
             }
@@ -142,7 +168,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                 // 스크롤을 500이상 다운했을 경우
                 if (scrollY > 500) {
                     if (binding.detailCardView2.visibility == View.INVISIBLE) {
-                       cardViewAnim()
+                        cardViewAnim()
                     }
                     if (binding.detailLocationContent.visibility == View.INVISIBLE) {
                         locationAnim()
@@ -170,10 +196,10 @@ class DeviceDetailActivity : AppCompatActivity() {
         // 데이터가 일부만 호출되었을 경우 새로 추가된 데이터와 함께 다시등록
         else {
             val item = AdapterModel.AirCondData(titleStr, dataStr, sort)
-                item.title = titleStr
-                item.sort = sort
-                item.data = dataStr
-                mList.add(item)
+            item.title = titleStr
+            item.sort = sort
+            item.data = dataStr
+            mList.add(item)
         }
     }
 
@@ -196,17 +222,27 @@ class DeviceDetailActivity : AppCompatActivity() {
     private fun applyDeviceListInViewModel() {
         getDataViewModel.getDataResult().observe(this) { data ->
             data?.let {
-                    addCategoryItem("온도", it.TEMPval, "temp")
-                    addCategoryItem("습도", it.HUMIDval, "humid")
-                    addCategoryItem("미세먼지", it.PM2P5val, "pm")
-                    addCategoryItem("일산화탄소", it.COval, "co")
-                    addCategoryItem("이산화탄소", it.CO2val, "co2")
-                    addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
-                    addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
-                    addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
-                    binding.detailAirCondTimeLine.text = ConvertDataTypeUtil().millsToString(it.date, "HH:mm")
+                addCategoryItem("온도", it.TEMPval, "temp")
+                addCategoryItem("습도", it.HUMIDval, "humid")
+                addCategoryItem("미세먼지", it.PM2P5val, "pm")
+                addCategoryItem("일산화탄소", it.COval, "co")
+                addCategoryItem("이산화탄소", it.CO2val, "co2")
+                addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
+                addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
+                addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
+                binding.detailAirCondTimeLine.text =
+                    ConvertDataTypeUtil().millsToString(it.date, "HH:mm")
             }
             adapter.notifyDataSetChanged()
+        }
+    }
+
+    // 뷰모델 호출 후 데이터 반환
+    private fun applyBookMarkViewModel() {
+        patchBookMarkViewModel.patchBookMarkResult().observe(this) { data ->
+            data?.let {
+                println(it)
+            }
         }
     }
 }

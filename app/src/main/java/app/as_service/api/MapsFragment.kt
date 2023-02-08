@@ -58,7 +58,7 @@ class MapsFragment : Fragment() {
                     // 위도 경도를 x y 좌표로 변환
                     latitude = result.latitude
                     longitude = result.longitude
-                    markerTitle = "${result.adminArea} ${result.locality} ${result.thoroughfare}"
+                    markerTitle = result.getAddressLine(0)
                 }
             }
         return inflater.inflate(R.layout.fragment_maps, container, false)

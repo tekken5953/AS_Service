@@ -9,8 +9,8 @@ class AdapterModel {
 
     // 장치검색 시 GET할 데이터 모델
     data class GetDeviceList(val userId: String, val device: String,
-                             val deviceName: String, val businessType: String,
-                             var caiVal: String, var virusVal: String, var starred: Boolean, val owned: Boolean)
+                             val deviceName: String?, val businessType: String?,
+                             var caiVal: String?, var virusVal: String?, var starred: Boolean, val owned: Boolean)
 
     data class GridItem( val img: Drawable, val text: String)
 }

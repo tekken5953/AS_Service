@@ -2,9 +2,9 @@ package app.as_service.server
 
 import android.annotation.SuppressLint
 import android.util.Log
+import app.as_service.dao.IgnoredKeyFile.springServerURL
 import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.server.api.MyApi
-import app.as_service.util.SharedPreferenceManager
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,7 +39,7 @@ object HttpClient {
             // 서버 URL 주소에 연결, GSON Convert 활성화
             val retrofit: Retrofit by lazy {
                 Retrofit.Builder()
-                    .baseUrl("http://192.168.0.177:8080/api/")
+                    .baseUrl(springServerURL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(clientBuilder.build())
                     .build()

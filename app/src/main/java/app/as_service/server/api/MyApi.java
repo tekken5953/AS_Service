@@ -1,7 +1,5 @@
 package app.as_service.server.api;
 
-import com.google.android.gms.common.api.Api;
-
 import java.util.List;
 
 import app.as_service.dao.AdapterModel;
@@ -29,7 +27,7 @@ public interface MyApi {
 
     // 장치추가 API
     @POST("device/")
-    Call<ApiModel.ReturnPost> postDevice(@Header("Authorization") String token, @Body ApiModel.PostDevice item);
+    Call<ApiModel.ReturnPost> postDevice(@Header("Authorization") String token, @Body ApiModel.Device item);
 
     // 장치리스트 검색
     @GET("device/")
@@ -59,7 +57,9 @@ public interface MyApi {
     @GET
     Call<List<ApiModel.GetWeather>> getWeather();
 
-    @FormUrlEncoded
-    @PATCH("device/{device}")
-    Call<ApiModel.ReturnPost> patchDevice(@Header("Authorization") String token, @Field("starred") String isStarred);
+    // 북마크 처리
+    @PUT("device/{device}")
+    Call<ApiModel.ReturnPost> patchDevice(@Path("device") String device,
+                                          @Header("Authorization") String token,
+                                          @Body ApiModel.PutBookMark isStarred);
 }

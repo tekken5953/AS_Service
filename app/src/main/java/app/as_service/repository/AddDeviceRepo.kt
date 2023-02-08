@@ -13,9 +13,9 @@ class AddDeviceRepo : BaseRepository() {
     var _postDeviceResultData = MutableLiveData<String>()    // 회원가입 Response Body : String(Ok Sign)
 
     fun loadPostDeviceResult(token: String, device: String, id: String, name: String, business: String) {
-        val postDeviceModel = ApiModel.PostDevice(device, id, name, business)
+        val deviceModel = ApiModel.Device(device, id, name, business)
 
-        httpClient.mMyAPI.postDevice(token, postDeviceModel).run {
+        httpClient.mMyAPI.postDevice(token, deviceModel).run {
             enqueue(object : Callback<ApiModel.ReturnPost> {
                 override fun onResponse(
                     call: Call<ApiModel.ReturnPost>,

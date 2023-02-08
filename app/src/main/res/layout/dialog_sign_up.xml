@@ -22,9 +22,9 @@
         android:layout_below="@+id/main_text"
         app:boxBackgroundColor="@color/modeViewColor"
         android:hint="@string/email"
-        android:textColorHint="@color/modeTextColor"
+        android:textColorHint="@color/black"
         app:boxStrokeColor="@color/defaultMainColor"
-        app:hintTextColor="@color/mainColor"
+        app:hintTextColor="@color/defaultMainColor"
         android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp">
@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:background="@drawable/signup_edit"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textEmailAddress" />
@@ -48,7 +49,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/phone"
-        android:textColorHint="@color/modeTextColor"
+        android:textColorHint="@color/black"
         app:boxBackgroundColor="@color/modeViewColor"
         app:boxStrokeColor="@color/defaultMainColor"
         app:counterEnabled="true"
@@ -57,12 +58,13 @@
         app:helperText="@string/sign_up_helper"
         app:helperTextTextColor="@color/modeTextColor"
         app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/mainColor">
+        app:hintTextColor="@color/defaultMainColor">
 
         <EditText
             android:id="@+id/sign_up_phone"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:background="@drawable/signup_edit"
             android:gravity="start"
             android:inputType="phone"
             android:textCursorDrawable="@drawable/et_cursor"
@@ -78,19 +80,20 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/password"
-        android:textColorHint="@color/modeTextColor"
+        android:textColorHint="@color/black"
         app:boxStrokeColor="@color/defaultMainColor"
         app:boxBackgroundColor="@color/modeViewColor"
-        app:hintTextColor="@color/mainColor"
+        app:hintTextColor="@color/defaultMainColor"
         app:counterMaxLength="20"
         app:errorEnabled="true"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/modeTextColor">
+        app:passwordToggleTint="@color/black">
 
         <EditText
             android:id="@+id/sign_up_pwd"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:background="@drawable/signup_edit"
             android:gravity="start"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
@@ -106,19 +109,20 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:hint="@string/re_password"
-        android:textColorHint="@color/modeTextColor"
+        android:textColorHint="@color/black"
         app:boxStrokeColor="@color/defaultMainColor"
         app:boxBackgroundColor="@color/modeViewColor"
-        app:hintTextColor="@color/mainColor"
+        app:hintTextColor="@color/defaultMainColor"
         app:counterMaxLength="20"
         app:errorEnabled="true"
-        app:passwordToggleTint="@color/modeTextColor"
+        app:passwordToggleTint="@color/black"
         app:passwordToggleEnabled="true">
 
         <EditText
             android:id="@+id/sign_up_repwd"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:background="@drawable/signup_edit"
             android:gravity="start"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"

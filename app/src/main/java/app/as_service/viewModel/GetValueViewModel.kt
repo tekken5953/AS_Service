@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import app.as_service.dao.ApiModel
 import app.as_service.repository.GetValueRepo
 
-class GetValueDataModel : BaseViewModel("데이터 호출") {
+class GetValueViewModel : BaseViewModel("데이터 호출") {
 
     // MutableLiveData 값을 받아 View 로 전달해 줄 LiveData
     private lateinit var getDataResultData: LiveData<ApiModel.GetData>

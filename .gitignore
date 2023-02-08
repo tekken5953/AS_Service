@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/src/main/java/app/as_service/dao/IgnoredKeyFile.kt
+app/src/main/res/values/ignored_keys.xml

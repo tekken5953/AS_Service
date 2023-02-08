@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.aslib.AsTextView;
 import com.bumptech.glide.Glide;
 
@@ -81,20 +83,17 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
     // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         holder.sn.setText(mData.get(position).getDevice());     // 시리얼 넘버
         if (mData.get(position).getStarred())
-            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),R.drawable.star_fill,null));
+            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.star_fill, null));
         else
-            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),R.drawable.star_empty,null));
-
-
+            holder.bookmark.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.star_empty, null));
 
         // 장치 별명 불러오기
         try {
             holder.name.setVisibility(View.VISIBLE);
             holder.name.setText(mData.get(position).getDeviceName());
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             holder.name.setVisibility(View.GONE);
         }
 
@@ -172,6 +171,8 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                     intent.putExtra("deviceName", name.getText().toString());
                     intent.putExtra("serialNumber", sn.getText().toString());
                     intent.putExtra("businessType", business.getText().toString());
+                    intent.putExtra("bookMark", mData.get(position).getStarred());
+
                     if (sn.getText().toString().startsWith("SI"))
                         intent.putExtra("deviceType", "as_100");
                     else if (sn.getText().toString().startsWith("TI"))
@@ -181,12 +182,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                             Pair.create(name, "deviceNameTran"),
                             Pair.create(sn, "serialNumberTran"),
                             Pair.create(business, "businessTypeTran"),
-                            Pair.create(type, "imageTran")
+                            Pair.create(type, "imageTran"),
+                            Pair.create(bookmark, "bookmarkTran")
                     );
+
                     if (currentTimer() != null) {
                         currentTimer().cancel();
                         currentTimer().purge();
-                        Log.w(StaticDataObject.TAG,"리스트 타이머 테스크 종료");
+                        Log.w(StaticDataObject.TAG, "리스트 타이머 테스크 종료");
                     }
 
                     context.startActivity(intent, options.toBundle());
