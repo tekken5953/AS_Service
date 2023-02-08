@@ -12,7 +12,7 @@ import retrofit2.Response
 @Suppress("PropertyName")
 class DeviceListRepo : BaseRepository() {
     var _deviceListResult =
-        MutableLiveData<ArrayList<AdapterModel.GetDeviceList>?>()    // 로그인 Response Body : access token
+        MutableLiveData<ArrayList<AdapterModel.GetDeviceList>?>()
 
     fun loadDeviceListResult(token: String) {
         val getDeviceList: Call<List<AdapterModel.GetDeviceList>> =

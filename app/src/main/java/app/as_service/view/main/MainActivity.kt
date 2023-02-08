@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                     businessGridAdapter.resultBusiness)
             }
 
-            //시리얼번호 EditText 처리
+            // 시리얼번호 EditText 처리
             serialEt.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int) {}

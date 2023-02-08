@@ -17,7 +17,8 @@ class BaseApplication : Application() {
             androidContext(this@BaseApplication)
             modules(listOf(loginModule, signUpModule,
                 deviceListModule, getValueDataModule,
-                postDeviceModule,deleteDeviceModule ))
+                postDeviceModule,deleteDeviceModule,
+                patchBookMarkModule))
         }
     }
 
@@ -27,7 +28,8 @@ class BaseApplication : Application() {
     private val loginModule = module { viewModel { LoginViewModel() } }
     private val signUpModule = module { viewModel { SignUpViewModel() } }
     private val deviceListModule = module { viewModel { DeviceListViewModel() }}
-    private val getValueDataModule = module { viewModel { GetValueDataModel()} }
+    private val getValueDataModule = module { viewModel { GetValueViewModel()} }
     private val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
     private val deleteDeviceModule = module { viewModel { DeleteDeviceViewModel() } }
+    private val patchBookMarkModule = module { viewModel { BookMarkViewModel() } }
 }

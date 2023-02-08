@@ -1,8 +1,5 @@
 package app.as_service.dao
 
-import com.google.gson.annotations.SerializedName
-import org.jetbrains.annotations.Nullable
-
 class ApiModel {
     // 회원가입 시 Body에 넣어서 POST 할 데이터 모델
     data class Member(val userId: String, val phone: String, val password: String)
@@ -11,7 +8,7 @@ class ApiModel {
     // 로그인 시 발행된 AccessToken Body로 Get할 데이터 모델
     data class AccessToken(var access: String)
     // 장치추가 시 Body에 넣어서 POST 할 데이터 모델
-    data class PostDevice(val device: String, val id: String, val deviceName: String, val business: String)
+    data class Device(val device: String, val id: String, val deviceName: String, val businessType: String)
     // 장치생성 리턴 텍스트
     data class ReturnPost(val result: String)
     // 유저정보 GET할 데이터 모델
@@ -27,4 +24,6 @@ class ApiModel {
 
     // 날씨정보 공공데이터 GET할 데이터 모델
     data class GetWeather(val category: String, val obsrValue: String, val baseDate: String, val baseTime: String)
+    // 북마크 PUT 바디
+    data class PutBookMark(val starred: Boolean)
 }

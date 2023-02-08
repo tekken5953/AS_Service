@@ -1,5 +1,6 @@
 package app.as_service.view.main.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import app.as_service.util.SnackBarUtils
 import app.as_service.viewModel.DeleteDeviceViewModel
 import app.as_service.viewModel.DeviceListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.lang.NullPointerException
 import java.util.*
 
 class DashboardFragment : Fragment() {
@@ -35,7 +37,6 @@ class DashboardFragment : Fragment() {
 
     private val accessToken by lazy { SharedPreferenceManager.getString(context, "accessToken") }
     private val snack = SnackBarUtils()
-    private var isLoaded = false
 
     override fun onResume() {
         super.onResume()
@@ -44,7 +45,7 @@ class DashboardFragment : Fragment() {
                 // 뷰모델 호출
                 deviceListViewModel.loadDeviceListResult(accessToken)
             }
-        },0,10 * 1000)
+        }, 0, 10 * 1000)
     }
 
     override fun onDestroy() {
@@ -93,15 +94,15 @@ class DashboardFragment : Fragment() {
                     if (newText!!.isNotEmpty()) {
                         searchList.clear()
                         adapter = DeviceListAdapter(searchList) // 어댑터의 데이터모델을 서치리스트로 변경
-                        mList.forEach {
-                            val s = newText.uppercase()     // 시리얼넘버는 모두 대문자로 변환
-                            if (it.device.contains(s)
-                                or it.deviceName.contains(s)
-                                or it.businessType.contains(s)
-                            ) {
-                                searchList.add(it)
+                        try {
+                            mList.forEach {
+                                val s = newText.uppercase()     // 시리얼넘버는 모두 대문자로 변환
+                                if (it.device.contains(s)
+                                    or it.deviceName!!.contains(s)
+                                    or it.businessType!!.contains(s)
+                                ) { searchList.add(it) }
                             }
-                        }
+                        } catch(e: NullPointerException) { e.printStackTrace() }
                     } else {
                         // 서치뷰의 텍스트가 입력되지 않았을 경우
                         adapter = DeviceListAdapter(mList)
@@ -119,9 +120,11 @@ class DashboardFragment : Fragment() {
                     .setPositiveButton(
                         "예"
                     ) { dialog, _ ->
-                        deleteDeviceViewModel.loadDeleteDeviceResult(
-                            accessToken, mList[position].device
-                        )
+                        mList[position].device?.let {
+                            deleteDeviceViewModel.loadDeleteDeviceResult(
+                                accessToken, it
+                            )
+                        }
                         dialog.dismiss()
                         // 삭제 뷰모델 호출
                         deviceListViewModel.loadDeviceListResult(accessToken)
@@ -135,29 +138,16 @@ class DashboardFragment : Fragment() {
     }
 
     // 뷰모델 호출 후 데이터 반환
+    @SuppressLint("NotifyDataSetChanged")
     private fun applyDeviceListInViewModel() {
         deviceListViewModel.getDeviceListResult().observe(viewLifecycleOwner) { listItem ->
-            listItem?.let {
-                if (!isLoaded) {
-                    if (it.size != 0) {
-                        mList.clear()
-                        mList.addAll(it)
-                        adapter.notifyItemRangeInserted(0, it.size)
-                    }
-                    isLoaded = true
-                } else {
-                    for (i: Int in 0 until (it.size)) {
-                        try {
-                            if (mList[i].caiVal != it[i].caiVal)
-                                mList[i].caiVal = it[i].caiVal
-                            if (mList[i].virusVal != it[i].virusVal)
-                                mList[i].virusVal = it[i].virusVal
-                            adapter.notifyItemChanged(i)
-                        } catch(e: NullPointerException) {
-                            e.printStackTrace()
-                        }
-                    }
+            listItem?.let { it ->
+                if (it.size != 0) {
+                    mList.clear()
+                    mList.addAll(it.filter { it.starred })
+                    mList.addAll(it.filter { !it.starred })
                 }
+                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -175,8 +165,8 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    // 리사이클러뷰 데이터가 바뀔 때 깜빡임 제거
     private fun deleteBlinkRecycle(recyclerView: RecyclerView) {
-        // 리사이클러뷰 데이터가 바뀔 때 깜빡임 제거
         recyclerView.itemAnimator.apply {
             if (this is SimpleItemAnimator) {
                 supportsChangeAnimations = false
