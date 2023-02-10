@@ -25,13 +25,14 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/signup_edit.xml" value="0.1785" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/star_empty.xml" value="0.185" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/star_fill.xml" value="0.185" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/drawable/weather_card_bg.xml" value="0.2" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/font/font.xml" value="0.2828125" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_add_device.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_device_detail.xml" value="0.264" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_main.xml" value="0.2390625" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/activity_main.xml" value="0.152" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/add_device_top_menu.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/analytics_fragment.xml" value="0.152" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/analytics_fragment.xml" value="0.176" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/chat_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dashboard_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/detail_air_item.xml" value="0.2526041666666667" />

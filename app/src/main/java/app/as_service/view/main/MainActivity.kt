@@ -1,11 +1,14 @@
 package app.as_service.view.main
 
 import android.annotation.SuppressLint
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,21 +21,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import app.as_service.R
 import app.as_service.adapter.GridAdapter
 import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.api.MapsFragment
+import app.as_service.dao.StaticDataObject
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.databinding.ActivityMainBinding
+import app.as_service.fcm.SubFCM
+import app.as_service.util.ConvertDataTypeUtil
+import app.as_service.util.RequestPermissionsUtil
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
 import app.as_service.view.main.fragment.AnalyticsFragment
+import app.as_service.view.main.fragment.ChatFragment
 import app.as_service.view.main.fragment.DashboardFragment
 import app.as_service.view.main.fragment.UserFragment
 import app.as_service.viewModel.AddDeviceViewModel
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,13 +49,12 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private lateinit var viewBusiness: View
     private lateinit var viewName: View
     private lateinit var builder: AlertDialog.Builder
-    lateinit var viewPager: ViewPager2
-    lateinit var bottomNav: BottomNavigationView
-    var deviceSerial = ""
+    private lateinit var bottomNav: BottomNavigationView
     private val postDeviceViewModel by viewModel<AddDeviceViewModel>()
-    private val accessToken by lazy { SharedPreferenceManager.getString(this,"accessToken")}
-    private val userId by lazy { SharedPreferenceManager.getString(this, "jti") }
-    var isBackPressed = false
+    private var isBackPressed = false
+    private var x = "0"
+    private var y = "0"
+    private var s = "null"
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,58 +62,57 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         binding = DataBindingUtil.setContentView<ActivityMainBinding?>(
             this, R.layout.activity_main
         ).apply {
-                lifecycleOwner = this@MainActivity
-                postDeviceVM = postDeviceViewModel
+            lifecycleOwner = this@MainActivity
+            postDeviceVM = postDeviceViewModel
         }
+        // 위치정보 불러오기
+        getLocation()
+
+        RequestPermissionsUtil(this).requestLocation()
+//        RequestPermissionsUtil(this).requestNotification()
+        // FCM Message
+        SubFCM().getToken()
 
         bottomNav = binding.bottomNav
-        viewPager = binding.viewPager
-        val viewPagerAdapter = ViewPagerAdapter(this)
         bottomNav.selectedItemId = R.id.bottom_dashboard    // 대시보드 화면이 초기화면
-        viewPager.adapter = viewPagerAdapter                // 어댑터 바인딩
         applyPostDeviceViewModel() // 장치 추가 뷰모델 설정
-
-        // 페이지 이동 시 바텀메뉴 아이템 변경
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                viewPager.isUserInputEnabled = true
-                when (position) {
-                    0 -> { bottomNav.selectedItemId = R.id.bottom_dashboard }
-                    1 -> { bottomNav.selectedItemId = R.id.bottom_analytics }
-                    2 -> {
-                        bottomNav.selectedItemId = R.id.map
-                        viewPager.isUserInputEnabled = false
-                    }
-                    3 -> { bottomNav.selectedItemId = R.id.bottom_user }
-                }
-                viewPager.currentItem = position
-                super.onPageSelected(position)
-            }
-        })
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentFrame, DashboardFragment())
+            .commit()
 
         // 바텀메뉴 아이템 변경 시 페이지 이동
         bottomNav.setOnItemSelectedListener {
+            val ft = supportFragmentManager.beginTransaction()
+            val bundle = Bundle()
+            bundle.putString("location", "${x}_${y}_${s}")
             when (it.itemId) {
                 R.id.bottom_dashboard -> {
-                    viewPager.currentItem = 0
+                    ft.replace(R.id.fragmentFrame, DashboardFragment(),"list").commit()
                     true
                 }
                 R.id.bottom_analytics -> {
-                    viewPager.currentItem = 1
+                    val analytics = AnalyticsFragment()
+                    analytics.arguments = bundle
+                    ft.replace(R.id.fragmentFrame, analytics,"analytics").commit()
                     true
                 }
 
                 R.id.bottom_chat -> {
-                    viewPager.currentItem = 2
+                    val chat = MapsFragment()
+                    chat.arguments = bundle
+                    ft.replace(R.id.fragmentFrame, chat,"maps").commit()
                     true
                 }
                 R.id.bottom_user -> {
-                    viewPager.currentItem = 3
+                    ft.replace(R.id.fragmentFrame, UserFragment(),"user").commit()
                     true
                 }
-                else -> { false }
+                else -> {
+                    false
+                }
             }
         }
+
+        var deviceSerial = ""
 
         // 장치 추가 이벤트리스너
         binding.fab.setOnClickListener {
@@ -128,7 +132,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             val businessGrid: GridView = viewBusiness.findViewById(R.id.businessGridView)
             val businessApplyBtn: AppCompatButton = viewBusiness.findViewById(R.id.businessApplyBtn)
             businessApplyBtn.isEnabled = false
-            val businessGridAdapter = GridAdapter(this,businessTitle,businessApplyBtn)
+            val businessGridAdapter = GridAdapter(this, businessTitle, businessApplyBtn)
             businessGridAdapter.setChangeDialogListener(this)
 
             val nameApplyBtn: AppCompatButton = viewName.findViewById(R.id.nameBtn)
@@ -141,21 +145,28 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
 
             nameApplyBtn.setOnClickListener {
                 (viewName.parent as ViewGroup).removeView(viewName)
-                postDeviceViewModel.loadPostDeviceResult(accessToken,
+                postDeviceViewModel.loadPostDeviceResult(
+                    SharedPreferenceManager.getString(this, "accessToken"),
                     deviceSerial,
-                    userId,
+                    SharedPreferenceManager.getString(this, "jti"),
                     nameEt.text.toString(),
-                    businessGridAdapter.resultBusiness)
+                    businessGridAdapter.resultBusiness
+                )
             }
 
             // 시리얼번호 EditText 처리
             serialEt.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
+
                 override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int) {
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
                     if (serialEt.text.isEmpty() ||
-                        serialEt.text.length == serialInput.counterMaxLength) {
+                        serialEt.text.length == serialInput.counterMaxLength
+                    ) {
                         serialInput.error = null    // error
                         serialBtn.isEnabled = true  // enable
                     } else {
@@ -163,6 +174,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                         serialBtn.isEnabled = false // disable
                     }
                 }
+
                 override fun afterTextChanged(s: Editable?) {}
             })
 
@@ -186,20 +198,6 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             }
             onChangeToSerial()
         }
-    }
-
-    // 프래그먼트 뷰페이저 어댑터 : 총 4개의 프래그먼트
-    internal class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
-        FragmentStateAdapter(fragmentActivity) {
-        override fun createFragment(position: Int): Fragment {
-            return when (position) {
-                1 -> { AnalyticsFragment() }
-                2 -> { MapsFragment() }
-                3 -> { UserFragment() }
-                else -> { DashboardFragment() }
-            }
-        }
-        override fun getItemCount(): Int { return 4 }
     }
 
     override fun onChangeToSerial() {
@@ -250,7 +248,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             result.let {
                 if (it == CODE_SERVER_OK.toString()) {
                     Toast.makeText(this, "장치등록에 성공하였습니다", Toast.LENGTH_SHORT).show()
-                }  else {
+                } else {
                     Toast.makeText(this, "장치등록에 실패하였습니다", Toast.LENGTH_SHORT).show()
                 }
                 refreshActivity()
@@ -258,8 +256,8 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         }
     }
 
+    // 액티비티 갱신
     private fun refreshActivity() {
-        // 액티비티 갱신
         finish() //인텐트 종료
         overridePendingTransition(0, 0) //인텐트 효과 없애기
         val intent = intent //인텐트
@@ -268,20 +266,54 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     }
 
     override fun onBackPressed() {
-        if (viewPager.currentItem == 0) {
-            val toast = ToastUtils(this)
-            if (!isBackPressed) {
-                toast.customDurationMessage("버튼을 한번 더 누르면 앱이 종료됩니다",2)
-                isBackPressed = true
-            } else {
-                finish()
+        for (fragment: Fragment in supportFragmentManager.fragments) {
+            if (fragment.isVisible) {
+                if (fragment is DashboardFragment) {
+                    val toast = ToastUtils(this)
+                    if (!isBackPressed) {
+                        toast.customDurationMessage("버튼을 한번 더 누르면 앱이 종료됩니다", 2)
+                        isBackPressed = true
+                    } else {
+                        finish()
+                    }
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        isBackPressed = false
+                    }, 2000)
+                } else {
+                    bottomNav.selectedItemId = R.id.bottom_dashboard
+
+                }
             }
-            Handler(Looper.getMainLooper()).postDelayed({
-               isBackPressed = false
-            },2000)
-        } else {
-            viewPager.currentItem = 0
-            bottomNav.selectedItemId = 0
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getLocation() {
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val geocoder = Geocoder(this)
+                    geocoder.getFromLocation(it.latitude, it.longitude, 1)?.get(0)?.let { address ->
+                        // 위도 경도를 x y 좌표로 변환
+                        val convertGrid = ConvertDataTypeUtil.convertGridGps(
+                            0,
+                            address.latitude,
+                            address.longitude
+                        )
+                        Log.d(
+                            StaticDataObject.TAG_G,
+                            "latitude : ${address.latitude} longitude : ${address.longitude}"
+                        )
+
+                        x = convertGrid.x.toInt().toString()
+                        y = convertGrid.y.toInt().toString()
+                        s = "${address.adminArea} ${address.locality} ${address.thoroughfare}"
+                        Log.d(StaticDataObject.TAG_G, "${x}_${y}_${s}")
+                    }
+                }
+            }
     }
 }

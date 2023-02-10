@@ -3,7 +3,7 @@ package app.as_service.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG
+import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.server.HttpClient.mMyAPI
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +25,7 @@ class GetValueRepo : BaseRepository() {
                 loadSuccessMapData(_getDataResult, response, "공기질 데이터")
             }
             override fun onFailure(call: Call<ApiModel.GetData>, t: Throwable) {
-                Log.e(TAG, "공기질 데이터 호출 실패 : ${t.localizedMessage}")
+                Log.e(TAG_R, "공기질 데이터 호출 실패 : ${t.localizedMessage}")
             }
         })
     }
