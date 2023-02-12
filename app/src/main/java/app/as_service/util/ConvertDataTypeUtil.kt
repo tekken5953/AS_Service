@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
-class ConvertDataTypeUtil {
+object ConvertDataTypeUtil {
     fun millsToString(mills: Long, pattern: String): String {
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat(pattern)
         val calendar = Calendar.getInstance()
@@ -16,6 +16,27 @@ class ConvertDataTypeUtil {
     // 현재 시간 불러오기
     fun getCurrentTimeMills() : Long {
         return System.currentTimeMillis()
+    }
+
+    // 어제시간 반환
+    fun getYesterdayLong() : Long {
+        val currentTime = getCurrentTimeMills()
+        return currentTime - (1000 * 60 * 60 * 24)
+    }
+
+    // 날짜 형식을 변환
+    fun convertBaseDateToFormatDate(baseDate: String): String {
+        return "${baseDate.substring(0, 4)}년 ${baseDate.substring(4, 6)}월 ${
+            baseDate.substring(
+                6,
+                baseDate.length
+            )
+        }일"
+    }
+
+    // 시간 형식을 변환
+    fun convertBaseTimeToFormatTime(baseTime: String): String {
+        return "${baseTime.substring(0, 2)}시 ${baseTime.substring(2, baseTime.length)}분"
     }
 
     // 위도, 경도 -> X축, Y축

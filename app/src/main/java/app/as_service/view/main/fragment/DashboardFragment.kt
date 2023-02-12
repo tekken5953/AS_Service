@@ -2,7 +2,6 @@ package app.as_service.view.main.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import app.as_service.R
 import app.as_service.adapter.DeviceListAdapter
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
-import app.as_service.dao.StaticDataObject.TAG
 import app.as_service.databinding.DashboardFragmentBinding
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.SnackBarUtils
@@ -50,8 +48,10 @@ class DashboardFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        adapter.currentTimer().cancel()
-        adapter.currentTimer().purge()
+        if (adapter.currentTimer() != null) {
+            adapter.currentTimer().cancel()
+            adapter.currentTimer().purge()
+        }
     }
 
     override fun onCreateView(
@@ -90,23 +90,30 @@ class DashboardFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    /// 서치뷰의 텍스트가 입력되었을 겨우
-                    if (newText!!.isNotEmpty()) {
-                        searchList.clear()
-                        adapter = DeviceListAdapter(searchList) // 어댑터의 데이터모델을 서치리스트로 변경
-                        try {
-                            mList.forEach {
-                                val s = newText.uppercase()     // 시리얼넘버는 모두 대문자로 변환
-                                if (it.device.contains(s)
-                                    or it.deviceName!!.contains(s)
-                                    or it.businessType!!.contains(s)
-                                ) { searchList.add(it) }
-                            }
-                        } catch(e: NullPointerException) { e.printStackTrace() }
-                    } else {
-                        // 서치뷰의 텍스트가 입력되지 않았을 경우
-                        adapter = DeviceListAdapter(mList)
+                    /// 서치뷰의 텍스트가 입력되었을 경우
+                    newText?.let {
+                            new ->
+                        if (new.isNotEmpty()) {
+                            searchList.clear()
+                            adapter = DeviceListAdapter(searchList) // 어댑터의 데이터모델을 서치리스트로 변경
+                            try {
+                                mList.forEach {
+                                    list ->
+                                    val s = new.uppercase()     // 시리얼넘버는 모두 대문자로 변환
+                                    if (list.device.contains(s)
+                                        or list.deviceName!!.contains(s)
+                                        or list.businessType!!.contains(s)
+                                    ) {
+                                        searchList.add(list)
+                                    }
+                                }
+                            } catch (e: NullPointerException) { e.printStackTrace() }
+                        } else {
+                            // 서치뷰의 텍스트가 입력되지 않았을 경우
+                            adapter = DeviceListAdapter(mList)
+                        }
                     }
+
                     // 어댑터 갱신
                     binding.dashboardRecyclerView.adapter = adapter
                     return true
@@ -120,7 +127,7 @@ class DashboardFragment : Fragment() {
                     .setPositiveButton(
                         "예"
                     ) { dialog, _ ->
-                        mList[position].device?.let {
+                        mList[position].device.let {
                             deleteDeviceViewModel.loadDeleteDeviceResult(
                                 accessToken, it
                             )

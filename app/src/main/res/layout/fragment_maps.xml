@@ -10,8 +10,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".api.MapsFragment"
-        android:layout_above="@+id/getMapButton"/>
+        android:layout_above="@+id/getMapButton"
+        tools:context=".api.MapsFragment" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/getMapButton"

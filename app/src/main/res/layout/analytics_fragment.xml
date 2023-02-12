@@ -1,67 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/modeViewColor"
         tools:context=".view.main.fragment.AnalyticsFragment">
 
-        <TextView
-            android:id="@+id/titleLocationTv"
-            style="@style/basicBoldTextView"
+        <LinearLayout
+            android:id="@+id/weatherCoverView"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/analytics_text_bg"
+            android:layout_height="match_parent"
+            android:background="#66080c42"
+            android:clickable="true"
+            android:gravity="center">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Material.ProgressBar.Large"
+                android:indeterminateTint="@color/defaultMainColor"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/weatherLocationTv"
+            style="@style/basicBoldTextView"
+            android:layout_marginTop="120dp"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textColor="@color/modeTextColor"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
-            android:id="@+id/apiScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/googleMapFrame"
-            app:layout_constraintTop_toBottomOf="@+id/titleLocationTv">
-            <TextView
-                android:id="@+id/getApiTextView"
-                style="@style/basicBoldTextView"
-                android:gravity="start" />
-        </ScrollView>
+        <TextView
+            android:id="@+id/weatherSkyTv"
+            style="@style/basicRegularTextView"
+            app:layout_constraintStart_toStartOf="@+id/weatherLocationTv"
+            app:layout_constraintEnd_toEndOf="@+id/weatherLocationTv"
+            app:layout_constraintTop_toBottomOf="@+id/weatherLocationTv"
+            android:textSize="23sp"
+            android:layout_marginTop="15dp"/>
 
-        <FrameLayout
-            android:id="@+id/googleMapFrame"
-            android:padding="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            app:layout_constraintTop_toBottomOf="@+id/apiScrollView"
-            app:layout_constraintBottom_toTopOf="@+id/apiReferenceText"/>
+        <ImageView
+            android:id="@+id/weatherSkyIv"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:layout_constraintTop_toBottomOf="@+id/weatherSkyTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/weatherTempTv"
+            style="@style/basicBoldTextView"
+            app:layout_constraintTop_toBottomOf="@+id/weatherSkyIv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="48sp"
+            android:gravity="center"
+            android:layout_marginEnd="13dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/weatherTempUnit"
+            style="@style/basicBoldTextView"
+            app:layout_constraintStart_toEndOf="@+id/weatherTempTv"
+            app:layout_constraintTop_toTopOf="@+id/weatherTempTv"
+            android:text="@string/degree"
+            android:visibility="gone"
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/weatherCompareTv"
+            style="@style/basicRegularTextView"
+            app:layout_constraintTop_toBottomOf="@+id/weatherTempTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/weatherRainTv"
+            style="@style/basicRegularTextView"
+            app:layout_constraintTop_toBottomOf="@+id/weatherCompareTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="15dp"
+            android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/apiReferenceText"
             style="@style/basicRegularTextView"
-            app:layout_constraintBottom_toTopOf="@+id/getApiButton"
-            app:layout_constraintStart_toStartOf="@+id/getApiButton"
-            app:layout_constraintEnd_toEndOf="@+id/getApiButton"
-            android:layout_marginBottom="2dp"
-            android:textStyle="italic"
-            android:textSize="14sp"
-            android:maxEms="18"
-            android:text="본 앱에 올려진 데이터들은 “CC BY-SA(저작자표시-동일조건변경허락)” 로 공개되고 있습니다."/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/getApiButton"
-            style="@style/basicButton"
             android:layout_width="match_parent"
-            android:layout_marginBottom="10dp"
-            android:text="GET DATA"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="30dp"
+            android:text="본 앱에 올려진 데이터들은“CC BY-SA(저작자표시-동일조건변경허락)”로 공개되고 있습니다"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

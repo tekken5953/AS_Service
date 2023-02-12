@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
@@ -12,15 +13,14 @@ import app.as_service.R
 import app.as_service.adapter.AirConditionAdapter
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG
+import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.ActivityDeviceDetailBinding
 import app.as_service.util.*
+import app.as_service.util.ConvertDataTypeUtil.millsToString
 import app.as_service.viewModel.BookMarkViewModel
 import app.as_service.viewModel.GetValueViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-
-//https://notepad96.tistory.com/180     // 스크롤 애니메이션
 
 class DeviceDetailActivity : AppCompatActivity() {
 
@@ -40,7 +40,7 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.w(TAG, "공기질 데이터 타이머 종료")
+        Log.w(TAG_R, "공기질 데이터 타이머 종료")
         timer.cancel()
         timer.purge()
     }
@@ -63,42 +63,17 @@ class DeviceDetailActivity : AppCompatActivity() {
                 bookMarkVM = patchBookMarkViewModel
                 getIntentData()
 
-                detailName.text = deviceName    // 디바이스 이름
-                detailSN.text = serialNumber    // 디바이스 S/N
-                detailDeviceBusiness.text = businessType    // 비즈니스 타입
-
-                // 북마크 현황
-                detailBookMark.setImageDrawable(
-                    if (isBookMark) {
-                        ResourcesCompat.getDrawable(resources, R.drawable.star_fill, null)
-                    } else {
-                        ResourcesCompat.getDrawable(resources, R.drawable.star_empty, null)
-                    }
-                )
-
-                // 디바이스 종류 별 이미지 불러오기
-                when (intent.extras?.getString("deviceType")) {
-                    "as_100" -> {
-                        detailDeviceType.setImageDrawable(
-                            ResourcesCompat.getDrawable(
-                                resources, R.drawable.as100, null
-                            )
-                        )
-                    }
-                    "as_m" -> {
-                        detailDeviceType.setImageDrawable(
-                            ResourcesCompat.getDrawable(
-                                resources, R.drawable.as_m, null
-                            )
-                        )
-                    }
-                }
-
                 applyDeviceListInViewModel()
                 applyBookMarkViewModel()
             }
 
         if (::binding.isInitialized) {  // 바인딩 정상 적용
+            binding.detailName.text = deviceName    // 디바이스 이름
+            binding.detailSN.text = serialNumber    // 디바이스 S/N
+            binding.detailDeviceBusiness.text = businessType    // 비즈니스 타입
+            getStarred(binding.detailBookMark)  // 북마크 불러오기
+            getDeviceImage(binding.detailDeviceType)    //디바이스 이미지 불러오기
+
             adapter = AirConditionAdapter(mList)
             binding.detailAirCondRecyclerView.adapter = adapter
 
@@ -111,7 +86,7 @@ class DeviceDetailActivity : AppCompatActivity() {
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
-                        intent.extras?.getString("serialNumber").toString(),
+                        serialNumber ,
                         accessToken
                     )
                 }
@@ -140,7 +115,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                 )
                 snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에서 제외되었습니다")
                 patchBookMarkViewModel.loadPatchBookMarkResult(serialNumber,accessToken, ApiModel.PutBookMark(false))
-                MakeVibrator(this).run(50)
+                vibrate100()
                 false
             }
         }
@@ -148,17 +123,18 @@ class DeviceDetailActivity : AppCompatActivity() {
         // 팬 제어 아이콘
         binding.detailFanCard.setOnClickListener {
             mToast.shortMessage("팬 제어")
-            MakeVibrator(this).run(100)
+            vibrate100()
         }
 
         // 파워 제어 아이콘
         binding.detailPowerCard.setOnClickListener {
             mToast.shortMessage("파워 제어")
-            MakeVibrator(this).run(100)
+            vibrate100()
         }
 
         // 뒤로가기 아이콘
         binding.detailBack.setOnClickListener {
+            vibrate100()
             super.onBackPressed()
         }
 
@@ -181,6 +157,41 @@ class DeviceDetailActivity : AppCompatActivity() {
                 locationAnim()
             }
         }
+    }
+
+    private fun getDeviceImage(view: ImageView) {
+        // 디바이스 종류 별 이미지 불러오기
+        when (intent.extras?.getString("deviceType")) {
+            "as_100" -> {
+                view.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources, R.drawable.as100, null
+                    )
+                )
+            }
+            "as_m" -> {
+                view.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources, R.drawable.as_m, null
+                    )
+                )
+            }
+        }
+    }
+
+    private fun vibrate100() {
+        MakeVibrator(this).run(100)
+    }
+
+    private fun getStarred(view: ImageView) {
+        // 북마크 현황
+        view.setImageDrawable(
+            if (isBookMark) {
+                ResourcesCompat.getDrawable(resources, R.drawable.star_fill, null)
+            } else {
+                ResourcesCompat.getDrawable(resources, R.drawable.star_empty, null)
+            }
+        )
     }
 
     // 공기질 데이터 카테고리 아이템 추가
@@ -231,7 +242,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                 addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
                 addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
                 binding.detailAirCondTimeLine.text =
-                    ConvertDataTypeUtil().millsToString(it.date, "HH:mm")
+                    millsToString(it.date, "HH:mm")
             }
             adapter.notifyDataSetChanged()
         }

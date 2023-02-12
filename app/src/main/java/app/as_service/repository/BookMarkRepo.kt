@@ -21,7 +21,7 @@ class BookMarkRepo : BaseRepository() {
                 ) { loadSuccessStringData(_patchBookMarkResultData, response ,"북마크") }
 
                 override fun onFailure(call: Call<ApiModel.ReturnPost>, t: Throwable) {
-                    Log.e(StaticDataObject.TAG, "북마크 실패 : ${t.localizedMessage}")
+                    Log.e(StaticDataObject.TAG_R, "북마크 실패 : ${t.localizedMessage}")
                 }
             })
         }

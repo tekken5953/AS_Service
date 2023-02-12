@@ -3,7 +3,7 @@ package app.as_service.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG
+import app.as_service.dao.StaticDataObject.TAG_R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +23,7 @@ class DeleteDeviceRepo : BaseRepository() {
                 }
 
                 override fun onFailure(call: Call<ApiModel.ReturnPost>, t: Throwable) {
-                    Log.e(TAG, "장치삭제 실패 : ${t.localizedMessage}")
+                    Log.e(TAG_R, "장치삭제 실패 : ${t.localizedMessage}")
                 }
             })
         }
