@@ -105,5 +105,10 @@ __Google Map__
  > implementation 'com.google.android.gms:play-services-location:17.0.0' // 위치정보 라이브러리
 
 
+__Coroutine__
+
+> implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
+
+> implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
 
