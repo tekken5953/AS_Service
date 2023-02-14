@@ -34,7 +34,6 @@ import app.as_service.util.RequestPermissionsUtil
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
 import app.as_service.view.main.fragment.AnalyticsFragment
-import app.as_service.view.main.fragment.ChatFragment
 import app.as_service.view.main.fragment.DashboardFragment
 import app.as_service.view.main.fragment.UserFragment
 import app.as_service.viewModel.AddDeviceViewModel
@@ -84,31 +83,39 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             val ft = supportFragmentManager.beginTransaction()
             val bundle = Bundle()
             bundle.putString("location", "${x}_${y}_${s}")
+
             when (it.itemId) {
                 R.id.bottom_dashboard -> {
-                    ft.replace(R.id.fragmentFrame, DashboardFragment(),"list").commit()
-                    true
+                    val list = DashboardFragment()
+                    if (bottomNav.selectedItemId !=  R.id.bottom_dashboard) {
+                        ft.replace(R.id.fragmentFrame, list, "list").commit()
+                        true
+                    } else false
                 }
                 R.id.bottom_analytics -> {
                     val analytics = AnalyticsFragment()
                     analytics.arguments = bundle
-                    ft.replace(R.id.fragmentFrame, analytics,"analytics").commit()
-                    true
+                    if (bottomNav.selectedItemId !=  R.id.bottom_analytics) {
+                        ft.replace(R.id.fragmentFrame, analytics, "analytics").commit()
+                        true
+                    } else false
                 }
-
                 R.id.bottom_chat -> {
                     val chat = MapsFragment()
                     chat.arguments = bundle
-                    ft.replace(R.id.fragmentFrame, chat,"maps").commit()
-                    true
+                    if (bottomNav.selectedItemId !=  R.id.bottom_chat) {
+                        ft.replace(R.id.fragmentFrame, chat, "maps").commit()
+                        true
+                    } else false
                 }
                 R.id.bottom_user -> {
-                    ft.replace(R.id.fragmentFrame, UserFragment(),"user").commit()
-                    true
+                    val user = UserFragment()
+                    if (bottomNav.selectedItemId !=  R.id.bottom_user) {
+                        ft.replace(R.id.fragmentFrame, user, "user").commit()
+                        true
+                    } else false
                 }
-                else -> {
-                    false
-                }
+                else -> { false }
             }
         }
 
@@ -164,8 +171,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                 override fun onTextChanged(
                     s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
-                    if (serialEt.text.isEmpty() ||
-                        serialEt.text.length == serialInput.counterMaxLength
+                    if (serialEt.text.isNotEmpty()
                     ) {
                         serialInput.error = null    // error
                         serialBtn.isEnabled = true  // enable
@@ -180,7 +186,6 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
 
             serialBtn.setOnClickListener {
                 if (serialInput.error == null
-                    && serialEt.text.length == serialInput.counterMaxLength
                 ) {
                     // 다이어로그가 초기생성인지 중복생성인지 구분
                     if (viewBusiness.parent == null) {

@@ -83,6 +83,7 @@ class DeviceDetailActivity : AppCompatActivity() {
             binding.detailCardView1.animation =
                 AnimationUtils.loadAnimation(this, R.anim.trans_right_to_left)
 
+
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
@@ -91,6 +92,17 @@ class DeviceDetailActivity : AppCompatActivity() {
                     )
                 }
             }, 0, 10 * 1000)
+        }
+
+        if (serialNumber == "SIA000000T") {
+            addCategoryItem("온도", "22.5", "temp")
+            addCategoryItem("습도", "47.1", "humid")
+            addCategoryItem("미세먼지", "15", "pm")
+            addCategoryItem("일산화탄소", "1", "co")
+            addCategoryItem("이산화탄소", "1025", "co2")
+            addCategoryItem("유기성 화합물", "0.1", "tvoc")
+            addCategoryItem("공기질\n통합지수", "21", "cqi")
+            addCategoryItem("바이러스\n위험지수", "7", "virus")
         }
 
         // 즐겨찾기 아이콘 클릭 이벤트
@@ -162,6 +174,13 @@ class DeviceDetailActivity : AppCompatActivity() {
     private fun getDeviceImage(view: ImageView) {
         // 디바이스 종류 별 이미지 불러오기
         when (intent.extras?.getString("deviceType")) {
+            "as_eye" -> {
+                view.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources, R.drawable.as_eye, null
+                    )
+                )
+            }
             "as_100" -> {
                 view.setImageDrawable(
                     ResourcesCompat.getDrawable(

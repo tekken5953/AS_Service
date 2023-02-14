@@ -1,7 +1,9 @@
 package app.as_service.fcm
 
+import android.content.Intent
 import android.util.Log
 import app.as_service.dao.StaticDataObject.TAG_R
+import app.as_service.view.login.LoginActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -20,8 +22,9 @@ class SubFCM : FirebaseMessagingService() {
         super.onMessageReceived(message)
         Log.d(TAG_R,"FCM 메시지 수신")
 
-        // 노티피케이션 발생
-        NotificationBuilder(this,message,"AS-Cloud FCM Test Msg").getNotification()
+        val intent = Intent(this, LoginActivity::class.java)
+        // 포그라운드 노티피케이션 발생
+        NotificationBuilder().sendNotification2(this,intent,message,"AS-Cloud FCM Test Msg")
     }
 
     // 현재 토큰정보 불러오기

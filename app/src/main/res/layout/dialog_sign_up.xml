@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:gravity="start"
+            android:textColor="@color/black"
             android:background="@drawable/signup_edit"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
@@ -67,6 +68,7 @@
             android:background="@drawable/signup_edit"
             android:gravity="start"
             android:inputType="phone"
+            android:textColor="@color/black"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -95,6 +97,7 @@
             android:layout_height="55dp"
             android:background="@drawable/signup_edit"
             android:gravity="start"
+            android:textColor="@color/black"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textPassword" />
@@ -124,6 +127,7 @@
             android:layout_height="55dp"
             android:background="@drawable/signup_edit"
             android:gravity="start"
+            android:textColor="@color/black"
             android:textCursorDrawable="@drawable/et_cursor"
             android:textIsSelectable="true"
             android:inputType="textPassword" />
