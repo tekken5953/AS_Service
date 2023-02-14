@@ -130,7 +130,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         }
 
         // 모델명에 따라 아이콘 다르게 불러옴
-        if (mData.get(position).getDevice().startsWith("SI")) {
+        if (mData.get(position).getDevice().equals("SIA000000T")) {
+            Glide.with(context)
+                    .load(R.drawable.as_eye)
+                    .placeholder(R.drawable.img_placeholder)
+                    .into(holder.type);
+        } else if (mData.get(position).getDevice().startsWith("SI")) {
             Glide.with(context)
                     .load(R.drawable.as100)
                     .placeholder(R.drawable.img_placeholder)
@@ -140,7 +145,8 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                     .load(R.drawable.as_m)
                     .placeholder(R.drawable.img_placeholder)
                     .into(holder.type);
-        } else {
+        }
+        else {
             Glide.with(context)
                     .load(R.drawable.no_img)
                     .placeholder(R.drawable.img_placeholder)
@@ -172,7 +178,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                     intent.putExtra("businessType", business.getText().toString());
                     intent.putExtra("bookMark", mData.get(position).getStarred());
 
-                    if (sn.getText().toString().startsWith("SI"))
+                    if (sn.getText().toString().equals("SIA000000T"))
+                        intent.putExtra("deviceType","as_eye");
+                    else if (sn.getText().toString().startsWith("SI"))
                         intent.putExtra("deviceType", "as_100");
                     else if (sn.getText().toString().startsWith("TI"))
                         intent.putExtra("deviceType", "as_m");

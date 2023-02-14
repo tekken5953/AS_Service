@@ -82,6 +82,12 @@ class DashboardFragment : Fragment() {
             //디바이스 삭제 뷰모델 옵저빙
             applyDeleteDeviceViewModel()
 
+            mList.add(0, AdapterModel.GetDeviceList("test","SIA000000T","AS-Eye",
+                "2층","21","7", starred = true, owned = true
+            ))
+
+            adapter.notifyDataSetChanged()
+
             // 서치뷰 입력시 필터링
             binding.dashboardSearchView.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {

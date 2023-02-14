@@ -59,12 +59,20 @@ class MapsFragment : Fragment() {
         RequestPermissionsUtil(requireActivity()).requestLocation()
     }
 
-    @SuppressLint("MissingPermission")
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        getLocale()
+
+        return inflater.inflate(R.layout.fragment_maps, container, false)
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun getLocale() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         fusedLocationClient.lastLocation
@@ -78,8 +86,6 @@ class MapsFragment : Fragment() {
                     markerTitle = result.getAddressLine(0)
                 }
             }
-
-        return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

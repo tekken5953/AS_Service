@@ -34,7 +34,7 @@
             app:boxCollapsedPaddingTop="5dp"
             app:boxStrokeColor="@color/defaultMainColor"
             app:counterEnabled="true"
-            app:counterMaxLength="10"
+            app:counterMaxLength="15"
             app:errorEnabled="true"
             app:hintTextColor="@color/defaultMainColor">
 
