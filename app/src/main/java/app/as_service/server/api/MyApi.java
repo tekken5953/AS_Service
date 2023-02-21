@@ -62,4 +62,8 @@ public interface MyApi {
     Call<ApiModel.ReturnPost> patchDevice(@Path("device") String device,
                                           @Header("Authorization") String token,
                                           @Body ApiModel.PutBookMark isStarred);
+
+    // 토큰갱신
+    @POST("authenticate/mobile")
+    Call<ApiModel.AccessToken> refreshToken(@Body ApiModel.RefreshToken token);
 }

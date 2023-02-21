@@ -9,19 +9,20 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import app.as_service.R
+import app.as_service.dao.StaticDataObject.NOTIFICATION_CHANNEL_ID
+import app.as_service.dao.StaticDataObject.NOTIFICATION_CHANNEL_NAME
 import com.google.firebase.messaging.RemoteMessage
 
 
 class NotificationBuilder {
     // foreground 상태에서 해드업 알림
-     fun sendNotification2(context: Context, intent: Intent, data: RemoteMessage, title : String) {
+     fun sendNotification(context: Context, intent: Intent, data: RemoteMessage, title : String, time: Long) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-        val notificationChannelId = "500"
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val notificationChannel = NotificationChannel(
-            notificationChannelId,
-            "푸시 알림",
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "Channel description"
@@ -32,19 +33,18 @@ class NotificationBuilder {
             enableVibration(true)
         }
 
-        notificationManager!!.createNotificationChannel(notificationChannel)
-
-        val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)
+        val notificationBuilder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         notificationBuilder.setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)
-            .setWhen(System.currentTimeMillis())
+            .setWhen(time)
             .setSmallIcon(R.drawable.app_icon)
-            .setTicker("TICKER")
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setContentIntent(pendingIntent)
             .setContentTitle(title)
             .setContentText(data.data.toString())
-        //.setContentInfo("Info");
-        notificationManager.notify( /*notification id*/1, notificationBuilder.build())
+        notificationManager!!.run {
+            createNotificationChannel(notificationChannel)
+            notify(1, notificationBuilder.build())
+        }
     }
 }

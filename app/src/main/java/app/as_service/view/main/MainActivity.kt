@@ -24,15 +24,13 @@ import androidx.fragment.app.Fragment
 import app.as_service.R
 import app.as_service.adapter.GridAdapter
 import app.as_service.adapter.`interface`.ChangeDialogListener
-import app.as_service.api.MapsFragment
-import app.as_service.dao.StaticDataObject
+import app.as_service.view.main.fragment.MapsFragment
+import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
-import app.as_service.databinding.ActivityMainBinding
+import app.as_service.dao.StaticDataObject.TAG_G
+import app.as_service.databinding.MainActivityBinding
 import app.as_service.fcm.SubFCM
-import app.as_service.util.ConvertDataTypeUtil
-import app.as_service.util.RequestPermissionsUtil
-import app.as_service.util.SharedPreferenceManager
-import app.as_service.util.ToastUtils
+import app.as_service.util.*
 import app.as_service.view.main.fragment.AnalyticsFragment
 import app.as_service.view.main.fragment.DashboardFragment
 import app.as_service.view.main.fragment.UserFragment
@@ -43,7 +41,7 @@ import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), ChangeDialogListener {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: MainActivityBinding
     private lateinit var viewSerial: View
     private lateinit var viewBusiness: View
     private lateinit var viewName: View
@@ -58,8 +56,8 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<ActivityMainBinding?>(
-            this, R.layout.activity_main
+        binding = DataBindingUtil.setContentView<MainActivityBinding?>(
+            this, R.layout.main_activity
         ).apply {
             lifecycleOwner = this@MainActivity
             postDeviceVM = postDeviceViewModel
@@ -251,23 +249,21 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private fun applyPostDeviceViewModel() {
         postDeviceViewModel.postDeviceResult().observe(this) { result ->
             result.let {
-                if (it == CODE_SERVER_OK.toString()) {
-                    Toast.makeText(this, "장치등록에 성공하였습니다", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "장치등록에 실패하였습니다", Toast.LENGTH_SHORT).show()
+                when (it) {
+                    CODE_SERVER_OK.toString() -> {
+                        Toast.makeText(this, "장치등록에 성공하였습니다", Toast.LENGTH_SHORT).show()
+                    }
+                    CODE_INVALID_TOKEN.toString() -> {
+                        //TODO 리프레쉬로 액세스 갱신
+                        val refresh = SharedPreferenceManager.getString(this, "refreshToken")
+                    }
+                    else -> {
+                        Toast.makeText(this, "장치등록에 실패하였습니다", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                refreshActivity()
+                RefreshUtils().refreshActivity(this)
             }
         }
-    }
-
-    // 액티비티 갱신
-    private fun refreshActivity() {
-        finish() //인텐트 종료
-        overridePendingTransition(0, 0) //인텐트 효과 없애기
-        val intent = intent //인텐트
-        startActivity(intent) //액티비티 열기
-        overridePendingTransition(0, 0) //인텐트 효과 없애기
     }
 
     override fun onBackPressed() {
@@ -294,7 +290,6 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
 
     @SuppressLint("MissingPermission")
     fun getLocation() {
-
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         fusedLocationClient.lastLocation
@@ -308,15 +303,12 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                             address.latitude,
                             address.longitude
                         )
-                        Log.d(
-                            StaticDataObject.TAG_G,
-                            "latitude : ${address.latitude} longitude : ${address.longitude}"
-                        )
+                        Log.d(TAG_G, "latitude : ${address.latitude} longitude : ${address.longitude}")
 
                         x = convertGrid.x.toInt().toString()
                         y = convertGrid.y.toInt().toString()
                         s = "${address.adminArea} ${address.locality} ${address.thoroughfare}"
-                        Log.d(StaticDataObject.TAG_G, "${x}_${y}_${s}")
+                        Log.d(TAG_G, "${x}_${y}_${s}")
                     }
                 }
             }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/getMapButton"
-        tools:context=".api.MapsFragment" />
+        tools:context=".view.main.fragment.MapsFragment" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/getMapButton"

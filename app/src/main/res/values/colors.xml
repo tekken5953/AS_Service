@@ -17,4 +17,10 @@
     <color name="deviceListBgColor">#E9ECEF</color>
     <color name="mainDarkColor">#080c42</color>
     <color name="subDarkColor">#252a69</color>
+
+    <color name="progressBad">#FBC93D</color> // 프로그래스 바 양호도 나쁨 컬러
+    <color name="progressWorst">#FB4F4F</color> // 프로그래스 바 양호도 매우나쁨 컬러
+    <color name="progressGood">#5CC2E4</color> // 프로그래스 바 양호도 좋음 컬러
+    <color name="progressNormal">#1ccf7f</color> // 프로그래스 바 양호도 보통 컬러
+    <color name="progressError">#A0A0A0</color> // 프로그래스 바 에러 컬러
 </resources>

@@ -65,7 +65,7 @@
                 style="@style/mainLoginItemField"
                 android:layout_marginBottom="190dp"
                 android:inputType="textEmailAddress"
-                android:text="admin"
+                android:text="test@test.com"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
                 android:layout_marginTop="50dp"
                 android:fontFamily="@font/lotte_medium"
                 android:inputType="textPassword"
-                android:text="admin"
+                android:text="1234"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mainLoginIdEt" />

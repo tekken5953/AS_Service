@@ -34,9 +34,9 @@ class GridAdapter(mContext: Context, mTitle: TextView, mButton: AppCompatButton)
     var resultBusiness = ""
     private val toast = ToastUtils(mContext as Activity)
 
-    fun setChangeDialogListener(listener: ChangeDialogListener?) {
-        if (listener != null) {
-            this.listener = listener
+    fun setChangeDialogListener(mListener: ChangeDialogListener?) {
+        mListener?.let {
+            this.listener = it
         }
     }
 
