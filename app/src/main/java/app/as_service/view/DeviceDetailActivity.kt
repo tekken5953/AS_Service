@@ -11,12 +11,16 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.adapter.AirConditionAdapter
+import app.as_service.api.ui.DrawBarChart
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.TAG_R
-import app.as_service.databinding.ActivityDeviceDetailBinding
-import app.as_service.util.*
+import app.as_service.databinding.DetailActivityBinding
 import app.as_service.util.ConvertDataTypeUtil.millsToString
+import app.as_service.util.MakeVibrator
+import app.as_service.util.SharedPreferenceManager
+import app.as_service.util.SnackBarUtils
+import app.as_service.util.ToastUtils
 import app.as_service.viewModel.BookMarkViewModel
 import app.as_service.viewModel.GetValueViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,7 +28,7 @@ import java.util.*
 
 class DeviceDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDeviceDetailBinding
+    private lateinit var binding: DetailActivityBinding
     private var isBookMark: Boolean = false
     private lateinit var adapter: AirConditionAdapter
     private val mList = ArrayList<AdapterModel.AirCondData>()
@@ -45,6 +49,11 @@ class DeviceDetailActivity : AppCompatActivity() {
         timer.purge()
     }
 
+    override fun onResume() {
+        super.onResume()
+        drawBarChart()
+    }
+
     private fun getIntentData() {
         deviceName = intent.extras!!.getString("deviceName").toString()
         serialNumber = intent.extras!!.getString("serialNumber").toString()
@@ -55,8 +64,8 @@ class DeviceDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =
-            DataBindingUtil.setContentView<ActivityDeviceDetailBinding?>(
-                this, R.layout.activity_device_detail
+            DataBindingUtil.setContentView<DetailActivityBinding?>(
+                this, R.layout.detail_activity
             ).apply {
                 lifecycleOwner = this@DeviceDetailActivity
                 dataVM = getDataViewModel
@@ -80,7 +89,7 @@ class DeviceDetailActivity : AppCompatActivity() {
             // 최초 뷰 애니메이션
             binding.detailAirCondRecyclerView.animation =
                 AnimationUtils.loadAnimation(this, R.anim.trans_left_to_right)
-            binding.detailCardView1.animation =
+            binding.detailGraphCard.animation =
                 AnimationUtils.loadAnimation(this, R.anim.trans_right_to_left)
 
 
@@ -247,6 +256,14 @@ class DeviceDetailActivity : AppCompatActivity() {
         )
     }
 
+    private fun drawBarChart() {
+        val chart = DrawBarChart(this)
+        val tempAxis = listOf(-8.6f,-3f,5.5f,7.3f,3.5f,0.8f)
+        val humidAxis = listOf(15.4f,16.3f,21.5f,33f,20f,35f)
+        chart.getInstance(binding.detailBarChart)
+        chart.add(tempAxis, humidAxis,"temp","humid", R.color.defaultMainColor, R.color.progressWorst)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     // 뷰모델 호출 후 데이터 반환
     private fun applyDeviceListInViewModel() {
@@ -271,7 +288,8 @@ class DeviceDetailActivity : AppCompatActivity() {
     private fun applyBookMarkViewModel() {
         patchBookMarkViewModel.patchBookMarkResult().observe(this) { data ->
             data?.let {
-                println(it)
+                //TODO 리프레쉬로 액세스 갱신
+                val refresh = SharedPreferenceManager.getString(this, "refreshToken")
             }
         }
     }

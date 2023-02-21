@@ -1,4 +1,4 @@
-package app.as_service.api
+package app.as_service.view.main.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -67,7 +67,7 @@ class MapsFragment : Fragment() {
     ): View? {
         getLocale()
 
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        return inflater.inflate(R.layout.map_fragment, container, false)
     }
 
 

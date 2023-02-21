@@ -6,5 +6,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.main.fragment.UserFragment">
+
+        <TextView
+            android:id="@+id/userLogout"
+            style="@style/basicRegularTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="로그아웃"
+            android:layout_margin="15dp"
+            android:background="?android:attr/selectableItemBackground"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/userKorCard"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/userEngCard">
+            <ImageView
+                android:id="@+id/userKorIv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/kor_image"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/userEngCard"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userKorCard">
+            <ImageView
+                android:id="@+id/userEngiv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/eng_image"/>
+        </androidx.cardview.widget.CardView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

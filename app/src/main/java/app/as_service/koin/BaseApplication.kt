@@ -25,11 +25,11 @@ class BaseApplication : Application() {
     /* single : 싱글톤 빈 정의를 제공. 즉 1번만 객체를 생성한다 */
     /* factory : 호출될 때마다 객체 생성 */
     /* viewModel : 뷰모델 의존성 제거 객체 생성 */
-    private val loginModule = module { viewModel { LoginViewModel() } }
-    private val signUpModule = module { viewModel { SignUpViewModel() } }
-    private val deviceListModule = module { viewModel { DeviceListViewModel() }}
-    private val getValueDataModule = module { viewModel { GetValueViewModel()} }
-    private val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
-    private val deleteDeviceModule = module { viewModel { DeleteDeviceViewModel() } }
-    private val patchBookMarkModule = module { viewModel { BookMarkViewModel() } }
+    val loginModule = module { viewModel { LoginViewModel() } }
+    val signUpModule = module { viewModel { SignUpViewModel() } }
+    val deviceListModule = module { viewModel { DeviceListViewModel() }}
+    val getValueDataModule = module { viewModel { GetValueViewModel()} }
+    val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
+    val deleteDeviceModule = module { viewModel { DeleteDeviceViewModel() } }
+    val patchBookMarkModule = module { viewModel { BookMarkViewModel() } }
 }

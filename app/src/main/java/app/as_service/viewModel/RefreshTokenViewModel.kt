@@ -1,26 +1,26 @@
 package app.as_service.viewModel
 
 import androidx.lifecycle.LiveData
-import app.as_service.repository.LoginRepo
+import app.as_service.repository.RefreshTokenRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel : BaseViewModel("로그인") {
+class RefreshTokenViewModel : BaseViewModel("토큰 갱신") {
     // MutableLiveData 값을 받아 View 로 전달해 줄 LiveData
-    private lateinit var signInResultData: LiveData<List<String>>
-    private val repo = LoginRepo()
+    private lateinit var refreshTokenResultData: LiveData<String>
+    private val repo = RefreshTokenRepo()
 
     // MutableLiveData 값을 갱신하기 위한 함수
-    fun loadSignInResult(username: String, password: String) {
+    fun loadSignUpResult(access: String) {
         job = CoroutineScope(Dispatchers.IO).launch {
-            repo.loadSignInResult(username, password)
+            repo.loadSignUpResult(access)
         }
     }
 
     // LiveData 에 MutableLiveData 값 적용 후 View 에 전달
-    fun getSignInAccess(): LiveData<List<String>> {
-        signInResultData = repo._signInResultData
-        return signInResultData
+    fun getSignUpCode() : LiveData<String> {
+        refreshTokenResultData = repo._refreshTokenResultData
+        return refreshTokenResultData
     }
 }

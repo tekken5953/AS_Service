@@ -1,5 +1,7 @@
 package app.as_service.adapter;
 
+import static java.util.Objects.requireNonNull;
+
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -53,7 +55,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.device_list_item, parent, false);
+        View view = inflater.inflate(R.layout.list_item_device, parent, false);
 
         return new ViewHolder(view);
     }
@@ -101,8 +103,8 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
             holder.arrow.setVisibility(View.VISIBLE);
             holder.business.setVisibility(View.VISIBLE);
             // > 가 존재하면 마지막 타입만 불러옴
-            if (mData.get(position).getBusinessType().contains(">")) {
-                String[] lastBusiness = mData.get(position).getBusinessType().split(">");
+            if (requireNonNull(mData.get(position).getBusinessType()).contains(">")) {
+                String[] lastBusiness = requireNonNull(mData.get(position).getBusinessType()).split(">");
                 holder.business.setText(lastBusiness[lastBusiness.length - 1]);
             } else {
                 // 아니면 다 불러옴
@@ -118,13 +120,13 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         // 공기질 통합지수 & 바이러스 위험지수 불러옴
         try {
             holder.cqi.setVisibility(View.VISIBLE);
-            holder.cqi.setIndexTextAsInt(Integer.parseInt(mData.get(position).getCaiVal()));
+            holder.cqi.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getCAIval())));
         } catch (NumberFormatException | NullPointerException e) {
             holder.cqi.setVisibility(View.GONE);
         }
         try {
             holder.virus.setVisibility(View.VISIBLE);
-            holder.virus.setIndexTextAsInt(Integer.parseInt(mData.get(position).getVirusVal()));
+            holder.virus.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getVirusval())));
         } catch (NumberFormatException | NullPointerException e) {
             holder.virus.setVisibility(View.GONE);
         }

@@ -39,21 +39,20 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.7.10'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
 
     //server
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'  // String 처리시
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'// String 처리시
 
     def lifecycle_version = "2.5.1"
     // ViewModel
@@ -62,7 +61,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     //AS Custom TextView
-    implementation 'com.github.tekken5953:ASCustomText:1.1.1'
+    implementation 'com.github.tekken5953:ASCustomText:2.1'
 
     def koin_android_version = "3.3.2"
     // Koin main features for Android
@@ -71,27 +70,61 @@ dependencies {
     implementation "io.insert-koin:koin-android-compat:$koin_android_version"
     // Navigation Graph
     implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version"
+    // logger
+    implementation "io.insert-koin:koin-logger-slf4j:3.3.1"
+    // Koin Test features
+    testImplementation "io.insert-koin:koin-test:$koin_android_version"
+    // Koin for JUnit 4
+    testImplementation "io.insert-koin:koin-test-junit4:$koin_android_version"
+    // Koin for JUnit 5
+    testImplementation "io.insert-koin:koin-test-junit5:$koin_android_version"
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    //Room
+    // Room
     def room_version = "2.4.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    //구글 지도
+    // 구글 지도
     implementation 'com.google.android.gms:play-services-maps:18.1.0' // 구글지도 라이브러리
     implementation 'com.google.android.gms:play-services-location:21.0.1' // 위치정보 라이브러리
 
-    //Firebase
+    // Firebase
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-messaging-directboot:23.1.1'
 
-    //Coroutine
+    // Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // LocalTest(JVM)
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    testImplementation "com.google.truth:truth:1.0.1"
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+    testImplementation "org.robolectric:robolectric:4.4"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+
+    // AndroidTest(FrameWork)
+    androidTestImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    androidTestImplementation "com.google.truth:truth:1.0.1"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Mockito
+    androidTestImplementation "org.mockito:mockito-android:2.24.5"
+    testImplementation 'org.mockito:mockito-inline:2.21.0'
+    testImplementation 'org.mockito:mockito-core:3.5.9'
+
+    // MPAndroid
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 }

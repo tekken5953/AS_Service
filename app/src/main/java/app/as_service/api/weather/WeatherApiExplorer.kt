@@ -1,9 +1,8 @@
-package app.as_service.api
+package app.as_service.api.weather
 
 import android.util.Log
-import app.as_service.dao.IgnoredKeyFile.decodingKey
+import app.as_service.dao.IgnoredKeyFile.WeatherDecodingKey
 import app.as_service.dao.IgnoredKeyFile.weatherApiURL
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.repository.BaseRepository
 import app.as_service.util.ConvertDataTypeUtil.getCurrentTimeMills
 import app.as_service.util.ConvertDataTypeUtil.getYesterdayLong
@@ -69,15 +68,15 @@ class WeatherApiExplorer : BaseRepository() {
         try {
             realTime = millsToString(getCurrentTimeMills(), "HHmm")
 
-            realTime = nearAlgorithm(realTime).split("_")[1]
-            realDate = nearAlgorithm(realTime).split("_")[0]
+            realTime = NearAlgorithm().execute(realTime).split("_")[1]
+            realDate = NearAlgorithm().execute(realTime).split("_")[0]
             if (yesterday) {
                 realDate = millsToString(getYesterdayLong(), "yyyyMMdd")
             }
 
             val strBuilder = weatherApiURL + method +  /*URL*/
                     "?" + encode("serviceKey", "UTF-8") +
-                    "=" + encode(decodingKey, "UTF-8") +  //Service Key
+                    "=" + encode(WeatherDecodingKey, "UTF-8") +  //Service Key
                     "&" + encode("numOfRows", "UTF-8") +
                     "=" + encode(numOfRows, "UTF-8") + //한 페이지 결과 수
                     "&" + encode("pageNo", "UTF-8") +
@@ -138,31 +137,5 @@ class WeatherApiExplorer : BaseRepository() {
         }
     }
 
-    // 근사값 알고리즘
-    private fun nearAlgorithm(hour: String): String {
-        // 단기예보 측정시간
-        val array = arrayOf("0210", "0510", "0810", "1110", "1410", "1710", "2010", "2310")
-        var time = ""
-        var date = ""
 
-        for (i: Int in 0 until (array.size)) {
-            val diff = array[i].toInt() - hour.toInt()   // 측정시간 - 현재시간
-            if (diff > 0) {  // 결과가 양수일 경우 = 오늘날짜 이전 측정 결과가 있는 경우
-                if (i == 0) {
-                    time = array.last()
-                    date = millsToString(getYesterdayLong(), "yyyyMMdd")
-                } else if (i == array.lastIndex) {
-                    time = array.first()
-                    date = millsToString(getYesterdayLong(), "yyyyMMdd")
-                } else {
-                    time = array[i - 1]   // 리턴값을 근삿값으로 지정
-                    date = millsToString(getCurrentTimeMills(), "yyyyMMdd")
-                    break
-                }
-            }
-        }
-        Log.d(TAG_R, "answer :${date}_${time}")
-
-        return "${date}_${time}"
-    }
 }

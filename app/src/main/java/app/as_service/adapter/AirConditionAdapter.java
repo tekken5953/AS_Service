@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aslib.AsTextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import app.as_service.R;
 import app.as_service.dao.AdapterModel;
@@ -35,7 +34,7 @@ public class AirConditionAdapter extends RecyclerView.Adapter<AirConditionAdapte
         context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.detail_air_item, parent, false);
+        View view = inflater.inflate(R.layout.listitem_detail_air, parent, false);
 
         return new ViewHolder(view);
     }

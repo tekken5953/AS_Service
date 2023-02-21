@@ -1,12 +1,16 @@
 package app.as_service.dao
 
+import java.sql.Time
+import java.time.LocalDateTime
+import java.util.*
+
 class ApiModel {
     // 회원가입 시 Body에 넣어서 POST 할 데이터 모델
     data class Member(val userId: String, val phone: String, val password: String)
     // 로그인 시 Body에 넣어서 POST 할 데이터 모델
     data class Login(val userId: String, val password: String)
     // 로그인 시 발행된 AccessToken Body로 Get할 데이터 모델
-    data class AccessToken(var access: String)
+    data class AccessToken(var access: String, var refresh: String)
     // 장치추가 시 Body에 넣어서 POST 할 데이터 모델
     data class Device(val device: String, val id: String, val deviceName: String, val businessType: String)
     // 장치생성 리턴 텍스트
@@ -26,4 +30,6 @@ class ApiModel {
     data class GetWeather(val category: String, val obsrValue: String, val baseDate: String, val baseTime: String)
     // 북마크 PUT 바디
     data class PutBookMark(val starred: Boolean)
+    // 리프레시 토큰 보내기
+    data class RefreshToken(val refresh: String)
 }

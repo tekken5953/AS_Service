@@ -35,6 +35,7 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/analytics_fragment.xml" value="0.176" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/chat_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dashboard_fragment.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/detail_activity.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/detail_air_item.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/device_list_item.xml" value="0.264" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_add_business.xml" value="0.25364583333333335" />
@@ -43,6 +44,11 @@
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/dialog_sign_up.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/fragment_maps.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/grid_item.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/list_item_device.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/listitem_detail_air.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/login_activity.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/main_activity.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/map_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/second_item_bg.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/layout/user_fragment.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/AndroidStudioProjects/AS_Service/app/src/main/res/menu/bottom_nav.xml" value="0.25364583333333335" />
