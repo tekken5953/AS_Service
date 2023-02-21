@@ -1,1 +1,13 @@
+name: CI #워크플로 이름
+
+on: [push] #push 할 때마다 실행
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest #실행 환경
+    steps: #실행 커맨드 저장소
+    - name: Run pwd #동작명
+      run: pwd  #실제 동작
+    - name: Run ls -al
+      run: ls -al
 
