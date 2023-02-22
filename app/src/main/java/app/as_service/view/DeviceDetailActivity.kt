@@ -14,6 +14,8 @@ import app.as_service.adapter.AirConditionAdapter
 import app.as_service.api.ui.DrawBarChart
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.ApiModel
+import app.as_service.dao.StaticDataObject
+import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.DetailActivityBinding
 import app.as_service.util.ConvertDataTypeUtil.millsToString
@@ -37,6 +39,7 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val getDataViewModel by viewModel<GetValueViewModel>()
     private val patchBookMarkViewModel by viewModel<BookMarkViewModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
+    private val refreshToken by lazy {SharedPreferenceManager.getString(this, "refreshToken")}
     private var timer = Timer()
     private lateinit var serialNumber: String
     private lateinit var deviceName: String
@@ -288,8 +291,7 @@ class DeviceDetailActivity : AppCompatActivity() {
     private fun applyBookMarkViewModel() {
         patchBookMarkViewModel.patchBookMarkResult().observe(this) { data ->
             data?.let {
-                //TODO 리프레쉬로 액세스 갱신
-                val refresh = SharedPreferenceManager.getString(this, "refreshToken")
+
             }
         }
     }

@@ -18,7 +18,7 @@ class BaseApplication : Application() {
             modules(listOf(loginModule, signUpModule,
                 deviceListModule, getValueDataModule,
                 postDeviceModule,deleteDeviceModule,
-                patchBookMarkModule))
+                patchBookMarkModule, refreshViewModel))
         }
     }
 
@@ -32,4 +32,5 @@ class BaseApplication : Application() {
     val postDeviceModule = module { viewModel { AddDeviceViewModel() }}
     val deleteDeviceModule = module { viewModel { DeleteDeviceViewModel() } }
     val patchBookMarkModule = module { viewModel { BookMarkViewModel() } }
+    val refreshViewModel = module { viewModel {TokenRefreshViewModel()} }
 }

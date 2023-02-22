@@ -27,6 +27,7 @@ import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.view.main.fragment.MapsFragment
 import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
+import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.TAG_G
 import app.as_service.databinding.MainActivityBinding
 import app.as_service.fcm.SubFCM
@@ -254,8 +255,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                         Toast.makeText(this, "장치등록에 성공하였습니다", Toast.LENGTH_SHORT).show()
                     }
                     CODE_INVALID_TOKEN.toString() -> {
-                        //TODO 리프레쉬로 액세스 갱신
-                        val refresh = SharedPreferenceManager.getString(this, "refreshToken")
+
                     }
                     else -> {
                         Toast.makeText(this, "장치등록에 실패하였습니다", Toast.LENGTH_SHORT).show()
@@ -282,7 +282,6 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                     }, 2000)
                 } else {
                     bottomNav.selectedItemId = R.id.bottom_dashboard
-
                 }
             }
         }

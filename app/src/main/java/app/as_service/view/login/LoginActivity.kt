@@ -68,8 +68,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             // 자동로그인
-            if (SharedPreferenceManager.getString(this, "jti") != "admin" &&
-                SharedPreferenceManager.getString(this, "accessToken") != ""
+            if (SharedPreferenceManager.getString(this, "accessToken") != ""
             ) {
                 val intent = Intent(this, MainActivity::class.java)
                 val userId = SharedPreferenceManager.getString(this, "jti")
@@ -168,7 +167,7 @@ class LoginActivity : AppCompatActivity() {
                                 SharedPreferenceManager.setString(
                                     context,
                                     "accessToken",
-                                    newToken[0]
+                                    "Bearer " + newToken[0]
                                 )
 
                                 SharedPreferenceManager.setString(

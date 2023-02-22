@@ -14,9 +14,9 @@ class DeviceListRepo : BaseRepository() {
     var _deviceListResult =
         MutableLiveData<List<AdapterModel.GetDeviceList>?>()
 
-    fun loadDeviceListResult(token: String) {
+    fun loadDeviceListResult(access: String) {
         val getDeviceList: Call<List<AdapterModel.GetDeviceList>> =
-            HttpClient.mMyAPI.getDeviceList(token)
+            HttpClient.mMyAPI.getDeviceList(access)
         getDeviceList.enqueue(object : Callback<List<AdapterModel.GetDeviceList>> {
             override fun onResponse(
                 call: Call<List<AdapterModel.GetDeviceList>>,

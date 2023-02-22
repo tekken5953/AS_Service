@@ -2,6 +2,7 @@ package app.as_service.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_DOWN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
@@ -9,6 +10,7 @@ import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.server.HttpClient
 import app.as_service.util.SharedPreferenceManager
+import app.as_service.viewModel.TokenRefreshViewModel
 import com.google.android.gms.common.util.SharedPreferencesUtils
 import retrofit2.Response
 
@@ -79,6 +81,7 @@ open class BaseRepository {
             }
             CODE_INVALID_TOKEN -> {
                 Log.w(TAG_R, "만료된 토큰 : ${response.code()}")
+
             }
             else -> {
                 Log.w(TAG_R, "통신 성공 but 예상치 못한 에러 발생: ${response.code()}")
