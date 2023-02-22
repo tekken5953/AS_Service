@@ -2,6 +2,7 @@ package app.as_service.view.main.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +17,14 @@ import app.as_service.adapter.DeviceListAdapter
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
+import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
+import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.DashboardFragmentBinding
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.SnackBarUtils
 import app.as_service.viewModel.DeleteDeviceViewModel
 import app.as_service.viewModel.DeviceListViewModel
+import app.as_service.viewModel.TokenRefreshViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -32,18 +36,18 @@ class DashboardFragment : Fragment() {
     private val searchList = ArrayList<AdapterModel.GetDeviceList>()
     private val deviceListViewModel by viewModel<DeviceListViewModel>()
     private val deleteDeviceViewModel by viewModel<DeleteDeviceViewModel>()
-
-    private val accessToken by lazy { SharedPreferenceManager.getString(context, "accessToken") }
+    private val refreshTokenViewModel by viewModel<TokenRefreshViewModel>()
     private val snack = SnackBarUtils()
 
     override fun onResume() {
         super.onResume()
-            adapter.timer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    // 뷰모델 호출
-                    deviceListViewModel.loadDeviceListResult(accessToken)
-                }
-            }, 0, 10 * 1000)
+        adapter.timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                // 뷰모델 호출
+
+                deviceListViewModel.loadDeviceListResult(getAccessToken())
+            }
+        }, 0, 10 * 1000)
     }
 
     override fun onDestroyView() {
@@ -69,6 +73,7 @@ class DashboardFragment : Fragment() {
                 lifecycleOwner = this@DashboardFragment
                 deviceListVM = deviceListViewModel
                 deleteDeviceVM = deleteDeviceViewModel
+                tokenRefreshVM = refreshTokenViewModel
             }
 
         if (::binding.isInitialized) {
@@ -81,6 +86,7 @@ class DashboardFragment : Fragment() {
             applyDeviceListInViewModel()
             //디바이스 삭제 뷰모델 옵저빙
             applyDeleteDeviceViewModel()
+            applyTokenRefreshViewModel()
 
             // 서치뷰 입력시 필터링
             binding.dashboardSearchView.setOnQueryTextListener(object :
@@ -91,14 +97,12 @@ class DashboardFragment : Fragment() {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     /// 서치뷰의 텍스트가 입력되었을 경우
-                    newText?.let {
-                            new ->
+                    newText?.let { new ->
                         if (new.isNotEmpty()) {
                             searchList.clear()
                             adapter = DeviceListAdapter(searchList) // 어댑터의 데이터모델을 서치리스트로 변경
                             try {
-                                mList.forEach {
-                                    list ->
+                                mList.forEach { list ->
                                     val s = new.uppercase()     // 시리얼넘버는 모두 대문자로 변환
                                     if (list.device.contains(s)
                                         or list.deviceName!!.contains(s)
@@ -107,7 +111,9 @@ class DashboardFragment : Fragment() {
                                         searchList.add(list)
                                     }
                                 }
-                            } catch (e: NullPointerException) { e.printStackTrace() }
+                            } catch (e: NullPointerException) {
+                                e.printStackTrace()
+                            }
                         } else {
                             // 서치뷰의 텍스트가 입력되지 않았을 경우
                             adapter = DeviceListAdapter(mList)
@@ -129,12 +135,12 @@ class DashboardFragment : Fragment() {
                     ) { dialog, _ ->
                         mList[position].device.let {
                             deleteDeviceViewModel.loadDeleteDeviceResult(
-                                accessToken, it
+                                getAccessToken(), it
                             )
                         }
                         dialog.dismiss()
                         // 삭제 뷰모델 호출
-                        deviceListViewModel.loadDeviceListResult(accessToken)
+                        deviceListViewModel.loadDeviceListResult(getAccessToken())
                     }
                     .setNegativeButton("아니오") { dialog, _ ->
                         dialog.dismiss()
@@ -148,14 +154,19 @@ class DashboardFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun applyDeviceListInViewModel() {
         deviceListViewModel.getDeviceListResult().observe(viewLifecycleOwner) { listItem ->
-            listItem?.let { it ->
-                if (it.isNotEmpty()) {
+            Log.d(TAG_R, "listItem : ${listItem.toString()}")
+            listItem?.let {
+                list ->
+                if (list.toString() != "null") {
                     mList.clear()
-                    mList.addAll(it.filter { it.starred })
-                    mList.addAll(it.filter { !it.starred })
+                    mList.addAll(list.filter { it.starred })
+                    mList.addAll(list.filter { !it.starred })
+                    refreshTokenViewModel.loadRefreshResult(getAccessToken(),getRefreshToken())
+                } else {
+
                 }
-                adapter.notifyDataSetChanged()
             }
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -167,15 +178,19 @@ class DashboardFragment : Fragment() {
                     CODE_SERVER_OK.toString() -> {
                         snack.makeSnack(this.view, activity, "장치제거에 성공하였습니다")
                     }
-                    CODE_INVALID_TOKEN.toString() -> {
-                        //TODO 리프레쉬로 액세스 갱신
-                        val refresh = SharedPreferenceManager.getString(requireContext(), "refreshToken")
-
-                    }
                     else -> {
                         snack.makeSnack(this.view, activity, "장치제거에 실패하였습니다")
                     }
                 }
+            }
+        }
+    }
+
+    private fun applyTokenRefreshViewModel() {
+        refreshTokenViewModel.getResultToken().observe(viewLifecycleOwner) { result ->
+            result.let {
+                SharedPreferenceManager.setString(requireContext(),"accessToken", it.access)
+                SharedPreferenceManager.setString(requireContext(),"refreshToken", it.refresh)
             }
         }
     }
@@ -187,5 +202,13 @@ class DashboardFragment : Fragment() {
                 supportsChangeAnimations = false
             }
         }
+    }
+
+    private fun getAccessToken() : String {
+        return SharedPreferenceManager.getString(context, "accessToken")
+    }
+
+    private fun getRefreshToken() : String{
+        return SharedPreferenceManager.getString(context, "refreshToken")
     }
 }

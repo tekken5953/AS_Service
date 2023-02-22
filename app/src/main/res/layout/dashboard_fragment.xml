@@ -8,6 +8,10 @@
         <variable
             name="deleteDeviceVM"
             type="app.as_service.viewModel.DeleteDeviceViewModel" />
+
+        <variable
+            name="tokenRefreshVM"
+            type="app.as_service.viewModel.TokenRefreshViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

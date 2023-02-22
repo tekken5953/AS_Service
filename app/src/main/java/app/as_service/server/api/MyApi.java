@@ -7,11 +7,8 @@ import app.as_service.dao.ApiModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -23,7 +20,7 @@ public interface MyApi {
 
     // 로그인 API
     @POST("login/")
-    Call<ApiModel.AccessToken> postUsers(@Body ApiModel.Login item);
+    Call<ApiModel.LoginToken> postUsers(@Body ApiModel.Login item);
 
     // 장치추가 API
     @POST("device/")
@@ -64,6 +61,6 @@ public interface MyApi {
                                           @Body ApiModel.PutBookMark isStarred);
 
     // 토큰갱신
-    @POST("authenticate/mobile")
-    Call<ApiModel.AccessToken> refreshToken(@Body ApiModel.RefreshToken token);
+    @POST("authenticate/mobile/")
+    Call<ApiModel.LoginToken> refreshToken(@Header("Authorization") String access, @Body ApiModel.RefreshToken item);
 }

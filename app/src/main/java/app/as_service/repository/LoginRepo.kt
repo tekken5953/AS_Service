@@ -8,7 +8,6 @@ import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG_R
-import app.as_service.util.SharedPreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,10 +19,10 @@ class LoginRepo : BaseRepository() {
     fun loadSignInResult(username: String, password: String) {
         val loginModel = ApiModel.Login(username, password)
         httpClient.mMyAPI.postUsers(loginModel).run {
-            enqueue(object : Callback<ApiModel.AccessToken> {
+            enqueue(object : Callback<ApiModel.LoginToken> {
                 override fun onResponse(
-                    call: Call<ApiModel.AccessToken>,
-                    response: Response<ApiModel.AccessToken>
+                    call: Call<ApiModel.LoginToken>,
+                    response: Response<ApiModel.LoginToken>
                 ) {
                     // API 통신 성공
                     if (response.code() == CODE_SERVER_OK) {
@@ -48,7 +47,7 @@ class LoginRepo : BaseRepository() {
                 }
 
                 // API 통신 실패
-                override fun onFailure(call: Call<ApiModel.AccessToken>, t: Throwable) {
+                override fun onFailure(call: Call<ApiModel.LoginToken>, t: Throwable) {
                     _signInResultData.value = listOf(RESPONSE_FAIL)
                     Log.e(TAG_R, "로그인 실패 : ${t.localizedMessage}")
                 }

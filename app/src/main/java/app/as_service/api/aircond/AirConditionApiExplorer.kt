@@ -30,7 +30,7 @@ class AirConditionApiExplorer : BaseRepository() {
     ) {
         val strBuilder = IgnoredKeyFile.airCondApiURL + "getMsrstnAcctoRltmMesureDnsty" +  /*URL*/
                 "?" + URLEncoder.encode("stationName", "UTF-8") +
-                "=" + URLEncoder.encode(stationName, "UTF-8") +  //측정소 이름
+                "=" + stationName +  //측정소 이름
                 "&" + URLEncoder.encode("dataTerm", "UTF-8") +
                 "=" + URLEncoder.encode(dataTerm, "UTF-8") +  //요청 데이터기간(1일: DAILY, 1개월: MONTH, 3개월: 3MONTH)
                 "&" + URLEncoder.encode("pageNo", "UTF-8") +

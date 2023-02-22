@@ -48,10 +48,13 @@ class AnalyticsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.analytics_fragment, container, false)
         binding.weatherCoverView.visibility = View.VISIBLE
         val locationStr = arguments?.get("location").toString().split("_")
+        Log.d(TAG_R,locationStr[2])
 
         thread(start = true) {
             val getAirCondResult = AirConditionApiExplorer()
-            getAirCondResult.getAirData("DAILY", "종로구", "1.0")
+            val station = locationStr[2].split(" ")
+            Log.d(TAG_R,station[2])
+            getAirCondResult.getAirData("DAILY", "구로구", "1.0")
             val JO = getAirCondResult.dataJO
             requireActivity().runOnUiThread {
                 Toast.makeText(

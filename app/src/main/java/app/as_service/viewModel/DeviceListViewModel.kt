@@ -13,9 +13,9 @@ class DeviceListViewModel : BaseViewModel("디바이스 리스트") {
     private val repo = DeviceListRepo()
 
     // MutableLiveData 값을 갱신하기 위한 함수
-    fun loadDeviceListResult(token: String) {
+    fun loadDeviceListResult(access: String) {
         job = CoroutineScope(Dispatchers.IO).launch {
-            repo.loadDeviceListResult(token)
+            repo.loadDeviceListResult(access)
         }
     }
 
