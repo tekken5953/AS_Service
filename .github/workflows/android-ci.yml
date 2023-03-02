@@ -39,7 +39,7 @@ jobs:
       
     # Local Property 
     - name: Local Property
-      run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
+      run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./home/runner/work/AS_Service/AS_Service/local.properties
       
     # Run unit test
     - name: Run unit test
