@@ -37,6 +37,10 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleDebug
       
+    # Local Property 
+    - name: Local Property
+      run: ./local.properties
+      
     # Run unit test
     - name: Run unit test
       run: ./gradlew testdebugUnitTest
