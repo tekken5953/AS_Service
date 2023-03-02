@@ -20,6 +20,9 @@ import app.as_service.dao.StaticDataObject.TAG_L
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.AnalyticsFragmentBinding
 import app.as_service.util.RefreshUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import java.lang.IllegalStateException
 import kotlin.concurrent.thread
@@ -48,24 +51,26 @@ class AnalyticsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.analytics_fragment, container, false)
         binding.weatherCoverView.visibility = View.VISIBLE
         val locationStr = arguments?.get("location").toString().split("_")
-        Log.d(TAG_R,locationStr[2])
 
-        thread(start = true) {
+        CoroutineScope(Dispatchers.IO).launch {
             val getAirCondResult = AirConditionApiExplorer()
             val station = locationStr[2].split(" ")
-            Log.d(TAG_R,station[2])
             getAirCondResult.getAirData("DAILY", "구로구", "1.0")
             val JO = getAirCondResult.dataJO
-            requireActivity().runOnUiThread {
-                Toast.makeText(
-                    requireContext(),
-                    "PM10Value : ${JO.get("pm10Value")}",
-                    Toast.LENGTH_SHORT
-                ).show()
+            try {
+                requireActivity().runOnUiThread {
+                    Toast.makeText(
+                        requireContext(),
+                        "PM10Value : ${JO.get("pm10Value")}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
             }
         }
 
-        thread(start = true) {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
 
                 val getResult = WeatherApiExplorer()
@@ -95,23 +100,14 @@ class AnalyticsFragment : Fragment() {
                             val abs = onceJO.getString("yTMP")
                                 .toFloat() - onceJO.getString("TMP")
                                 .toFloat()
-                            Log.d(
-                                TAG_R,
-                                "yTMP : ${onceJO.getString("yTMP")} TMP : ${onceJO.getString("TMP")}"
-                            )
 
-                            val upDown = if (abs > 0) {
-                                "낮습니다"
-                            } else {
-                                "높습니다"
-                            }
+                            val upDown = if (abs > 0) { "낮습니다" } else { "높습니다" }
 
                             binding.weatherTempUnit.visibility = View.VISIBLE
                             binding.weatherTempTv.text = onceJO.getString("TMP")
                             binding.weatherCompareTv.text =
-                                "어제보다 기온이 ${
-                                    ((kotlin.math.abs(abs) * 100).roundToInt().toFloat() / 100)
-                                }˚ $upDown"
+                                if (abs == 0f) { "어제와 기온이 같습니다" }
+                                else {"어제보다 기온이 ${getDegreeTemp(abs)}˚ $upDown"}
 
                             binding.weatherCoverView.visibility = View.GONE
                         }
@@ -151,5 +147,9 @@ class AnalyticsFragment : Fragment() {
         binding.weatherSkyIv.setImageDrawable(
             ResourcesCompat.getDrawable(resources, id, null)
         )
+    }
+
+    private fun getDegreeTemp(f: Float) : Float {
+        return ((kotlin.math.abs(f) * 100).roundToInt().toFloat() / 100)
     }
 }

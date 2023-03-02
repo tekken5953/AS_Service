@@ -6,13 +6,18 @@ import android.content.Context
 import android.content.res.Configuration
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.*
 import kotlin.math.*
+
 
 object ConvertDataTypeUtil {
     fun millsToString(mills: Long, pattern: String): String {
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat(pattern,Locale.KOREA)
         return format.format(Date(mills))
+    }
+
+    fun longToMillsString(mills: Long, pattern: String): String {
+        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat(pattern,Locale.KOREA)
+        return format.format(Date(mills * 1000))
     }
 
     // 현재 시간 불러오기
@@ -29,14 +34,14 @@ object ConvertDataTypeUtil {
     // 국가를 대한민국으로 설정합니다
     fun setLocaleToKorea(context: Context) {
         val configuration = Configuration()
-        configuration.setLocale(Locale.KOREA)
+        configuration.setLocale(Locale.KOREA);
         context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
 
     // 국가를 영어권으로 설정합니다
     fun setLocaleToEnglish(context: Context) {
         val configuration = Configuration()
-        configuration.setLocale(Locale.ENGLISH)
+        configuration.setLocale(Locale.ENGLISH);
         context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
 

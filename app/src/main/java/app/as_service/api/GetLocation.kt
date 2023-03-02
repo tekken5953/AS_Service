@@ -6,8 +6,10 @@ import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import app.as_service.dao.StaticDataObject
+import app.as_service.dao.StaticDataObject.TAG_G
 import app.as_service.util.ConvertDataTypeUtil
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.*
 
 @SuppressLint("MissingPermission")
 class GetLocation() {
@@ -15,7 +17,7 @@ class GetLocation() {
     private var y = "0"
     private var s = "null"
 
-    fun getInstance(context: Context) {
+    private fun getInstance(context: Context) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
         fusedLocationClient.lastLocation
@@ -29,21 +31,20 @@ class GetLocation() {
                             address.latitude,
                             address.longitude
                         )
-                        Log.d(
-                            StaticDataObject.TAG_G,
-                            "latitude : ${address.latitude} longitude : ${address.longitude}"
-                        )
-
                         x = convertGrid.x.toInt().toString()
                         y = convertGrid.y.toInt().toString()
                         s = "${address.adminArea} ${address.locality} ${address.thoroughfare}"
-                        Log.d(StaticDataObject.TAG_G, "${x}_${y}_${s}")
                     }
                 }
             }
+
+
     }
 
-    fun execute() : String {
+    suspend fun execute(context: Context) : String {
+        getInstance(context)
+        delay(500)
+        Log.d(TAG_G, "Get Location : ${x}_${y}_${s}")
         return "${x}_${y}_${s}"
     }
 }

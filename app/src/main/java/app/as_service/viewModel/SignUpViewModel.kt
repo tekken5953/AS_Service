@@ -12,7 +12,7 @@ class SignUpViewModel : BaseViewModel("회원가입") {
     private val repo = SignUpRepo()
 
     // MutableLiveData 값을 갱신하기 위한 함수
-    fun loadSignUpResult(username: String,phone: String,password: String) {
+    fun loadSignUpResult(username: String, phone: String,password: String) {
         job = CoroutineScope(Dispatchers.IO).launch {
             repo.loadSignUpResult(username,phone, password)
         }

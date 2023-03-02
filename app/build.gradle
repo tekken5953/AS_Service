@@ -30,8 +30,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -61,7 +61,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     //AS Custom TextView
-    implementation 'com.github.tekken5953:ASCustomText:2.1'
+    implementation 'com.github.tekken5953:ASCustomText:2.1.1'
 
     def koin_android_version = "3.3.2"
     // Koin main features for Android
