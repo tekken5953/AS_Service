@@ -13,6 +13,7 @@ import app.as_service.R
 import app.as_service.databinding.UserFragmentBinding
 import app.as_service.util.ConvertDataTypeUtil.setLocaleToEnglish
 import app.as_service.util.ConvertDataTypeUtil.setLocaleToKorea
+import app.as_service.util.RefreshUtils
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
 import app.as_service.view.login.LoginActivity
@@ -37,11 +38,7 @@ class UserFragment : Fragment() {
                 setMessage("로그아웃 하시겠습니까?")
                 setPositiveButton("예") { dialog, _ ->
                     dialog.dismiss()
-                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    SharedPreferenceManager.clear(requireContext()) // 저장된 환경 초기화
-                    startActivity(intent)
-                    requireActivity().finish()
+                    RefreshUtils().logout(requireActivity())
                 }
                 setNegativeButton("아니오") { dialog, _ ->
                     dialog.dismiss()

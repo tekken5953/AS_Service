@@ -19,6 +19,7 @@ import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.LoginActivityBinding
+import app.as_service.util.ConvertDataTypeUtil.longToMillsString
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
@@ -138,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
 
     // JWT 토큰의 payload 로 전달된 데이터 추출
     private fun getDecodeStream(accessToken: String?, type: String): String {
-        // jti : 이름, iat : 토큰 발행일, exp 토큰 만료일, iss alias, auth : 권한, mobile : 모바일접속여부
+        // jti : 이름, iat : 토큰 발행일, exp 토큰 만료일, iss : alias, auth : 권한, mobile : 모바일접속여부
         val jwtPayload = String(Base64.getUrlDecoder().decode(accessToken!!.split(".")[1]))
         return JSONObject(jwtPayload).get(type).toString()
     }
@@ -151,14 +152,20 @@ class LoginActivity : AppCompatActivity() {
                     when (it[0]) {
                         // 통신성공 but 데이터 에러
                         RESPONSE_DEFAULT -> {
-                            MakeVibrator(context).run(300)
+                            MakeVibrator().run {
+                                init(context)
+                                make(300)
+                            }
                             nullCheck()
                         }
 
                         // 통신 실패
                         RESPONSE_FAIL -> {
                             toast.shortMessage("예상치 못한 오류가 발생했습니다")
-                            MakeVibrator(context).run(300)
+                            MakeVibrator().run {
+                                init(context)
+                                make(300)
+                            }
                         }
 
                         else -> {
@@ -185,6 +192,15 @@ class LoginActivity : AppCompatActivity() {
                                     context, "auth",
                                     getDecodeStream(newToken[0], "auth")
                                 )
+
+                                SharedPreferenceManager.setString(
+                                    context, "exp",
+                                    getDecodeStream(newToken[0],"exp")
+                                )
+
+                                Log.d(TAG_R, "토큰 발행일은 ${longToMillsString(getDecodeStream(newToken[0], "iat").toLong(), "yyyy년 MM월 dd일 HH시 mm분")} 입니다")
+
+                                Log.d(TAG_R, "토큰 만료시간은 ${longToMillsString(getDecodeStream(newToken[0], "exp").toLong(),"yyyy년 MM월 dd일 HH시 mm분")} 입니다")
                             }
                             // 토큰이 저장되었으면 메인화면으로 이동
                             val intent = Intent(context, MainActivity::class.java)

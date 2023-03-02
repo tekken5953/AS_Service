@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import app.as_service.dao.StaticDataObject.TAG_R
-import app.as_service.db.dao.BookMarkRepository
 import app.as_service.db.dao.GpsRepository
 import app.as_service.db.model.DBModel
 
@@ -12,7 +11,6 @@ import app.as_service.db.model.DBModel
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun gpsRepository(): GpsRepository
-    abstract fun getBookMark(): BookMarkRepository
 
     companion object {
         private var INSTANCE: AppDataBase? = null

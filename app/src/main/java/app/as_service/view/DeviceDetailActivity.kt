@@ -14,10 +14,9 @@ import app.as_service.adapter.AirConditionAdapter
 import app.as_service.api.ui.DrawBarChart
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject
-import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.DetailActivityBinding
+import app.as_service.util.ConvertDataTypeUtil.longToMillsString
 import app.as_service.util.ConvertDataTypeUtil.millsToString
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
@@ -25,6 +24,10 @@ import app.as_service.util.SnackBarUtils
 import app.as_service.util.ToastUtils
 import app.as_service.viewModel.BookMarkViewModel
 import app.as_service.viewModel.GetValueViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -39,7 +42,7 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val getDataViewModel by viewModel<GetValueViewModel>()
     private val patchBookMarkViewModel by viewModel<BookMarkViewModel>()
     private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
-    private val refreshToken by lazy {SharedPreferenceManager.getString(this, "refreshToken")}
+    private val refreshToken by lazy { SharedPreferenceManager.getString(this, "refreshToken") }
     private var timer = Timer()
     private lateinit var serialNumber: String
     private lateinit var deviceName: String
@@ -99,7 +102,7 @@ class DeviceDetailActivity : AppCompatActivity() {
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     getDataViewModel.loadDataResult(
-                        serialNumber ,
+                        serialNumber,
                         accessToken
                     )
                 }
@@ -126,9 +129,24 @@ class DeviceDetailActivity : AppCompatActivity() {
                         R.drawable.star_fill, null
                     )
                 )
-                MakeVibrator(this).run(50)
+
+
+                CoroutineScope(Dispatchers.Default).launch {
+                    MakeVibrator().run {
+                        init(this@DeviceDetailActivity)
+                        longArrayOf(100, 100, 100).forEach {
+                            make(it)
+                            delay(100)
+                        }
+                    }
+                }
                 snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에 저장되었습니다")
-                patchBookMarkViewModel.loadPatchBookMarkResult(serialNumber,accessToken, ApiModel.PutBookMark(true))
+
+                patchBookMarkViewModel.loadPatchBookMarkResult(
+                    serialNumber,
+                    accessToken,
+                    ApiModel.PutBookMark(true)
+                )
                 true
             } else {
                 binding.detailBookMark.setImageDrawable(
@@ -138,7 +156,11 @@ class DeviceDetailActivity : AppCompatActivity() {
                     )
                 )
                 snackBarUtils.makeSnack(binding.nestedScrollView, this, "즐겨찾기에서 제외되었습니다")
-                patchBookMarkViewModel.loadPatchBookMarkResult(serialNumber,accessToken, ApiModel.PutBookMark(false))
+                patchBookMarkViewModel.loadPatchBookMarkResult(
+                    serialNumber,
+                    accessToken,
+                    ApiModel.PutBookMark(false)
+                )
                 vibrate100()
                 false
             }
@@ -158,7 +180,6 @@ class DeviceDetailActivity : AppCompatActivity() {
 
         // 뒤로가기 아이콘
         binding.detailBack.setOnClickListener {
-            vibrate100()
             super.onBackPressed()
         }
 
@@ -211,7 +232,10 @@ class DeviceDetailActivity : AppCompatActivity() {
     }
 
     private fun vibrate100() {
-        MakeVibrator(this).run(100)
+        MakeVibrator().run {
+            init(this@DeviceDetailActivity)
+            make(100)
+        }
     }
 
     private fun getStarred(view: ImageView) {
@@ -261,10 +285,17 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     private fun drawBarChart() {
         val chart = DrawBarChart(this)
-        val tempAxis = listOf(-8.6f,-3f,5.5f,7.3f,3.5f,0.8f)
-        val humidAxis = listOf(15.4f,16.3f,21.5f,33f,20f,35f)
+        val tempAxis = listOf(-8.6f, -3f, 5.5f, 7.3f, 3.5f, 0.8f)
+        val humidAxis = listOf(15.4f, 16.3f, 21.5f, 33f, 20f, 35f)
         chart.getInstance(binding.detailBarChart)
-        chart.add(tempAxis, humidAxis,"temp","humid", R.color.defaultMainColor, R.color.progressWorst)
+        chart.add(
+            tempAxis,
+            humidAxis,
+            "temp",
+            "humid",
+            R.color.defaultMainColor,
+            R.color.progressWorst
+        )
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -272,16 +303,18 @@ class DeviceDetailActivity : AppCompatActivity() {
     private fun applyDeviceListInViewModel() {
         getDataViewModel.getDataResult().observe(this) { data ->
             data?.let {
-                addCategoryItem("온도", it.TEMPval, "temp")
-                addCategoryItem("습도", it.HUMIDval, "humid")
-                addCategoryItem("미세먼지", it.PM2P5val, "pm")
-                addCategoryItem("일산화탄소", it.COval, "co")
-                addCategoryItem("이산화탄소", it.CO2val, "co2")
-                addCategoryItem("유기성 화합물", it.TVOCval, "tvoc")
-                addCategoryItem("공기질\n통합지수", it.CAIval, "cqi")
-                addCategoryItem("바이러스\n위험지수", it.Virusval, "virus")
+                addCategoryItem("온도", it.tempValue, "temp")
+                addCategoryItem("습도", it.humidValue, "humid")
+                addCategoryItem("미세먼지", it.pmValue, "pm")
+                addCategoryItem("일산화탄소", it.coValue, "co")
+                addCategoryItem("이산화탄소", it.co2Value, "co2")
+                addCategoryItem("유기성 화합물", it.tvocValue, "tvoc")
+                addCategoryItem("공기질\n통합지수", it.cqiValue, "cqi")
+                addCategoryItem("바이러스\n위험지수", it.virusValue, "virus")
                 binding.detailAirCondTimeLine.text =
-                    millsToString(it.date, "HH:mm")
+                    millsToString(it.timeStamp, "HH:mm")
+                binding.detailChangeTempTimeLine.text =
+                    millsToString(it.timeStamp, "yyyy-MM-dd")
             }
             adapter.notifyDataSetChanged()
         }
@@ -289,10 +322,6 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     // 뷰모델 호출 후 데이터 반환
     private fun applyBookMarkViewModel() {
-        patchBookMarkViewModel.patchBookMarkResult().observe(this) { data ->
-            data?.let {
-
-            }
-        }
+        patchBookMarkViewModel.patchBookMarkResult().observe(this){}
     }
 }

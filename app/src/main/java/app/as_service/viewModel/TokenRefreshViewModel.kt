@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class TokenRefreshViewModel : BaseViewModel("토큰 갱신") {
     // MutableLiveData 값을 받아 View 로 전달해 줄 LiveData
-    private lateinit var refreshTokenResultData: LiveData<ApiModel.LoginToken>
+    private lateinit var refreshTokenResultData: LiveData<List<String>>
     private val repo = TokenRefreshRepo()
 
     // MutableLiveData 값을 갱신하기 위한 함수
@@ -20,7 +20,7 @@ class TokenRefreshViewModel : BaseViewModel("토큰 갱신") {
     }
 
     // LiveData 에 MutableLiveData 값 적용 후 View 에 전달
-    fun getResultToken() : LiveData<ApiModel.LoginToken> {
+    fun getResultToken() : LiveData<List<String>> {
         refreshTokenResultData = repo._refreshTokenResultData
         return refreshTokenResultData
     }

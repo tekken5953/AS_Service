@@ -120,13 +120,13 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         // 공기질 통합지수 & 바이러스 위험지수 불러옴
         try {
             holder.cqi.setVisibility(View.VISIBLE);
-            holder.cqi.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getCAIval())));
+            holder.cqi.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getCqiValue())));
         } catch (NumberFormatException | NullPointerException e) {
             holder.cqi.setVisibility(View.GONE);
         }
         try {
             holder.virus.setVisibility(View.VISIBLE);
-            holder.virus.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getVirusval())));
+            holder.virus.setIndexTextAsInt(Integer.parseInt(requireNonNull(mData.get(position).getVirusValue())));
         } catch (NumberFormatException | NullPointerException e) {
             holder.virus.setVisibility(View.GONE);
         }

@@ -21,14 +21,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import app.as_service.R
 import app.as_service.adapter.GridAdapter
 import app.as_service.adapter.`interface`.ChangeDialogListener
+import app.as_service.api.GetLocation
 import app.as_service.view.main.fragment.MapsFragment
 import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
-import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.TAG_G
+import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.MainActivityBinding
 import app.as_service.fcm.SubFCM
 import app.as_service.util.*
@@ -39,6 +41,10 @@ import app.as_service.viewModel.AddDeviceViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), ChangeDialogListener {
@@ -52,7 +58,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private var isBackPressed = false
     private var x = "0"
     private var y = "0"
-    private var s = "null"
+    private var address = "null"
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +69,10 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             lifecycleOwner = this@MainActivity
             postDeviceVM = postDeviceViewModel
         }
-        // 위치정보 불러오기
-        getLocation()
+
+        lifecycleScope.launch {
+            joinJob()
+        }
 
         RequestPermissionsUtil(this).requestLocation()
 //        RequestPermissionsUtil(this).requestNotification()
@@ -81,7 +89,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
         bottomNav.setOnItemSelectedListener {
             val ft = supportFragmentManager.beginTransaction()
             val bundle = Bundle()
-            bundle.putString("location", "${x}_${y}_${s}")
+            bundle.putString("location", "${x}_${y}_${address}")
 
             when (it.itemId) {
                 R.id.bottom_dashboard -> {
@@ -288,28 +296,19 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     }
 
     @SuppressLint("MissingPermission")
-    fun getLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    fun getLocation() : Job {
+        // 위치정보 불러오기
+        return CoroutineScope(Dispatchers.IO).launch {
+            val location = GetLocation().execute(this@MainActivity).split("_")
+            x = location[0]
+            y = location[1]
+            address = location[2]
+        }
+    }
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                location?.let {
-                    val geocoder = Geocoder(this)
-                    geocoder.getFromLocation(it.latitude, it.longitude, 1)?.get(0)?.let { address ->
-                        // 위도 경도를 x y 좌표로 변환
-                        val convertGrid = ConvertDataTypeUtil.convertGridGps(
-                            0,
-                            address.latitude,
-                            address.longitude
-                        )
-                        Log.d(TAG_G, "latitude : ${address.latitude} longitude : ${address.longitude}")
-
-                        x = convertGrid.x.toInt().toString()
-                        y = convertGrid.y.toInt().toString()
-                        s = "${address.adminArea} ${address.locality} ${address.thoroughfare}"
-                        Log.d(TAG_G, "${x}_${y}_${s}")
-                    }
-                }
-            }
+    private suspend fun joinJob() {
+        Log.d(TAG_R, "Get Location Job")
+        val job = getLocation()
+        job.join()
     }
 }

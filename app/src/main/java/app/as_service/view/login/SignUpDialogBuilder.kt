@@ -39,12 +39,21 @@ class SignUpDialogBuilder(context: Activity) {
             if (idEt.text.isBlank() || phoneEt.text.isBlank() || pwdEt.text.isBlank() || rePwdEt.text.isBlank()) {
                 Toast.makeText(mContext, mContext.getString(R.string.error_not_input), Toast.LENGTH_SHORT)
                     .show()
-                MakeVibrator(mContext).run(300)
+                MakeVibrator().run {
+                    init(mContext)
+                    make(300)
+                }
             } else if (rePwdInput.error != null || phoneInput.error != null) {
-                MakeVibrator(mContext).run(300)
+                MakeVibrator().run {
+                    init(mContext)
+                    make(300)
+                }
             } else if (!idEt.text.toString().contains("@")) {
                 idInput.error = mContext.getString(R.string.error_email)
-                MakeVibrator(mContext).run(300)
+                MakeVibrator().run {
+                    init(mContext)
+                    make(300)
+                }
             } else {
                 idInput.error = null
 
