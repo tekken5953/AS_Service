@@ -1,6 +1,8 @@
 package app.as_service.util;
 
 
+import androidx.annotation.NonNull;
+
 //https://thinkerodeng.tistory.com/324
 public class CRCChecker {
 
@@ -15,14 +17,14 @@ public class CRCChecker {
      * @return true : 성공, false 실패
      */
 
-    public boolean checkSum(byte[] data,  byte[] checkCrc) {
+    public boolean checkSum(byte[] data, @NonNull byte[] checkCrc) {
         short crc = crcUpdate(data, data.length);
         byte[] bCrc = fnShortToBytes(crc,1);
 
         return bCrc[0] == checkCrc[0] && bCrc[1] == checkCrc[1];
     }
 
-    public boolean checkSum(String data, String checkCrc){
+    public boolean checkSum(@NonNull String data, @NonNull String checkCrc) {
         return checkSum(data.getBytes(),checkCrc.getBytes());
     }
 

@@ -20,6 +20,7 @@ import app.as_service.dao.StaticDataObject.TAG_L
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.AnalyticsFragmentBinding
 import app.as_service.util.RefreshUtils
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,19 +35,13 @@ import kotlin.math.roundToInt
 // https://gist.github.com/fronteer-kr/14d7f779d52a21ac2f16 // 위/경도 -> x축 y축 좌표 변환
 class AnalyticsFragment : Fragment() {
     private lateinit var binding: AnalyticsFragmentBinding
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG_L, "onAttach AnalyticsFragment")
-    }
-
     @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG_L, "onCreateView AnalyticsFragment")
+        Logger.d("AnalyticsFragment 진입")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.analytics_fragment, container, false)
         binding.weatherCoverView.visibility = View.VISIBLE
@@ -112,9 +107,9 @@ class AnalyticsFragment : Fragment() {
                             binding.weatherCoverView.visibility = View.GONE
                         }
                     } catch (e: JSONException) {
-                        Log.e("api_result", "JSONException : ${e.localizedMessage}")
+                        Logger.e("JSONException : ${e.localizedMessage}")
                     } catch (e: IllegalStateException) {
-                        Log.e(TAG_R, "부모 뷰 소멸상태")
+                        Logger.e("부모 뷰 소멸상태")
                     }
                 }
             } catch (e: NullPointerException) {

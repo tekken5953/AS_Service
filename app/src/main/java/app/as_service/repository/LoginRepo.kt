@@ -1,6 +1,5 @@
 package app.as_service.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
 import app.as_service.dao.StaticDataObject.CODE_SERVER_DOWN
@@ -8,6 +7,7 @@ import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG_R
+import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,19 +29,19 @@ class LoginRepo : BaseRepository() {
                         // response body 에 전달 된 Json 으로 값 갱신
                         val access = response.body()?.access.toString()
                         val refresh = response.body()?.refresh.toString()
-                        Log.d(TAG_R, "로그인 성공 : ${response.code()}")
-                        Log.d(TAG_R, "엑세스 토큰 발행(Response Body) : \n$access")
-                        Log.d(TAG_R, "리프레시 토큰 발행(Response Body) : \n$refresh")
+                        Logger.d(TAG_R, "로그인 성공 : ${response.code()}")
+                        Logger.d(TAG_R, "엑세스 토큰 발행(Response Body) : \n$access")
+                        Logger.d(TAG_R, "리프레시 토큰 발행(Response Body) : \n$refresh")
                         _signInResultData.value = listOf(access, refresh) // MutableLiveData 값 갱신
                     }
                     // 서버 연결 실패(404)
                     else if (response.code() == CODE_SERVER_DOWN) {
-                        Log.e(TAG_R, "서버 연결 불가 : ${response.code()}")
+                        Logger.e(TAG_R, "서버 연결 불가 : ${response.code()}")
                         _signInResultData.value = listOf(RESPONSE_DEFAULT)
                     }
                     // 나머지 에러코드(추가예정)
                     else {
-                        Log.w(TAG_R, "통신 성공 but 예상치 못한 에러 발생: ${response.code()}")
+                        Logger.w(TAG_R, "통신 성공 but 예상치 못한 에러 발생: ${response.code()}")
                         _signInResultData.value = listOf(RESPONSE_DEFAULT)
                     }
                 }
@@ -49,7 +49,7 @@ class LoginRepo : BaseRepository() {
                 // API 통신 실패
                 override fun onFailure(call: Call<ApiModel.LoginToken>, t: Throwable) {
                     _signInResultData.value = listOf(RESPONSE_FAIL)
-                    Log.e(TAG_R, "로그인 실패 : ${t.localizedMessage}")
+                    Logger.e(TAG_R, "로그인 실패 : ${t.localizedMessage}")
                 }
             })
         }

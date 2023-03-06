@@ -1,16 +1,21 @@
 package app.as_service.api.aircond
 
 import android.util.Log
+import android.util.Log.d
 import app.as_service.dao.IgnoredKeyFile
-import app.as_service.dao.StaticDataObject
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.repository.BaseRepository
+import com.google.android.datatransport.runtime.logging.Logging.d
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.util.logging.Logger
 
 class AirConditionApiExplorer : BaseRepository() {
     /**
@@ -22,7 +27,6 @@ class AirConditionApiExplorer : BaseRepository() {
      */
 
     val dataJO = JSONObject()
-
     fun getAirData(
         dataTerm: String,
         stationName: String,
@@ -45,7 +49,7 @@ class AirConditionApiExplorer : BaseRepository() {
                 "=" + URLEncoder.encode(ver, "UTF-8")
                 // 버전별 상세 결과(1.0: PM2.5포함, 1.1: PM10,2.5 24시간 예측이동 평균데이터 포함,
                 // 1.2: 측정망 정보 데이터 포함, 1.3: PM10,2.5 한시간 등급 자료 포함
-        Log.d(TAG_R, strBuilder)
+
         val url = URL(strBuilder)
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"

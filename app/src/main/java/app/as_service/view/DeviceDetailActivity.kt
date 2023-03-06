@@ -2,7 +2,6 @@ package app.as_service.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -14,9 +13,7 @@ import app.as_service.adapter.AirConditionAdapter
 import app.as_service.api.ui.DrawBarChart
 import app.as_service.dao.AdapterModel
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.DetailActivityBinding
-import app.as_service.util.ConvertDataTypeUtil.longToMillsString
 import app.as_service.util.ConvertDataTypeUtil.millsToString
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
@@ -24,6 +21,7 @@ import app.as_service.util.SnackBarUtils
 import app.as_service.util.ToastUtils
 import app.as_service.viewModel.BookMarkViewModel
 import app.as_service.viewModel.GetValueViewModel
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -50,7 +48,7 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.w(TAG_R, "공기질 데이터 타이머 종료")
+        Logger.w("공기질 데이터 타이머 종료")
         timer.cancel()
         timer.purge()
     }
@@ -69,6 +67,7 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.d("디바이스 상세화면 진입")
         binding =
             DataBindingUtil.setContentView<DetailActivityBinding?>(
                 this, R.layout.detail_activity
@@ -107,6 +106,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                     )
                 }
             }, 0, 10 * 1000)
+            Logger.i("공기질 데이터 타이머 시작")
         }
 
         if (serialNumber == "SIA000000T") {
@@ -322,6 +322,6 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     // 뷰모델 호출 후 데이터 반환
     private fun applyBookMarkViewModel() {
-        patchBookMarkViewModel.patchBookMarkResult().observe(this){}
+        patchBookMarkViewModel.patchBookMarkResult().observe(this) {}
     }
 }

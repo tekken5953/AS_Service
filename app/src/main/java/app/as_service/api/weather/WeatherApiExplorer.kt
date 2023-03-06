@@ -7,8 +7,12 @@ import app.as_service.repository.BaseRepository
 import app.as_service.util.ConvertDataTypeUtil.getCurrentTimeMills
 import app.as_service.util.ConvertDataTypeUtil.getYesterdayLong
 import app.as_service.util.ConvertDataTypeUtil.millsToString
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
+import com.orhanobut.logger.Logger
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -91,7 +95,6 @@ class WeatherApiExplorer : BaseRepository() {
                     "=" + encode(x, "UTF-8") +   //예보지점의 X 좌표값
                     "&" + encode("ny", "UTF-8") +
                     "=" + encode(y, "UTF-8") //예보지점의 Y 좌표값
-
             println(strBuilder)
             val url = URL(strBuilder)
             val conn = url.openConnection() as HttpURLConnection
@@ -113,6 +116,11 @@ class WeatherApiExplorer : BaseRepository() {
 
             val responseJA = JSONObject(sb.toString()).getJSONObject("response")
                 .getJSONObject("body").getJSONObject("items").getJSONArray("item")
+            Timber.tag("Weather").d(
+                GsonBuilder().setPrettyPrinting().create().toJson(
+                    JsonParser().parse(responseJA.toString())
+                )
+            )
 
             var fcstValue: String
 
@@ -129,11 +137,11 @@ class WeatherApiExplorer : BaseRepository() {
                 }
             }
         } catch (e: IOException) {
-            Log.e("api_result", "IOException : ${e.localizedMessage}")
+            Logger.e("api_result", "IOException : ${e.localizedMessage}")
         } catch (e: InvocationTargetException) {
-            Log.e("api_result", "InvocationTargetException : ${e.localizedMessage}")
+            Logger.e("api_result", "InvocationTargetException : ${e.localizedMessage}")
         } catch (e: JSONException) {
-            Log.e("api_result", "JSONException : ${e.localizedMessage}")
+            Logger.e("api_result", "JSONException : ${e.localizedMessage}")
         }
     }
 

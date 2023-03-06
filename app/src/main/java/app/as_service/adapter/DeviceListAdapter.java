@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aslib.AsTextView;
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -198,7 +199,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
                     if (currentTimer() != null) {
                         currentTimer().cancel();
                         currentTimer().purge();
-                        Log.w(StaticDataObject.TAG_R, "리스트 타이머 테스크 종료");
+                         Logger.w("리스트 타이머 테스크 종료");
                     }
 
                     context.startActivity(intent, options.toBundle());

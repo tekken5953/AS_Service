@@ -1,7 +1,9 @@
 package app.as_service.fcm
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import app.as_service.dao.StaticDataObject.TAG_N
 import app.as_service.view.login.LoginActivity
 import com.google.android.gms.tasks.OnCompleteListener
@@ -10,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 
+@SuppressLint("LogNotTimber")
 class SubFCM : FirebaseMessagingService() {
 
     // 메시지 받았을 때
@@ -21,6 +24,28 @@ class SubFCM : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
         // 포그라운드 노티피케이션 발생
         NotificationBuilder().sendNotification(this,intent,message,"AS-Cloud FCM Test Msg", System.currentTimeMillis())
+    }
+
+    fun subTopic(s: String) {
+        FirebaseMessaging.getInstance().subscribeToTopic(s)
+            .addOnCompleteListener { task ->
+                var msg = "Subscribed"
+                if (!task.isSuccessful) {
+                    msg = "Subscribe failed"
+                }
+                Log.d(TAG_N, msg)
+            }
+    }
+
+    fun unSubTopic(s: String) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(s)
+            .addOnCompleteListener { task ->
+                var msg = "UnSubscribed"
+                if (!task.isSuccessful) {
+                    msg = "UnSubscribed failed"
+                }
+                Log.w(TAG_N, msg)
+            }
     }
 
     // 현재 토큰정보 불러오기

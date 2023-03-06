@@ -1,14 +1,11 @@
 package app.as_service.view.main
 
 import android.annotation.SuppressLint
-import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,21 +23,22 @@ import app.as_service.R
 import app.as_service.adapter.GridAdapter
 import app.as_service.adapter.`interface`.ChangeDialogListener
 import app.as_service.api.GetLocation
-import app.as_service.view.main.fragment.MapsFragment
 import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
-import app.as_service.dao.StaticDataObject.TAG_G
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.MainActivityBinding
 import app.as_service.fcm.SubFCM
-import app.as_service.util.*
+import app.as_service.util.RefreshUtils
+import app.as_service.util.RequestPermissionsUtil
+import app.as_service.util.SharedPreferenceManager
+import app.as_service.util.ToastUtils
 import app.as_service.view.main.fragment.AnalyticsFragment
 import app.as_service.view.main.fragment.DashboardFragment
+import app.as_service.view.main.fragment.MapsFragment
 import app.as_service.view.main.fragment.UserFragment
 import app.as_service.viewModel.AddDeviceViewModel
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -78,6 +76,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
 //        RequestPermissionsUtil(this).requestNotification()
         // FCM Message
         SubFCM().getToken()
+        SubFCM().subTopic("test")
 
         bottomNav = binding.bottomNav
         bottomNav.selectedItemId = R.id.bottom_dashboard    // 대시보드 화면이 초기화면
@@ -94,7 +93,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             when (it.itemId) {
                 R.id.bottom_dashboard -> {
                     val list = DashboardFragment()
-                    if (bottomNav.selectedItemId !=  R.id.bottom_dashboard) {
+                    if (bottomNav.selectedItemId != R.id.bottom_dashboard) {
                         ft.replace(R.id.fragmentFrame, list, "list").commit()
                         true
                     } else false
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                 R.id.bottom_analytics -> {
                     val analytics = AnalyticsFragment()
                     analytics.arguments = bundle
-                    if (bottomNav.selectedItemId !=  R.id.bottom_analytics) {
+                    if (bottomNav.selectedItemId != R.id.bottom_analytics) {
                         ft.replace(R.id.fragmentFrame, analytics, "analytics").commit()
                         true
                     } else false
@@ -110,19 +109,21 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
                 R.id.bottom_chat -> {
                     val chat = MapsFragment()
                     chat.arguments = bundle
-                    if (bottomNav.selectedItemId !=  R.id.bottom_chat) {
+                    if (bottomNav.selectedItemId != R.id.bottom_chat) {
                         ft.replace(R.id.fragmentFrame, chat, "maps").commit()
                         true
                     } else false
                 }
                 R.id.bottom_user -> {
                     val user = UserFragment()
-                    if (bottomNav.selectedItemId !=  R.id.bottom_user) {
+                    if (bottomNav.selectedItemId != R.id.bottom_user) {
                         ft.replace(R.id.fragmentFrame, user, "user").commit()
                         true
                     } else false
                 }
-                else -> { false }
+                else -> {
+                    false
+                }
             }
         }
 
@@ -296,7 +297,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     }
 
     @SuppressLint("MissingPermission")
-    fun getLocation() : Job {
+    fun getLocation(): Job {
         // 위치정보 불러오기
         return CoroutineScope(Dispatchers.IO).launch {
             val location = GetLocation().execute(this@MainActivity).split("_")
@@ -307,7 +308,6 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     }
 
     private suspend fun joinJob() {
-        Log.d(TAG_R, "Get Location Job")
         val job = getLocation()
         job.join()
     }

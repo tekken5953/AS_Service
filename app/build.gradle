@@ -48,10 +48,8 @@ dependencies {
     //server
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter'// String 처리시
 
     def lifecycle_version = "2.5.1"
@@ -71,7 +69,9 @@ dependencies {
     // Navigation Graph
     implementation "io.insert-koin:koin-androidx-navigation:$koin_android_version"
     // logger
-    implementation "io.insert-koin:koin-logger-slf4j:3.3.1"
+    implementation "com.orhanobut:logger:2.2.0"
+    // Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
     // Koin Test features
     testImplementation "io.insert-koin:koin-test:$koin_android_version"
     // Koin for JUnit 4
@@ -113,7 +113,6 @@ dependencies {
 
     // AndroidTest(FrameWork)
     androidTestImplementation "junit:junit:4.13.2"
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     androidTestImplementation "com.google.truth:truth:1.0.1"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

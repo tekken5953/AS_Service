@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.orhanobut.logger.Logger
 
 class MapsFragment : Fragment() {
 
@@ -65,8 +66,9 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        getLocale()
+        Logger.d("MapsFragment 진입")
 
+        getLocale()
         return inflater.inflate(R.layout.map_fragment, container, false)
     }
 

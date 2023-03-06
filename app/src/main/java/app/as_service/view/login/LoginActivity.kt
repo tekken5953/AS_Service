@@ -9,7 +9,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -20,15 +19,18 @@ import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
 import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.LoginActivityBinding
 import app.as_service.util.ConvertDataTypeUtil.longToMillsString
+import app.as_service.util.LoggerUtil
 import app.as_service.util.MakeVibrator
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
 import app.as_service.view.main.MainActivity
 import app.as_service.viewModel.LoginViewModel
 import app.as_service.viewModel.SignUpViewModel
+import com.orhanobut.logger.Logger
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginActivityBinding
@@ -42,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        LoggerUtil().getInstance()
         initializing()
         setLoginTitleText()
         setMissingPasswordText()
@@ -50,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
         // ViewModel 에게 LiveData 값을 보내라고 명령. 리턴받은 결과 값(토큰)을 비교하여 내부 DB에 저장
         applySignInViewModel()
         applySignUpViewModel()
+
     }
 
     // 뷰 생성 시 init 할 데이터
@@ -73,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
             ) {
                 val intent = Intent(this, MainActivity::class.java)
                 val userId = SharedPreferenceManager.getString(this, "jti")
-                Log.d(TAG_R, "${userId}로 자동 로그인됨")
+                Logger.d("${userId}로 자동 로그인됨")
                 toast.shortMessage("${userId}님 환영합니다")
                 startActivity(intent)
                 finish()
@@ -195,12 +198,26 @@ class LoginActivity : AppCompatActivity() {
 
                                 SharedPreferenceManager.setString(
                                     context, "exp",
-                                    getDecodeStream(newToken[0],"exp")
+                                    getDecodeStream(newToken[0], "exp")
                                 )
 
-                                Log.d(TAG_R, "토큰 발행일은 ${longToMillsString(getDecodeStream(newToken[0], "iat").toLong(), "yyyy년 MM월 dd일 HH시 mm분")} 입니다")
+                                Logger.i(
+                                    TAG_R, "토큰 발행일은 ${
+                                        longToMillsString(
+                                            getDecodeStream(newToken[0], "iat").toLong(),
+                                            "yyyy년 MM월 dd일 HH시 mm분"
+                                        )
+                                    } 입니다"
+                                )
 
-                                Log.d(TAG_R, "토큰 만료시간은 ${longToMillsString(getDecodeStream(newToken[0], "exp").toLong(),"yyyy년 MM월 dd일 HH시 mm분")} 입니다")
+                                Logger.i(
+                                    TAG_R, "토큰 만료시간은 ${
+                                        longToMillsString(
+                                            getDecodeStream(newToken[0], "exp").toLong(),
+                                            "yyyy년 MM월 dd일 HH시 mm분"
+                                        )
+                                    } 입니다"
+                                )
                             }
                             // 토큰이 저장되었으면 메인화면으로 이동
                             val intent = Intent(context, MainActivity::class.java)

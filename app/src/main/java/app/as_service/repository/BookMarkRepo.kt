@@ -1,9 +1,8 @@
 package app.as_service.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject
+import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,10 +17,10 @@ class BookMarkRepo : BaseRepository() {
                 override fun onResponse(
                     call: Call<ApiModel.ReturnPost>,
                     response: Response<ApiModel.ReturnPost>
-                ) { loadSuccessStringData(_patchBookMarkResultData, response ,"북마크") }
+                ) { loadSuccessStringData(_patchBookMarkResultData, response) }
 
                 override fun onFailure(call: Call<ApiModel.ReturnPost>, t: Throwable) {
-                    Log.e(StaticDataObject.TAG_R, "북마크 실패 : ${t.localizedMessage}")
+                    Logger.e("북마크 실패 : " + t.localizedMessage)
                 }
             })
         }

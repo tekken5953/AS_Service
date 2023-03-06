@@ -9,10 +9,11 @@ import app.as_service.dao.StaticDataObject
 import app.as_service.dao.StaticDataObject.TAG_G
 import app.as_service.util.ConvertDataTypeUtil
 import com.google.android.gms.location.LocationServices
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.*
 
 @SuppressLint("MissingPermission")
-class GetLocation() {
+class GetLocation {
     private var x = "0"
     private var y = "0"
     private var s = "null"
@@ -43,8 +44,8 @@ class GetLocation() {
 
     suspend fun execute(context: Context) : String {
         getInstance(context)
-        delay(500)
-        Log.d(TAG_G, "Get Location : ${x}_${y}_${s}")
+        delay(1000)
+        Logger.i("Get Location : ${x}_${y}_${s}")
         return "${x}_${y}_${s}"
     }
 }

@@ -1,10 +1,9 @@
 package app.as_service.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.server.HttpClient.mMyAPI
+import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,10 +21,10 @@ class GetValueRepo : BaseRepository() {
                 call: Call<ApiModel.GetData>,
                 response: Response<ApiModel.GetData>
             ) {
-                loadSuccessMapData(_getDataResult, response, "공기질 데이터")
+                loadSuccessMapData(_getDataResult, response)
             }
             override fun onFailure(call: Call<ApiModel.GetData>, t: Throwable) {
-                Log.e(TAG_R, "공기질 데이터 호출 실패 : ${t.localizedMessage}")
+                Logger.e("공기질 데이터 호출 실패 : " + t.localizedMessage)
             }
         })
     }

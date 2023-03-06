@@ -1,9 +1,7 @@
 package app.as_service.view.main.fragment
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,20 +14,15 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import app.as_service.R
 import app.as_service.adapter.DeviceListAdapter
 import app.as_service.dao.AdapterModel
-import app.as_service.dao.StaticDataObject
-import app.as_service.dao.StaticDataObject.CODE_INVALID_TOKEN
 import app.as_service.dao.StaticDataObject.CODE_SERVER_OK
-import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.DashboardFragmentBinding
-import app.as_service.util.ConvertDataTypeUtil
 import app.as_service.util.RefreshUtils
 import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.SnackBarUtils
-import app.as_service.view.login.LoginActivity
 import app.as_service.viewModel.DeleteDeviceViewModel
 import app.as_service.viewModel.DeviceListViewModel
 import app.as_service.viewModel.TokenRefreshViewModel
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,10 +45,10 @@ class DashboardFragment : Fragment() {
         adapter.timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 // 뷰모델 호출
-
                 deviceListViewModel.loadDeviceListResult(getAccessToken())
             }
         }, 0, 10 * 1000)
+        Logger.i("리스트 타이머 시작")
     }
 
     override fun onDestroyView() {
@@ -68,6 +61,7 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Logger.d("DashboardFragment 진입")
         binding = DataBindingUtil.inflate<DashboardFragmentBinding?>(
             inflater,
             R.layout.dashboard_fragment,
@@ -160,11 +154,7 @@ class DashboardFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun applyDeviceListInViewModel() {
         deviceListViewModel.getDeviceListResult().observe(viewLifecycleOwner) { listItem ->
-            Log.d(TAG_R, "listItem : ${listItem.toString()}")
             if (listItem == null) {
-                Log.d(TAG_R, "토큰 만료시간은 ${
-                    ConvertDataTypeUtil.longToMillsString(SharedPreferenceManager.getString(context,"exp").toLong(), 
-                        "yyyy년 MM월 dd일 HH시 mm분")} 입니다")
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setMessage("세션이 만료되었습니다.\n다시 로그인 해 주세요")
                     .setPositiveButton(

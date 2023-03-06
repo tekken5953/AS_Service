@@ -1,9 +1,8 @@
 package app.as_service.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import app.as_service.dao.ApiModel
-import app.as_service.dao.StaticDataObject.TAG_R
+import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,11 +18,11 @@ class DeleteDeviceRepo : BaseRepository() {
                     call: Call<ApiModel.ReturnPost>,
                     response: Response<ApiModel.ReturnPost>
                 ) {
-                   loadSuccessStringData(_deleteDeviceResultData,response,"장치삭제")
+                   loadSuccessStringData(_deleteDeviceResultData,response)
                 }
 
                 override fun onFailure(call: Call<ApiModel.ReturnPost>, t: Throwable) {
-                    Log.e(TAG_R, "장치삭제 실패 : ${t.localizedMessage}")
+                    Logger.e("장치삭제 실패 : " + t.localizedMessage)
                 }
             })
         }
