@@ -1,24 +1,20 @@
 package app.as_service.fcm
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
-import android.widget.Toast
-import app.as_service.dao.StaticDataObject.TAG_N
 import app.as_service.view.login.LoginActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import timber.log.Timber
 
 
-@SuppressLint("LogNotTimber")
 class SubFCM : FirebaseMessagingService() {
 
     // 메시지 받았을 때
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.d(TAG_N,"FCM 메시지 수신")
+        Timber.tag("Notification").d("FCM 메시지 수신")
 
         val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -33,7 +29,7 @@ class SubFCM : FirebaseMessagingService() {
                 if (!task.isSuccessful) {
                     msg = "Subscribe failed"
                 }
-                Log.d(TAG_N, msg)
+                Timber.tag("Notification").d(msg)
             }
     }
 
@@ -44,7 +40,7 @@ class SubFCM : FirebaseMessagingService() {
                 if (!task.isSuccessful) {
                     msg = "UnSubscribed failed"
                 }
-                Log.w(TAG_N, msg)
+                Timber.tag("Notification").w(msg)
             }
     }
 
@@ -52,13 +48,12 @@ class SubFCM : FirebaseMessagingService() {
     fun getToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(TAG_N, "Fetching FCM registration token failed", task.exception)
+                Timber.tag("Notification").w("Fetching FCM registration token failed by $task.exception")
                 return@OnCompleteListener
             }
 
             val token = task.result
-
-            Log.d(TAG_N, "FCM 토큰 : $token")
+            Timber.tag("Notification").d("FCM 토큰 : $token")
         })
     }
 
@@ -66,7 +61,6 @@ class SubFCM : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         //TODO 서버에 바뀐 토큰 보내기
-
-        Log.d(TAG_N, "sendRegistrationTokenToServer($token)")
+        Timber.tag("Notification").d("sendRegistrationTokenToServer($token)")
     }
 }

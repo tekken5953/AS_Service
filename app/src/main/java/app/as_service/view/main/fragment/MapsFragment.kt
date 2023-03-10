@@ -66,8 +66,6 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Logger.d("MapsFragment 진입")
-
         getLocale()
         return inflater.inflate(R.layout.map_fragment, container, false)
     }

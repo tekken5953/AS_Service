@@ -1,11 +1,8 @@
 package app.as_service.api.aircond
 
-import android.util.Log
-import android.util.Log.d
 import app.as_service.dao.IgnoredKeyFile
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.repository.BaseRepository
-import com.google.android.datatransport.runtime.logging.Logging.d
+import app.as_service.util.LoggerUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import org.json.JSONObject
@@ -15,7 +12,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
-import java.util.logging.Logger
+
+
 
 class AirConditionApiExplorer : BaseRepository() {
     /**
@@ -32,11 +30,15 @@ class AirConditionApiExplorer : BaseRepository() {
         stationName: String,
         ver: String
     ) {
+
         val strBuilder = IgnoredKeyFile.airCondApiURL + "getMsrstnAcctoRltmMesureDnsty" +  /*URL*/
                 "?" + URLEncoder.encode("stationName", "UTF-8") +
                 "=" + stationName +  //측정소 이름
                 "&" + URLEncoder.encode("dataTerm", "UTF-8") +
-                "=" + URLEncoder.encode(dataTerm, "UTF-8") +  //요청 데이터기간(1일: DAILY, 1개월: MONTH, 3개월: 3MONTH)
+                "=" + URLEncoder.encode(
+            dataTerm,
+            "UTF-8"
+        ) + //요청 데이터기간(1일: DAILY, 1개월: MONTH, 3개월: 3MONTH)
                 "&" + URLEncoder.encode("pageNo", "UTF-8") +
                 "=" + URLEncoder.encode("1", "UTF-8") +   //페이지번호
                 "&" + URLEncoder.encode("numOfRows", "UTF-8") +
@@ -47,14 +49,13 @@ class AirConditionApiExplorer : BaseRepository() {
                 "=" + URLEncoder.encode(IgnoredKeyFile.AirCondDecodingKey, "UTF-8") +  //Service Key
                 "&" + URLEncoder.encode("ver", "UTF-8") +
                 "=" + URLEncoder.encode(ver, "UTF-8")
-                // 버전별 상세 결과(1.0: PM2.5포함, 1.1: PM10,2.5 24시간 예측이동 평균데이터 포함,
-                // 1.2: 측정망 정보 데이터 포함, 1.3: PM10,2.5 한시간 등급 자료 포함
+        // 버전별 상세 결과(1.0: PM2.5포함, 1.1: PM10,2.5 24시간 예측이동 평균데이터 포함,
+        // 1.2: 측정망 정보 데이터 포함, 1.3: PM10,2.5 한시간 등급 자료 포함
 
         val url = URL(strBuilder)
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"
         conn.setRequestProperty("Content-type", "application/json")
-        println("Response code: " + conn.responseCode)
         val rd: BufferedReader = if (conn.responseMessage == "OK") {
             BufferedReader(InputStreamReader(conn.inputStream))
         } else {
@@ -71,6 +72,8 @@ class AirConditionApiExplorer : BaseRepository() {
         val responseJA = JSONObject(sb.toString()).getJSONObject("response")
             .getJSONObject("body").getJSONArray("items")
         val data = responseJA.getJSONObject(0).get("pm10Value").toString()
-        dataJO.put("pm10Value",data)
+        dataJO.put("pm10Value", data)
+
+        LoggerUtil().logJsonTimberDebug("AirCondApi", responseJA.toString())
     }
 }

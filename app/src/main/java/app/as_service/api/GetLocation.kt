@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
-import app.as_service.dao.StaticDataObject
-import app.as_service.dao.StaticDataObject.TAG_G
 import app.as_service.util.ConvertDataTypeUtil
 import com.google.android.gms.location.LocationServices
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
 
 @SuppressLint("MissingPermission")
 class GetLocation {

@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import app.as_service.R
 import app.as_service.dao.StaticDataObject.RESPONSE_DEFAULT
 import app.as_service.dao.StaticDataObject.RESPONSE_FAIL
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.LoginActivityBinding
 import app.as_service.util.ConvertDataTypeUtil.longToMillsString
 import app.as_service.util.LoggerUtil
@@ -36,8 +35,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginActivityBinding
     private val loginViewModel by viewModel<LoginViewModel>()
     private val signUpViewModel by viewModel<SignUpViewModel>()
+    private val sp = SharedPreferenceManager(this)
     private val originToken: String by lazy {
-        SharedPreferenceManager.getString(this@LoginActivity, "accessToken")  // 엑세스 토큰
+        sp.getString("accessToken")  // 엑세스 토큰
     }
     private val context: Context = this@LoginActivity
     private val toast = ToastUtils(this)
@@ -65,21 +65,12 @@ class LoginActivity : AppCompatActivity() {
                     signUpVM = signUpViewModel
                 }
 
+        autoLogin()
+
         if (::binding.isInitialized) {
             binding.mainSignUpBtn.setOnClickListener {
                 // 회원가입 다이얼로그 생성
                 SignUpDialogBuilder(this).build(signUpViewModel)
-            }
-
-            // 자동로그인
-            if (SharedPreferenceManager.getString(this, "accessToken") != ""
-            ) {
-                val intent = Intent(this, MainActivity::class.java)
-                val userId = SharedPreferenceManager.getString(this, "jti")
-                Logger.d("${userId}로 자동 로그인됨")
-                toast.shortMessage("${userId}님 환영합니다")
-                startActivity(intent)
-                finish()
             }
 
             binding.mainLoginBtn.setOnClickListener {
@@ -174,35 +165,33 @@ class LoginActivity : AppCompatActivity() {
                         else -> {
                             if (newToken[0] != originToken) {
                                 // 토큰 저장
-                                SharedPreferenceManager.setString(
-                                    context,
+                                sp.setString(
                                     "accessToken",
                                     "Bearer " + newToken[0]
                                 )
 
-                                SharedPreferenceManager.setString(
-                                    context,
+                                sp.setString(
                                     "refreshToken",
                                     newToken[1]
                                 )
 
                                 // 유저 이름 저장
-                                SharedPreferenceManager.setString(
-                                    context, "jti",
+                                sp.setString(
+                                    "jti",
                                     getDecodeStream(newToken[0], "jti")
                                 )
-                                SharedPreferenceManager.setString(
-                                    context, "auth",
+                                sp.setString(
+                                    "auth",
                                     getDecodeStream(newToken[0], "auth")
                                 )
 
-                                SharedPreferenceManager.setString(
-                                    context, "exp",
+                                sp.setString(
+                                    "exp",
                                     getDecodeStream(newToken[0], "exp")
                                 )
 
                                 Logger.i(
-                                    TAG_R, "토큰 발행일은 ${
+                                     "토큰 발행일은 ${
                                         longToMillsString(
                                             getDecodeStream(newToken[0], "iat").toLong(),
                                             "yyyy년 MM월 dd일 HH시 mm분"
@@ -211,7 +200,7 @@ class LoginActivity : AppCompatActivity() {
                                 )
 
                                 Logger.i(
-                                    TAG_R, "토큰 만료시간은 ${
+                                     "토큰 만료시간은 ${
                                         longToMillsString(
                                             getDecodeStream(newToken[0], "exp").toLong(),
                                             "yyyy년 MM월 dd일 HH시 mm분"
@@ -246,4 +235,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun autoLogin() {
+        // 자동로그인
+        if (sp.getString("accessToken") != ""
+        ) {
+            val intent = Intent(this, MainActivity::class.java)
+            val userId = sp.getString("jti")
+            Logger.d("${userId}로 자동 로그인됨")
+            Logger.i(
+                "해당 토큰 만료시간은 ${
+                    longToMillsString(
+                        getDecodeStream(sp.getString("accessToken"), "exp").toLong(),
+                        "yyyy년 MM월 dd일 HH시 mm분"
+                    )
+                } 입니다"
+            )
+            toast.shortMessage("${userId}님 환영합니다")
+            startActivity(intent)
+            finish()
+        }
+    }
 }

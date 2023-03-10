@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.text.method.TextKeyListener.clear
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import app.as_service.view.login.LoginActivity
 import kotlin.system.exitProcess
-
 
 class RefreshUtils {
     // 액티비티 갱신
@@ -34,7 +34,7 @@ class RefreshUtils {
     fun logout(context: Activity) {
         val intent = Intent(context, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        SharedPreferenceManager.clear(context) // 저장된 환경 초기화
+        SharedPreferenceManager(context).clear() // 저장된 환경 초기화
         context.startActivity(intent)
         context.finish()
     }

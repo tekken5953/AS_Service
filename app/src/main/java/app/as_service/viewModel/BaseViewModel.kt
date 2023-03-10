@@ -1,8 +1,7 @@
 package app.as_service.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import app.as_service.dao.StaticDataObject.TAG_R
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.Job
 
 open class BaseViewModel(msg: String) : ViewModel() {
@@ -13,6 +12,6 @@ open class BaseViewModel(msg: String) : ViewModel() {
         super.onCleared()
         if (job != null)
             job?.cancel()
-        Log.d(TAG_R, "$message 뷰모델 인스턴스 소멸")
+        Logger.i("$message 뷰모델 인스턴스 소멸")
     }
 }

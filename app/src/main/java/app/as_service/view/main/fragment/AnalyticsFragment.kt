@@ -1,13 +1,10 @@
 package app.as_service.view.main.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
@@ -16,17 +13,12 @@ import app.as_service.R
 import app.as_service.api.aircond.AirConditionApiExplorer
 import app.as_service.api.weather.GetSkyData
 import app.as_service.api.weather.WeatherApiExplorer
-import app.as_service.dao.StaticDataObject.TAG_L
-import app.as_service.dao.StaticDataObject.TAG_R
 import app.as_service.databinding.AnalyticsFragmentBinding
-import app.as_service.util.RefreshUtils
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONException
-import java.lang.IllegalStateException
-import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
 //https://developer.android.com/training/location/retrieve-current?hl=ko    // 위치정보
@@ -41,8 +33,6 @@ class AnalyticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Logger.d("AnalyticsFragment 진입")
-
         binding = DataBindingUtil.inflate(inflater, R.layout.analytics_fragment, container, false)
         binding.weatherCoverView.visibility = View.VISIBLE
         val locationStr = arguments?.get("location").toString().split("_")

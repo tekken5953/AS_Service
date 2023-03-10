@@ -39,6 +39,9 @@ class DashboardFragment : Fragment() {
     private val deleteDeviceViewModel by viewModel<DeleteDeviceViewModel>()
     private val refreshTokenViewModel by viewModel<TokenRefreshViewModel>()
     private val snack = SnackBarUtils()
+    private val sp by lazy {
+        SharedPreferenceManager(requireContext())
+    }
 
     override fun onResume() {
         super.onResume()
@@ -61,7 +64,6 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Logger.d("DashboardFragment 진입")
         binding = DataBindingUtil.inflate<DashboardFragmentBinding?>(
             inflater,
             R.layout.dashboard_fragment,
@@ -155,14 +157,15 @@ class DashboardFragment : Fragment() {
     private fun applyDeviceListInViewModel() {
         deviceListViewModel.getDeviceListResult().observe(viewLifecycleOwner) { listItem ->
             if (listItem == null) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setMessage("세션이 만료되었습니다.\n다시 로그인 해 주세요")
-                    .setPositiveButton(
-                        "확인"
-                    ) { dialog, _ ->
-                        dialog.dismiss()
-                        RefreshUtils().logout(requireActivity())
-                    }.show()
+//                val builder = AlertDialog.Builder(requireContext())
+//                builder.setMessage("세션이 만료되었습니다.\n다시 로그인 해 주세요")
+//                    .setPositiveButton(
+//                        "확인"
+//                    ) { dialog, _ ->
+//                        dialog.dismiss()
+//                        RefreshUtils().logout(requireActivity())
+//                    }.show()
+                refreshTokenViewModel.loadRefreshResult(getAccessToken(),getRefreshToken())
             } else {
                 mList.clear()
                 CoroutineScope(Dispatchers.Main).launch {
@@ -194,8 +197,8 @@ class DashboardFragment : Fragment() {
         refreshTokenViewModel.getResultToken().observe(viewLifecycleOwner) { result ->
             result.let {
                 if (it.size == 2) {
-                    SharedPreferenceManager.setString(requireContext(), "accessToken", it[0])
-                    SharedPreferenceManager.setString(requireContext(), "refreshToken", it[1])
+                    sp.setString("accessToken", it[0])
+                    sp.setString("refreshToken", it[1])
                 }
             }
         }
@@ -218,10 +221,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun getAccessToken(): String {
-        return SharedPreferenceManager.getString(context, "accessToken")
+        return sp.getString("accessToken")
     }
 
     private fun getRefreshToken(): String {
-        return SharedPreferenceManager.getString(context, "refreshToken")
+        return sp.getString("refreshToken")
     }
 }

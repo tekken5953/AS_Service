@@ -13,6 +13,6 @@ object StaticDataObject {
     const val TAG_D = "TAG_DrawGraph"                     // 그래프 기본 태그 Key
     const val REQUEST_LOCATION = 1                        // 위치권한 요청 Result Code
     const val REQUEST_NOTIFICATION = 2                    // 알림권한 요청 Result Code
-    const val NOTIFICATION_CHANNEL_ID = "500"             //FCM 채널 ID
+    const val NOTIFICATION_CHANNEL_ID = "500"             // FCM 채널 ID
     const val NOTIFICATION_CHANNEL_NAME = "AIRSIGNAL"     // FCM 채널 NAME
 }

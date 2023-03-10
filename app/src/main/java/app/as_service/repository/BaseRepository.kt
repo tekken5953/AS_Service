@@ -37,7 +37,7 @@ open class BaseRepository {
 
     inline fun <reified TD, TR> loadSuccessMapData(
         data: MutableLiveData<TD>,
-        response: Response<TR>,
+        response: Response<TR>
     ) {
         when (response.code()) {
             CODE_SERVER_OK -> {

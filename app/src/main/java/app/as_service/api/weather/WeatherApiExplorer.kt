@@ -1,12 +1,12 @@
 package app.as_service.api.weather
 
-import android.util.Log
 import app.as_service.dao.IgnoredKeyFile.WeatherDecodingKey
 import app.as_service.dao.IgnoredKeyFile.weatherApiURL
 import app.as_service.repository.BaseRepository
 import app.as_service.util.ConvertDataTypeUtil.getCurrentTimeMills
 import app.as_service.util.ConvertDataTypeUtil.getYesterdayLong
 import app.as_service.util.ConvertDataTypeUtil.millsToString
+import app.as_service.util.LoggerUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.orhanobut.logger.Logger
@@ -116,11 +116,8 @@ class WeatherApiExplorer : BaseRepository() {
 
             val responseJA = JSONObject(sb.toString()).getJSONObject("response")
                 .getJSONObject("body").getJSONObject("items").getJSONArray("item")
-            Timber.tag("Weather").d(
-                GsonBuilder().setPrettyPrinting().create().toJson(
-                    JsonParser().parse(responseJA.toString())
-                )
-            )
+
+            LoggerUtil().logJsonTimberDebug("WeatherApi", responseJA.toString())
 
             var fcstValue: String
 
@@ -137,11 +134,11 @@ class WeatherApiExplorer : BaseRepository() {
                 }
             }
         } catch (e: IOException) {
-            Logger.e("api_result", "IOException : ${e.localizedMessage}")
+            Logger.e("IOException Get Weather : ${e.localizedMessage}")
         } catch (e: InvocationTargetException) {
-            Logger.e("api_result", "InvocationTargetException : ${e.localizedMessage}")
+            Logger.e("InvocationTargetException Get Weather : ${e.localizedMessage}")
         } catch (e: JSONException) {
-            Logger.e("api_result", "JSONException : ${e.localizedMessage}")
+            Logger.e("JSONException Get Weather : ${e.localizedMessage}")
         }
     }
 

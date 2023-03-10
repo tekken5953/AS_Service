@@ -3,10 +3,14 @@ package app.as_service.server
 import android.annotation.SuppressLint
 import app.as_service.dao.IgnoredKeyFile.springServerURL
 import app.as_service.server.api.MyApi
+import app.as_service.util.LoggerUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,7 +29,7 @@ object HttpClient {
         instance ?: synchronized(HttpClient::class.java) {  // 멀티스레드에서 동시생성하는 것을 막음
             instance ?: HttpClient.also {
                 instance = it
-                Logger.i("API Instance 생성")
+                Logger.d("API Instance 생성")
             }
         }
 
@@ -40,11 +44,7 @@ object HttpClient {
                 }
                 try {
                     // Timber 와 Gson setPrettyPrinting 를 이용해 json 을 보기 편하게 표시해준다.
-                    Timber.tag("Timber").d(
-                        GsonBuilder().setPrettyPrinting().create().toJson(
-                            JsonParser().parse(message)
-                        )
-                    )
+                    LoggerUtil().logJsonTimberDebug("Timber", message)
                 } catch (m: JsonSyntaxException) {
                     Timber.tag("Timber").e(message)
                 }

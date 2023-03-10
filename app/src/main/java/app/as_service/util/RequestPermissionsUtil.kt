@@ -3,11 +3,9 @@ package app.as_service.util
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import app.as_service.dao.StaticDataObject.REQUEST_LOCATION
-import app.as_service.dao.StaticDataObject.REQUEST_NOTIFICATION
 
 class RequestPermissionsUtil(activity: Activity) {
     val context = activity

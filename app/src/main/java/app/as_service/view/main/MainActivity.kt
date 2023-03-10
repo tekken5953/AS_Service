@@ -38,7 +38,6 @@ import app.as_service.view.main.fragment.UserFragment
 import app.as_service.viewModel.AddDeviceViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
-import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -57,6 +56,7 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
     private var x = "0"
     private var y = "0"
     private var address = "null"
+    private val sp by lazy {  SharedPreferenceManager(this) }
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -161,9 +161,9 @@ class MainActivity : AppCompatActivity(), ChangeDialogListener {
             nameApplyBtn.setOnClickListener {
                 (viewName.parent as ViewGroup).removeView(viewName)
                 postDeviceViewModel.loadPostDeviceResult(
-                    SharedPreferenceManager.getString(this, "accessToken"),
+                    sp.getString("accessToken"),
                     deviceSerial,
-                    SharedPreferenceManager.getString(this, "jti"),
+                    sp.getString("jti"),
                     nameEt.text.toString(),
                     businessGridAdapter.resultBusiness
                 )

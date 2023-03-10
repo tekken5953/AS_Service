@@ -39,8 +39,9 @@ class DeviceDetailActivity : AppCompatActivity() {
     private val snackBarUtils = SnackBarUtils()
     private val getDataViewModel by viewModel<GetValueViewModel>()
     private val patchBookMarkViewModel by viewModel<BookMarkViewModel>()
-    private val accessToken by lazy { SharedPreferenceManager.getString(this, "accessToken") }
-    private val refreshToken by lazy { SharedPreferenceManager.getString(this, "refreshToken") }
+    private val sp = SharedPreferenceManager(this)
+    private val accessToken by lazy { sp.getString("accessToken") }
+    private val refreshToken by lazy { sp.getString("refreshToken") }
     private var timer = Timer()
     private lateinit var serialNumber: String
     private lateinit var deviceName: String
@@ -67,7 +68,6 @@ class DeviceDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Logger.d("디바이스 상세화면 진입")
         binding =
             DataBindingUtil.setContentView<DetailActivityBinding?>(
                 this, R.layout.detail_activity
@@ -109,16 +109,16 @@ class DeviceDetailActivity : AppCompatActivity() {
             Logger.i("공기질 데이터 타이머 시작")
         }
 
-        if (serialNumber == "SIA000000T") {
-            addCategoryItem("온도", "22.5", "temp")
-            addCategoryItem("습도", "47.1", "humid")
-            addCategoryItem("미세먼지", "15", "pm")
-            addCategoryItem("일산화탄소", "1", "co")
-            addCategoryItem("이산화탄소", "1025", "co2")
-            addCategoryItem("유기성 화합물", "0.1", "tvoc")
-            addCategoryItem("공기질\n통합지수", "21", "cqi")
-            addCategoryItem("바이러스\n위험지수", "7", "virus")
-        }
+//        if (serialNumber == "SIA000000T") {
+//            addCategoryItem("온도", "22.5", "temp")
+//            addCategoryItem("습도", "47.1", "humid")
+//            addCategoryItem("미세먼지", "15", "pm")
+//            addCategoryItem("일산화탄소", "1", "co")
+//            addCategoryItem("이산화탄소", "1025", "co2")
+//            addCategoryItem("유기성 화합물", "0.1", "tvoc")
+//            addCategoryItem("공기질\n통합지수", "21", "cqi")
+//            addCategoryItem("바이러스\n위험지수", "7", "virus")
+//        }
 
         // 즐겨찾기 아이콘 클릭 이벤트
         binding.detailBookMark.setOnClickListener {
@@ -129,7 +129,6 @@ class DeviceDetailActivity : AppCompatActivity() {
                         R.drawable.star_fill, null
                     )
                 )
-
 
                 CoroutineScope(Dispatchers.Default).launch {
                     MakeVibrator().run {

@@ -2,11 +2,8 @@ package app.as_service.api.ui
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import app.as_service.R
-import app.as_service.dao.StaticDataObject.TAG_D
-import app.as_service.dao.StaticDataObject.TAG_R
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
@@ -16,6 +13,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.google.android.gms.location.Priority
+import com.orhanobut.logger.Logger
+import timber.log.Timber
 import kotlin.concurrent.thread
 
 class DrawBarChart(mContext: Context) {
@@ -26,7 +26,7 @@ class DrawBarChart(mContext: Context) {
     private lateinit var mChart: BarChart
 
     fun getInstance(chart: BarChart) {
-        Log.d(TAG_R, "그래프 인스턴스 생성")
+        Logger.d( "그래프 인스턴스 생성")
 
         mChart = chart
         setChart()
@@ -45,14 +45,14 @@ class DrawBarChart(mContext: Context) {
     }
 
     fun remove(index: Int) {
-        Log.d(TAG_D, "remove $index item")
+        Logger.t("GraphLog").d("remove $index item")
         thread(start = true) {
             removeEntry(index)
         }
     }
 
     private fun setChart() {
-        Log.d(TAG_D, "setChart")
+        Logger.t("GraphLog").d("setChart")
         val legend = mChart.legend
         mChart.run {
             description.isEnabled = false   // 차트 설명
@@ -82,7 +82,7 @@ class DrawBarChart(mContext: Context) {
     }
 
     private fun setAxisY() {
-        Log.d(TAG_D, "setAxisY")
+        Logger.t("GraphLog").d("setAxisY")
         val axisY = mChart.axisLeft
         axisY.run {
             axisMaximum = 30f                 // 그래프의 맥시멈. 그래프를 그리는 위치에 따라 설정
@@ -100,7 +100,7 @@ class DrawBarChart(mContext: Context) {
     }
 
     private fun setAxisX() {
-        Log.d(TAG_D, "setAxisX")
+        Logger.t("GraphLog").d("setAxisX")
         val axisX = mChart.xAxis
         axisX.run {
             position = XAxis.XAxisPosition.BOTTOM       // X축의 위치
@@ -116,13 +116,13 @@ class DrawBarChart(mContext: Context) {
     }
 
     private fun removeEntry(index: Int) {
-        Log.d(TAG_D, "removeEntry")
+        Logger.t("GraphLog").d("removeEntry")
         entries1.removeAt(index)
         entries2.removeAt(index)
     }
 
     private fun setData(label: String, label2: String, color: Int, color2: Int) {
-        Log.d(TAG_D, "setData")
+        Logger.t("GraphLog").d("setData")
         val set = BarDataSet(entries1, label)
         val set2 = BarDataSet(entries2, label2)
         set.apply {
@@ -155,8 +155,7 @@ class DrawBarChart(mContext: Context) {
     }
 
     private class MyXAxisFormatter : ValueFormatter() {
-        private val times =
-            arrayOf("00:00", "04:00", "08:00", "12:00", "16:00", "20:00")
+        private val times = arrayOf("00:00", "04:00", "08:00", "12:00", "16:00", "20:00")
 
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             return times.getOrNull(value.toInt() - 1) ?: value.toString()

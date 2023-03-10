@@ -1,7 +1,5 @@
 package app.as_service.view.main.fragment
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,17 +12,11 @@ import app.as_service.databinding.UserFragmentBinding
 import app.as_service.util.ConvertDataTypeUtil.setLocaleToEnglish
 import app.as_service.util.ConvertDataTypeUtil.setLocaleToKorea
 import app.as_service.util.RefreshUtils
-import app.as_service.util.SharedPreferenceManager
 import app.as_service.util.ToastUtils
-import app.as_service.view.login.LoginActivity
 
 class UserFragment : Fragment() {
 
     lateinit var binding : UserFragmentBinding
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
