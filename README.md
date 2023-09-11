@@ -3,6 +3,8 @@ _**<h1>AirSignal 100 Service App</h1>**_
 
 <br/><img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"> <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
 
+![Readme Card](https://github-readme-stats.vercel.app/api/pin?username=tekken5953&repo=AS_Service&title_color=fff&icon_color=f9f9f9&text_color=9f9f9f&bg_color=151515)
+
 
 <br/>
 <h2>Initial main branch merged at</h2>
